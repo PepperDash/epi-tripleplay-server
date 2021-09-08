@@ -1,0 +1,94 @@
+{
+	"system_url": "",
+	"template": {
+		"info": {
+			"comment": "",
+			"requiredControlSofwareVersion": "",
+			"systemType": "huddle",
+			"lastModifiedDate": "2018-07-09T20:00:47.873Z",
+			"lastUid": 23,
+			"processorType": "rmc3"
+		},
+		"devices": [
+			{
+				"key": "processor",
+				"group": "processor",
+				"uid": 0,
+				"supportsCompliance": true,
+				"type": "rmc3",
+				"properties": {},
+				"name": "RMC3"
+			},
+			{
+				"key": "example-plugin-1",
+				"name": "Example Plugin Name",
+				"type": "examplePluginDevice",
+				"group": "pluginDevices",
+				"properties": {
+					"control": {
+						"method": "tcpIp",
+						"controlPortDevKey": "processor",
+						"controlPortNumber": 1,
+						"comParams": {
+							"baudRate": 9600,
+							"dataBits": 8,
+							"stopBits": 1,
+							"parity": "None",
+							"protocol": "RS232",
+							"hardwareHandshake": "None",
+							"softwareHandshake": "None"
+						},
+						"tcpSshProperties": {
+							"address": "10.0.0.200",
+							"port": 23,
+							"username": "admin",
+							"password": "password",
+							"autoReconnect": true,
+							"autoReconnectIntervalMs": 10000
+						}
+					},
+					"pollTimeMs": 30000,
+					"warningTimeoutMs": 180000,
+					"errorTimeoutMs": 300000,
+					"pluginCollection": {
+						"1": {
+							"name": "Item 1",
+							"value": 1
+						},
+						"2": {
+							"name": "Item 2",
+							"value": 2
+						}
+					}
+				}
+			},
+			{
+				"key": "example-plugin-bridge-1",
+				"uid": 11,
+				"name": "Example Plugin Bridge",
+				"group": "api",
+				"type": "eiscApiAdvanced",
+				"properties": {
+					"control": {
+						"tcpSshProperties": {
+							"address": "127.0.0.2",
+							"port": 0
+						},
+						"ipid": "B1"
+					},
+					"devices": [
+						{
+							"deviceKey": "example-plugin-1",
+							"joinStart": 1
+						}
+					]
+				}
+			}
+		],
+		"rooms": [],
+		"sourceLists": {},
+		"tieLines": []
+	},
+	"template_url": "",
+	"system": {}
+}
