@@ -20,52 +20,44 @@
 				"name": "RMC3"
 			},
 			{
-				"key": "example-plugin-1",
-				"name": "Example Plugin Name",
-				"type": "examplePluginDevice",
+				"key": "iptv-tuner-1",
+				"name": "TriplePlay IPTV",
+				"type": "tripleplay",
 				"group": "pluginDevices",
 				"properties": {
 					"control": {
-						"method": "tcpIp",
-						"controlPortDevKey": "processor",
-						"controlPortNumber": 1,
-						"comParams": {
-							"baudRate": 9600,
-							"dataBits": 8,
-							"stopBits": 1,
-							"parity": "None",
-							"protocol": "RS232",
-							"hardwareHandshake": "None",
-							"softwareHandshake": "None"
-						},
+						"method": "http",
 						"tcpSshProperties": {
 							"address": "10.0.0.200",
-							"port": 23,
-							"username": "admin",
-							"password": "password",
+							"port": 80,
+							"username": "",
+							"password": "",
 							"autoReconnect": true,
 							"autoReconnectIntervalMs": 10000
 						}
 					},
+					"stbId": 1,
 					"pollTimeMs": 30000,
 					"warningTimeoutMs": 180000,
 					"errorTimeoutMs": 300000,
-					"pluginCollection": {
+					"presets": {
 						"1": {
 							"name": "Item 1",
-							"value": 1
+							"icon": 1,
+							"channel": 101
 						},
 						"2": {
 							"name": "Item 2",
-							"value": 2
+							"icon": 2,
+							"channel": 102
 						}
 					}
 				}
 			},
 			{
-				"key": "example-plugin-bridge-1",
+				"key": "plugin-bridge-1",
 				"uid": 11,
-				"name": "Example Plugin Bridge",
+				"name": "Plugin Bridge 1",
 				"group": "api",
 				"type": "eiscApiAdvanced",
 				"properties": {
@@ -78,7 +70,7 @@
 					},
 					"devices": [
 						{
-							"deviceKey": "example-plugin-1",
+							"deviceKey": "iptv-tuner-1",
 							"joinStart": 1
 						}
 					]
