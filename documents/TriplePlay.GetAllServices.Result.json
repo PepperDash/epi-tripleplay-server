@@ -1,0 +1,126 @@
+{
+    "jsonrpc": "2.0",
+    "id": null,
+    "result": [
+        {
+            "id": 1,
+            "channelNumber": 1,
+            "name": "CP24",
+            "isFavourite": false,
+            "iconPath": "/portalImages/services/1_v2.png",
+            "accessControl": false,
+            "serviceAccessControl": "1",
+            "recordingType": "NwPvr",
+            "type": 1,
+            "typeSpecificData": {
+                "ipAddress": "239.0.8.2",
+                "port": 2802,
+                "videoCodec": "mpeg2",
+                "encryptionType": "None",
+                "encryptionId": ""
+            },
+            "multipleTypeData": {
+                "None": {
+                    "ipAddress": "239.0.8.2",
+                    "port": 2802,
+                    "videoCodec": "mpeg2",
+                    "encryptionType": "None",
+                    "encryptionId": ""
+                }
+            },
+            "geographicalArea": "0",
+            "isWatchable": true,
+            "liveTrickplayRunning": false
+        },
+        {
+            "id": 2,
+            "channelNumber": 2,
+            "name": "Test Channel 2",
+            "isFavourite": false,
+            "iconPath": "/portalImages/services/2_v1.png",
+            "accessControl": false,
+            "serviceAccessControl": "1",
+            "recordingType": "NwPvr",
+            "type": 1,
+            "typeSpecificData": {
+                "ipAddress": "239.100.100.1",
+                "port": 1234,
+                "videoCodec": "mpeg2",
+                "encryptionType": "None",
+                "encryptionId": ""
+            },
+            "multipleTypeData": {
+                "None": {
+                    "ipAddress": "239.100.100.1",
+                    "port": 1234,
+                    "videoCodec": "mpeg2",
+                    "encryptionType": "None",
+                    "encryptionId": ""
+                }
+            },
+            "geographicalArea": "0",
+            "isWatchable": true,
+            "liveTrickplayRunning": false
+        },
+        {
+            "id": 3,
+            "channelNumber": 3,
+            "name": "Test Channel 3",
+            "isFavourite": false,
+            "iconPath": "/portalImages/services/3_v1.png",
+            "accessControl": false,
+            "serviceAccessControl": "1",
+            "recordingType": "NwPvr",
+            "type": 1,
+            "typeSpecificData": {
+                "ipAddress": "239.10.10.3",
+                "port": 1234,
+                "videoCodec": "mpeg2",
+                "encryptionType": "None",
+                "encryptionId": ""
+            },
+            "multipleTypeData": {
+                "None": {
+                    "ipAddress": "239.10.10.3",
+                    "port": 1234,
+                    "videoCodec": "mpeg2",
+                    "encryptionType": "None",
+                    "encryptionId": ""
+                }
+            },
+            "geographicalArea": "0",
+            "isWatchable": true,
+            "liveTrickplayRunning": false
+        },
+        {
+            "id": 4,
+            "channelNumber": 4,
+            "name": "Test Channel 4",
+            "isFavourite": false,
+            "iconPath": "/portalImages/services/4_v1.png",
+            "accessControl": false,
+            "serviceAccessControl": "1",
+            "recordingType": "NwPvr",
+            "type": 1,
+            "typeSpecificData": {
+                "ipAddress": "239.10.10.4",
+                "port": 1234,
+                "videoCodec": "mpeg2",
+                "encryptionType": "None",
+                "encryptionId": ""
+            },
+            "multipleTypeData": {
+                "None": {
+                    "ipAddress": "239.10.10.4",
+                    "port": 1234,
+                    "videoCodec": "mpeg2",
+                    "encryptionType": "None",
+                    "encryptionId": ""
+                }
+            },
+            "geographicalArea": "0",
+            "isWatchable": true,
+            "liveTrickplayRunning": false
+        }
+    ]
+}

@@ -1,0 +1,8 @@
+{
+    "jsonrpc": "2.0",
+    "id": null,
+    "error": {
+        "code": -32601,
+        "message": "server error. method not found.\n\nGetPowerStatus"
+    }
+}

@@ -1,0 +1,1683 @@
+{
+	"info": {
+		"_postman_id": "d3a887c3-fa17-4d1c-b31f-18f480b5bf58",
+		"name": "TriplePlay",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "GetPowerStatus",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://10.120.5.15/triplecare/JsonRpcHandler.php?call={%22jsonrpc%22:%222.0%22,%22method%22:%22GetPowerStatus%22,%22params%22:[3]}",
+					"protocol": "http",
+					"host": [
+						"10",
+						"120",
+						"5",
+						"15"
+					],
+					"path": [
+						"triplecare",
+						"JsonRpcHandler.php"
+					],
+					"query": [
+						{
+							"key": "call",
+							"value": "{%22jsonrpc%22:%222.0%22,%22method%22:%22GetPowerStatus%22,%22params%22:[3]}"
+						}
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "GetPowerStatus",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://10.120.5.15/triplecare/JsonRpcHandler.php?call={%22jsonrpc%22:%222.0%22,%22method%22:%22GetPowerStatus%22,%22params%22:[3]}",
+							"protocol": "http",
+							"host": [
+								"10",
+								"120",
+								"5",
+								"15"
+							],
+							"path": [
+								"triplecare",
+								"JsonRpcHandler.php"
+							],
+							"query": [
+								{
+									"key": "call",
+									"value": "{%22jsonrpc%22:%222.0%22,%22method%22:%22GetPowerStatus%22,%22params%22:[3]}"
+								}
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Server",
+							"value": "nginx/1.12.2"
+						},
+						{
+							"key": "Date",
+							"value": "Tue, 31 Aug 2021 16:10:43 GMT"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=UTF-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "113"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Expires",
+							"value": "Thu, 19 Nov 1981 08:52:00 GMT"
+						},
+						{
+							"key": "Cache-Control",
+							"value": "no-store, no-cache, must-revalidate"
+						},
+						{
+							"key": "Pragma",
+							"value": "no-cache"
+						},
+						{
+							"key": "Access-Control-Allow-Origin",
+							"value": "*"
+						},
+						{
+							"key": "Access-Control-Allow-Methods",
+							"value": "POST, GET, OPTIONS"
+						},
+						{
+							"key": "Access-Control-Max-Age",
+							"value": "1728000"
+						},
+						{
+							"key": "X-Frame-Options",
+							"value": "SAMEORIGIN"
+						},
+						{
+							"key": "X-Content-Type-Options",
+							"value": "nosniff"
+						},
+						{
+							"key": "X-XSS-Protection",
+							"value": "1; mode=block"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"jsonrpc\": \"2.0\",\n    \"id\": null,\n    \"error\": {\n        \"code\": -32601,\n        \"message\": \"server error. method not found.\\n\\nGetPowerStatus\"\n    }\n}"
+				}
+			]
+		},
+		{
+			"name": "GetAudioState",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://10.120.5.15/triplecare/JsonRpcHandler.php?call={%22jsonrpc%22:%222.0%22,%22method%22:%22GetAudioState%22,%22params%22:[3]}",
+					"protocol": "http",
+					"host": [
+						"10",
+						"120",
+						"5",
+						"15"
+					],
+					"path": [
+						"triplecare",
+						"JsonRpcHandler.php"
+					],
+					"query": [
+						{
+							"key": "call",
+							"value": "{%22jsonrpc%22:%222.0%22,%22method%22:%22GetAudioState%22,%22params%22:[3]}"
+						}
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "GetAudioState",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://10.120.5.15/triplecare/JsonRpcHandler.php?call={%22jsonrpc%22:%222.0%22,%22method%22:%22GetAudioState%22,%22params%22:[3]}",
+							"protocol": "http",
+							"host": [
+								"10",
+								"120",
+								"5",
+								"15"
+							],
+							"path": [
+								"triplecare",
+								"JsonRpcHandler.php"
+							],
+							"query": [
+								{
+									"key": "call",
+									"value": "{%22jsonrpc%22:%222.0%22,%22method%22:%22GetAudioState%22,%22params%22:[3]}"
+								}
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Server",
+							"value": "nginx/1.12.2"
+						},
+						{
+							"key": "Date",
+							"value": "Tue, 31 Aug 2021 16:11:00 GMT"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=UTF-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "112"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Expires",
+							"value": "Thu, 19 Nov 1981 08:52:00 GMT"
+						},
+						{
+							"key": "Cache-Control",
+							"value": "no-store, no-cache, must-revalidate"
+						},
+						{
+							"key": "Pragma",
+							"value": "no-cache"
+						},
+						{
+							"key": "Access-Control-Allow-Origin",
+							"value": "*"
+						},
+						{
+							"key": "Access-Control-Allow-Methods",
+							"value": "POST, GET, OPTIONS"
+						},
+						{
+							"key": "Access-Control-Max-Age",
+							"value": "1728000"
+						},
+						{
+							"key": "X-Frame-Options",
+							"value": "SAMEORIGIN"
+						},
+						{
+							"key": "X-Content-Type-Options",
+							"value": "nosniff"
+						},
+						{
+							"key": "X-XSS-Protection",
+							"value": "1; mode=block"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"jsonrpc\": \"2.0\",\n    \"id\": null,\n    \"error\": {\n        \"code\": -32601,\n        \"message\": \"server error. method not found.\\n\\nGetAudioState\"\n    }\n}"
+				}
+			]
+		},
+		{
+			"name": "SetVolume",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://10.120.5.15/triplecare/JsonRpcHandler.php?call={%22jsonrpc%22:%222.0%22,%22method%22:%22SetVolume%22,%22params%22:[3,15]}",
+					"protocol": "http",
+					"host": [
+						"10",
+						"120",
+						"5",
+						"15"
+					],
+					"path": [
+						"triplecare",
+						"JsonRpcHandler.php"
+					],
+					"query": [
+						{
+							"key": "call",
+							"value": "{%22jsonrpc%22:%222.0%22,%22method%22:%22SetVolume%22,%22params%22:[3,15]}"
+						}
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "SetVolume",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://10.120.5.15/triplecare/JsonRpcHandler.php?call={%22jsonrpc%22:%222.0%22,%22method%22:%22SetVolume%22,%22params%22:[3,15]}",
+							"protocol": "http",
+							"host": [
+								"10",
+								"120",
+								"5",
+								"15"
+							],
+							"path": [
+								"triplecare",
+								"JsonRpcHandler.php"
+							],
+							"query": [
+								{
+									"key": "call",
+									"value": "{%22jsonrpc%22:%222.0%22,%22method%22:%22SetVolume%22,%22params%22:[3,15]}"
+								}
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Server",
+							"value": "nginx/1.12.2"
+						},
+						{
+							"key": "Date",
+							"value": "Tue, 31 Aug 2021 16:11:18 GMT"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=UTF-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "41"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Expires",
+							"value": "Thu, 19 Nov 1981 08:52:00 GMT"
+						},
+						{
+							"key": "Cache-Control",
+							"value": "no-store, no-cache, must-revalidate"
+						},
+						{
+							"key": "Pragma",
+							"value": "no-cache"
+						},
+						{
+							"key": "Access-Control-Allow-Origin",
+							"value": "*"
+						},
+						{
+							"key": "Access-Control-Allow-Methods",
+							"value": "POST, GET, OPTIONS"
+						},
+						{
+							"key": "Access-Control-Max-Age",
+							"value": "1728000"
+						},
+						{
+							"key": "X-Frame-Options",
+							"value": "SAMEORIGIN"
+						},
+						{
+							"key": "X-Content-Type-Options",
+							"value": "nosniff"
+						},
+						{
+							"key": "X-XSS-Protection",
+							"value": "1; mode=block"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"jsonrpc\": \"2.0\",\n    \"id\": null,\n    \"result\": true\n}"
+				}
+			]
+		},
+		{
+			"name": "SetMute",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://10.120.5.15/triplecare/JsonRpcHandler.php?call={%22jsonrpc%22:%222.0%22,%22method%22:%22SetMute%22,%22params%22:[3,false]}",
+					"protocol": "http",
+					"host": [
+						"10",
+						"120",
+						"5",
+						"15"
+					],
+					"path": [
+						"triplecare",
+						"JsonRpcHandler.php"
+					],
+					"query": [
+						{
+							"key": "call",
+							"value": "{%22jsonrpc%22:%222.0%22,%22method%22:%22SetMute%22,%22params%22:[3,false]}"
+						}
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "SetMute",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://10.120.5.15/triplecare/JsonRpcHandler.php?call={%22jsonrpc%22:%222.0%22,%22method%22:%22SetMute%22,%22params%22:[3,false]}",
+							"protocol": "http",
+							"host": [
+								"10",
+								"120",
+								"5",
+								"15"
+							],
+							"path": [
+								"triplecare",
+								"JsonRpcHandler.php"
+							],
+							"query": [
+								{
+									"key": "call",
+									"value": "{%22jsonrpc%22:%222.0%22,%22method%22:%22SetMute%22,%22params%22:[3,false]}"
+								}
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Server",
+							"value": "nginx/1.12.2"
+						},
+						{
+							"key": "Date",
+							"value": "Tue, 31 Aug 2021 16:11:34 GMT"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=UTF-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "41"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Expires",
+							"value": "Thu, 19 Nov 1981 08:52:00 GMT"
+						},
+						{
+							"key": "Cache-Control",
+							"value": "no-store, no-cache, must-revalidate"
+						},
+						{
+							"key": "Pragma",
+							"value": "no-cache"
+						},
+						{
+							"key": "Access-Control-Allow-Origin",
+							"value": "*"
+						},
+						{
+							"key": "Access-Control-Allow-Methods",
+							"value": "POST, GET, OPTIONS"
+						},
+						{
+							"key": "Access-Control-Max-Age",
+							"value": "1728000"
+						},
+						{
+							"key": "X-Frame-Options",
+							"value": "SAMEORIGIN"
+						},
+						{
+							"key": "X-Content-Type-Options",
+							"value": "nosniff"
+						},
+						{
+							"key": "X-XSS-Protection",
+							"value": "1; mode=block"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"jsonrpc\": \"2.0\",\n    \"id\": null,\n    \"result\": true\n}"
+				}
+			]
+		},
+		{
+			"name": "ChannelUp",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://10.120.5.15/triplecare/JsonRpcHandler.php?call={%22jsonrpc%22:%222.0%22,%22method%22:%22ChannelUp%22,%22params%22:[3]}",
+					"protocol": "http",
+					"host": [
+						"10",
+						"120",
+						"5",
+						"15"
+					],
+					"path": [
+						"triplecare",
+						"JsonRpcHandler.php"
+					],
+					"query": [
+						{
+							"key": "call",
+							"value": "{%22jsonrpc%22:%222.0%22,%22method%22:%22ChannelUp%22,%22params%22:[3]}"
+						}
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "ChannelUp",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://10.120.5.15/triplecare/JsonRpcHandler.php?call={%22jsonrpc%22:%222.0%22,%22method%22:%22ChannelUp%22,%22params%22:[3]}",
+							"protocol": "http",
+							"host": [
+								"10",
+								"120",
+								"5",
+								"15"
+							],
+							"path": [
+								"triplecare",
+								"JsonRpcHandler.php"
+							],
+							"query": [
+								{
+									"key": "call",
+									"value": "{%22jsonrpc%22:%222.0%22,%22method%22:%22ChannelUp%22,%22params%22:[3]}"
+								}
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Server",
+							"value": "nginx/1.12.2"
+						},
+						{
+							"key": "Date",
+							"value": "Tue, 31 Aug 2021 16:11:44 GMT"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=UTF-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "41"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Expires",
+							"value": "Thu, 19 Nov 1981 08:52:00 GMT"
+						},
+						{
+							"key": "Cache-Control",
+							"value": "no-store, no-cache, must-revalidate"
+						},
+						{
+							"key": "Pragma",
+							"value": "no-cache"
+						},
+						{
+							"key": "Access-Control-Allow-Origin",
+							"value": "*"
+						},
+						{
+							"key": "Access-Control-Allow-Methods",
+							"value": "POST, GET, OPTIONS"
+						},
+						{
+							"key": "Access-Control-Max-Age",
+							"value": "1728000"
+						},
+						{
+							"key": "X-Frame-Options",
+							"value": "SAMEORIGIN"
+						},
+						{
+							"key": "X-Content-Type-Options",
+							"value": "nosniff"
+						},
+						{
+							"key": "X-XSS-Protection",
+							"value": "1; mode=block"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"jsonrpc\": \"2.0\",\n    \"id\": null,\n    \"result\": true\n}"
+				}
+			]
+		},
+		{
+			"name": "ChannelDown",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://10.120.5.15/triplecare/JsonRpcHandler.php?call={%22jsonrpc%22:%222.0%22,%22method%22:%22ChannelDown%22,%22params%22:[3]}",
+					"protocol": "http",
+					"host": [
+						"10",
+						"120",
+						"5",
+						"15"
+					],
+					"path": [
+						"triplecare",
+						"JsonRpcHandler.php"
+					],
+					"query": [
+						{
+							"key": "call",
+							"value": "{%22jsonrpc%22:%222.0%22,%22method%22:%22ChannelDown%22,%22params%22:[3]}"
+						}
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "ChannelDown",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://10.120.5.15/triplecare/JsonRpcHandler.php?call={%22jsonrpc%22:%222.0%22,%22method%22:%22ChannelDown%22,%22params%22:[3]}",
+							"protocol": "http",
+							"host": [
+								"10",
+								"120",
+								"5",
+								"15"
+							],
+							"path": [
+								"triplecare",
+								"JsonRpcHandler.php"
+							],
+							"query": [
+								{
+									"key": "call",
+									"value": "{%22jsonrpc%22:%222.0%22,%22method%22:%22ChannelDown%22,%22params%22:[3]}"
+								}
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Server",
+							"value": "nginx/1.12.2"
+						},
+						{
+							"key": "Date",
+							"value": "Tue, 31 Aug 2021 16:11:54 GMT"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=UTF-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "41"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Expires",
+							"value": "Thu, 19 Nov 1981 08:52:00 GMT"
+						},
+						{
+							"key": "Cache-Control",
+							"value": "no-store, no-cache, must-revalidate"
+						},
+						{
+							"key": "Pragma",
+							"value": "no-cache"
+						},
+						{
+							"key": "Access-Control-Allow-Origin",
+							"value": "*"
+						},
+						{
+							"key": "Access-Control-Allow-Methods",
+							"value": "POST, GET, OPTIONS"
+						},
+						{
+							"key": "Access-Control-Max-Age",
+							"value": "1728000"
+						},
+						{
+							"key": "X-Frame-Options",
+							"value": "SAMEORIGIN"
+						},
+						{
+							"key": "X-Content-Type-Options",
+							"value": "nosniff"
+						},
+						{
+							"key": "X-XSS-Protection",
+							"value": "1; mode=block"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"jsonrpc\": \"2.0\",\n    \"id\": null,\n    \"result\": true\n}"
+				}
+			]
+		},
+		{
+			"name": "ChannelSelect",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://10.120.5.15/triplecare/JsonRpcHandler.php?call={%22jsonrpc%22:%222.0%22,%22method%22:%22SelectChannel%22,%22params%22:[3,1]}",
+					"protocol": "http",
+					"host": [
+						"10",
+						"120",
+						"5",
+						"15"
+					],
+					"path": [
+						"triplecare",
+						"JsonRpcHandler.php"
+					],
+					"query": [
+						{
+							"key": "call",
+							"value": "{%22jsonrpc%22:%222.0%22,%22method%22:%22SelectChannel%22,%22params%22:[3,1]}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetAllServices",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://10.120.5.15/triplecare/JsonRpcHandler.php?call={%22jsonrpc%22:%222.0%22,%22method%22:%22GetAllServices%22,%22params%22:[3]}",
+					"protocol": "http",
+					"host": [
+						"10",
+						"120",
+						"5",
+						"15"
+					],
+					"path": [
+						"triplecare",
+						"JsonRpcHandler.php"
+					],
+					"query": [
+						{
+							"key": "call",
+							"value": "{%22jsonrpc%22:%222.0%22,%22method%22:%22GetAllServices%22,%22params%22:[3]}"
+						}
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "GetAllServices",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://10.120.5.15/triplecare/JsonRpcHandler.php?call={%22jsonrpc%22:%222.0%22,%22method%22:%22GetAllServices%22,%22params%22:[3]}",
+							"protocol": "http",
+							"host": [
+								"10",
+								"120",
+								"5",
+								"15"
+							],
+							"path": [
+								"triplecare",
+								"JsonRpcHandler.php"
+							],
+							"query": [
+								{
+									"key": "call",
+									"value": "{%22jsonrpc%22:%222.0%22,%22method%22:%22GetAllServices%22,%22params%22:[3]}"
+								}
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Server",
+							"value": "nginx/1.12.2"
+						},
+						{
+							"key": "Date",
+							"value": "Tue, 31 Aug 2021 16:12:07 GMT"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=UTF-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "2128"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Expires",
+							"value": "Thu, 19 Nov 1981 08:52:00 GMT"
+						},
+						{
+							"key": "Cache-Control",
+							"value": "no-store, no-cache, must-revalidate"
+						},
+						{
+							"key": "Pragma",
+							"value": "no-cache"
+						},
+						{
+							"key": "Access-Control-Allow-Origin",
+							"value": "*"
+						},
+						{
+							"key": "Access-Control-Allow-Methods",
+							"value": "POST, GET, OPTIONS"
+						},
+						{
+							"key": "Access-Control-Max-Age",
+							"value": "1728000"
+						},
+						{
+							"key": "X-Frame-Options",
+							"value": "SAMEORIGIN"
+						},
+						{
+							"key": "X-Content-Type-Options",
+							"value": "nosniff"
+						},
+						{
+							"key": "X-XSS-Protection",
+							"value": "1; mode=block"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"jsonrpc\": \"2.0\",\n    \"id\": null,\n    \"result\": [\n        {\n            \"id\": 1,\n            \"channelNumber\": 1,\n            \"name\": \"CP24\",\n            \"isFavourite\": false,\n            \"iconPath\": \"/portalImages/services/1_v2.png\",\n            \"accessControl\": false,\n            \"serviceAccessControl\": \"1\",\n            \"recordingType\": \"NwPvr\",\n            \"type\": 1,\n            \"typeSpecificData\": {\n                \"ipAddress\": \"239.0.8.2\",\n                \"port\": 2802,\n                \"videoCodec\": \"mpeg2\",\n                \"encryptionType\": \"None\",\n                \"encryptionId\": \"\"\n            },\n            \"multipleTypeData\": {\n                \"None\": {\n                    \"ipAddress\": \"239.0.8.2\",\n                    \"port\": 2802,\n                    \"videoCodec\": \"mpeg2\",\n                    \"encryptionType\": \"None\",\n                    \"encryptionId\": \"\"\n                }\n            },\n            \"geographicalArea\": \"0\",\n            \"isWatchable\": true,\n            \"liveTrickplayRunning\": false\n        },\n        {\n            \"id\": 2,\n            \"channelNumber\": 2,\n            \"name\": \"Test Channel 2\",\n            \"isFavourite\": false,\n            \"iconPath\": \"/portalImages/services/2_v1.png\",\n            \"accessControl\": false,\n            \"serviceAccessControl\": \"1\",\n            \"recordingType\": \"NwPvr\",\n            \"type\": 1,\n            \"typeSpecificData\": {\n                \"ipAddress\": \"239.100.100.1\",\n                \"port\": 1234,\n                \"videoCodec\": \"mpeg2\",\n                \"encryptionType\": \"None\",\n                \"encryptionId\": \"\"\n            },\n            \"multipleTypeData\": {\n                \"None\": {\n                    \"ipAddress\": \"239.100.100.1\",\n                    \"port\": 1234,\n                    \"videoCodec\": \"mpeg2\",\n                    \"encryptionType\": \"None\",\n                    \"encryptionId\": \"\"\n                }\n            },\n            \"geographicalArea\": \"0\",\n            \"isWatchable\": true,\n            \"liveTrickplayRunning\": false\n        },\n        {\n            \"id\": 3,\n            \"channelNumber\": 3,\n            \"name\": \"Test Channel 3\",\n            \"isFavourite\": false,\n            \"iconPath\": \"/portalImages/services/3_v1.png\",\n            \"accessControl\": false,\n            \"serviceAccessControl\": \"1\",\n            \"recordingType\": \"NwPvr\",\n            \"type\": 1,\n            \"typeSpecificData\": {\n                \"ipAddress\": \"239.10.10.3\",\n                \"port\": 1234,\n                \"videoCodec\": \"mpeg2\",\n                \"encryptionType\": \"None\",\n                \"encryptionId\": \"\"\n            },\n            \"multipleTypeData\": {\n                \"None\": {\n                    \"ipAddress\": \"239.10.10.3\",\n                    \"port\": 1234,\n                    \"videoCodec\": \"mpeg2\",\n                    \"encryptionType\": \"None\",\n                    \"encryptionId\": \"\"\n                }\n            },\n            \"geographicalArea\": \"0\",\n            \"isWatchable\": true,\n            \"liveTrickplayRunning\": false\n        },\n        {\n            \"id\": 4,\n            \"channelNumber\": 4,\n            \"name\": \"Test Channel 4\",\n            \"isFavourite\": false,\n            \"iconPath\": \"/portalImages/services/4_v1.png\",\n            \"accessControl\": false,\n            \"serviceAccessControl\": \"1\",\n            \"recordingType\": \"NwPvr\",\n            \"type\": 1,\n            \"typeSpecificData\": {\n                \"ipAddress\": \"239.10.10.4\",\n                \"port\": 1234,\n                \"videoCodec\": \"mpeg2\",\n                \"encryptionType\": \"None\",\n                \"encryptionId\": \"\"\n            },\n            \"multipleTypeData\": {\n                \"None\": {\n                    \"ipAddress\": \"239.10.10.4\",\n                    \"port\": 1234,\n                    \"videoCodec\": \"mpeg2\",\n                    \"encryptionType\": \"None\",\n                    \"encryptionId\": \"\"\n                }\n            },\n            \"geographicalArea\": \"0\",\n            \"isWatchable\": true,\n            \"liveTrickplayRunning\": false\n        }\n    ]\n}"
+				}
+			]
+		},
+		{
+			"name": "PowerOnTv",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://10.120.5.15/triplecare/JsonRpcHandler.php?call={%22jsonrpc%22:%222.0%22,%22method%22:%22PowerOnTv%22,%22params%22:[3]}",
+					"protocol": "http",
+					"host": [
+						"10",
+						"120",
+						"5",
+						"15"
+					],
+					"path": [
+						"triplecare",
+						"JsonRpcHandler.php"
+					],
+					"query": [
+						{
+							"key": "call",
+							"value": "{%22jsonrpc%22:%222.0%22,%22method%22:%22PowerOnTv%22,%22params%22:[3]}"
+						}
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "PowerOnTv",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://10.120.5.15/triplecare/JsonRpcHandler.php?call={%22jsonrpc%22:%222.0%22,%22method%22:%22PowerOnTv%22,%22params%22:[3]}",
+							"protocol": "http",
+							"host": [
+								"10",
+								"120",
+								"5",
+								"15"
+							],
+							"path": [
+								"triplecare",
+								"JsonRpcHandler.php"
+							],
+							"query": [
+								{
+									"key": "call",
+									"value": "{%22jsonrpc%22:%222.0%22,%22method%22:%22PowerOnTv%22,%22params%22:[3]}"
+								}
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Server",
+							"value": "nginx/1.12.2"
+						},
+						{
+							"key": "Date",
+							"value": "Tue, 31 Aug 2021 16:12:20 GMT"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=UTF-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "41"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Expires",
+							"value": "Thu, 19 Nov 1981 08:52:00 GMT"
+						},
+						{
+							"key": "Cache-Control",
+							"value": "no-store, no-cache, must-revalidate"
+						},
+						{
+							"key": "Pragma",
+							"value": "no-cache"
+						},
+						{
+							"key": "Access-Control-Allow-Origin",
+							"value": "*"
+						},
+						{
+							"key": "Access-Control-Allow-Methods",
+							"value": "POST, GET, OPTIONS"
+						},
+						{
+							"key": "Access-Control-Max-Age",
+							"value": "1728000"
+						},
+						{
+							"key": "X-Frame-Options",
+							"value": "SAMEORIGIN"
+						},
+						{
+							"key": "X-Content-Type-Options",
+							"value": "nosniff"
+						},
+						{
+							"key": "X-XSS-Protection",
+							"value": "1; mode=block"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"jsonrpc\": \"2.0\",\n    \"id\": null,\n    \"result\": true\n}"
+				}
+			]
+		},
+		{
+			"name": "PowerOffTv",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://10.120.5.15/triplecare/JsonRpcHandler.php?call={%22jsonrpc%22:%222.0%22,%22method%22:%22PowerOffTv%22,%22params%22:[3]}",
+					"protocol": "http",
+					"host": [
+						"10",
+						"120",
+						"5",
+						"15"
+					],
+					"path": [
+						"triplecare",
+						"JsonRpcHandler.php"
+					],
+					"query": [
+						{
+							"key": "call",
+							"value": "{%22jsonrpc%22:%222.0%22,%22method%22:%22PowerOffTv%22,%22params%22:[3]}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "SetTVVolume",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://10.120.5.15/triplecare/JsonRpcHandler.php?call={%22jsonrpc%22:%222.0%22,%22method%22:%22SetTVVolume%22,%22params%22:[3,10]}",
+					"protocol": "http",
+					"host": [
+						"10",
+						"120",
+						"5",
+						"15"
+					],
+					"path": [
+						"triplecare",
+						"JsonRpcHandler.php"
+					],
+					"query": [
+						{
+							"key": "call",
+							"value": "{%22jsonrpc%22:%222.0%22,%22method%22:%22SetTVVolume%22,%22params%22:[3,10]}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetPowerStatus",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://10.120.5.15/triplecare/JsonRpcHandler.php?call={%22jsonrpc%22:%222.0%22,%22method%22:%22GetPowerStatus%22,%22params%22:[3]}",
+					"protocol": "http",
+					"host": [
+						"10",
+						"120",
+						"5",
+						"15"
+					],
+					"path": [
+						"triplecare",
+						"JsonRpcHandler.php"
+					],
+					"query": [
+						{
+							"key": "call",
+							"value": "{%22jsonrpc%22:%222.0%22,%22method%22:%22GetPowerStatus%22,%22params%22:[3]}"
+						}
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "GetPowerStatus",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://10.120.5.15/triplecare/JsonRpcHandler.php?call={%22jsonrpc%22:%222.0%22,%22method%22:%22GetPowerStatus%22,%22params%22:[3]}",
+							"protocol": "http",
+							"host": [
+								"10",
+								"120",
+								"5",
+								"15"
+							],
+							"path": [
+								"triplecare",
+								"JsonRpcHandler.php"
+							],
+							"query": [
+								{
+									"key": "call",
+									"value": "{%22jsonrpc%22:%222.0%22,%22method%22:%22GetPowerStatus%22,%22params%22:[3]}"
+								}
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Server",
+							"value": "nginx/1.12.2"
+						},
+						{
+							"key": "Date",
+							"value": "Tue, 31 Aug 2021 16:12:39 GMT"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=UTF-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "113"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Expires",
+							"value": "Thu, 19 Nov 1981 08:52:00 GMT"
+						},
+						{
+							"key": "Cache-Control",
+							"value": "no-store, no-cache, must-revalidate"
+						},
+						{
+							"key": "Pragma",
+							"value": "no-cache"
+						},
+						{
+							"key": "Access-Control-Allow-Origin",
+							"value": "*"
+						},
+						{
+							"key": "Access-Control-Allow-Methods",
+							"value": "POST, GET, OPTIONS"
+						},
+						{
+							"key": "Access-Control-Max-Age",
+							"value": "1728000"
+						},
+						{
+							"key": "X-Frame-Options",
+							"value": "SAMEORIGIN"
+						},
+						{
+							"key": "X-Content-Type-Options",
+							"value": "nosniff"
+						},
+						{
+							"key": "X-XSS-Protection",
+							"value": "1; mode=block"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"jsonrpc\": \"2.0\",\n    \"id\": null,\n    \"error\": {\n        \"code\": -32601,\n        \"message\": \"server error. method not found.\\n\\nGetPowerStatus\"\n    }\n}"
+				}
+			]
+		},
+		{
+			"name": "SelectTVInput - HDMI",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://10.120.5.15/triplecare/JsonRpcHandler.php?call={%22jsonrpc%22:%222.0%22,%22method%22:%22SelectTVInput%22,%22params%22:[3,101]}",
+					"protocol": "http",
+					"host": [
+						"10",
+						"120",
+						"5",
+						"15"
+					],
+					"path": [
+						"triplecare",
+						"JsonRpcHandler.php"
+					],
+					"query": [
+						{
+							"key": "call",
+							"value": "{%22jsonrpc%22:%222.0%22,%22method%22:%22SelectTVInput%22,%22params%22:[3,101]}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "SelectTVInput - HDMI1",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://10.120.5.15/triplecare/JsonRpcHandler.php?call={%22jsonrpc%22:%222.0%22,%22method%22:%22SelectTVInput%22,%22params%22:[3,153]}",
+					"protocol": "http",
+					"host": [
+						"10",
+						"120",
+						"5",
+						"15"
+					],
+					"path": [
+						"triplecare",
+						"JsonRpcHandler.php"
+					],
+					"query": [
+						{
+							"key": "call",
+							"value": "{%22jsonrpc%22:%222.0%22,%22method%22:%22SelectTVInput%22,%22params%22:[3,153]}"
+						}
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "SelectTVInput - HDMI1",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://10.120.5.15/triplecare/JsonRpcHandler.php?call={%22jsonrpc%22:%222.0%22,%22method%22:%22SelectTVInput%22,%22params%22:[3,153]}",
+							"protocol": "http",
+							"host": [
+								"10",
+								"120",
+								"5",
+								"15"
+							],
+							"path": [
+								"triplecare",
+								"JsonRpcHandler.php"
+							],
+							"query": [
+								{
+									"key": "call",
+									"value": "{%22jsonrpc%22:%222.0%22,%22method%22:%22SelectTVInput%22,%22params%22:[3,153]}"
+								}
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Server",
+							"value": "nginx/1.12.2"
+						},
+						{
+							"key": "Date",
+							"value": "Tue, 31 Aug 2021 16:12:49 GMT"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=UTF-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "85"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Expires",
+							"value": "Thu, 19 Nov 1981 08:52:00 GMT"
+						},
+						{
+							"key": "Cache-Control",
+							"value": "no-store, no-cache, must-revalidate"
+						},
+						{
+							"key": "Pragma",
+							"value": "no-cache"
+						},
+						{
+							"key": "Access-Control-Allow-Origin",
+							"value": "*"
+						},
+						{
+							"key": "Access-Control-Allow-Methods",
+							"value": "POST, GET, OPTIONS"
+						},
+						{
+							"key": "Access-Control-Max-Age",
+							"value": "1728000"
+						},
+						{
+							"key": "X-Frame-Options",
+							"value": "SAMEORIGIN"
+						},
+						{
+							"key": "X-Content-Type-Options",
+							"value": "nosniff"
+						},
+						{
+							"key": "X-XSS-Protection",
+							"value": "1; mode=block"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"jsonrpc\": \"2.0\",\n    \"id\": null,\n    \"error\": {\n        \"code\": 361,\n        \"message\": \"Sequence '153' Not Found\"\n    }\n}"
+				}
+			]
+		},
+		{
+			"name": "SelectTVInput - HDMI2",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://10.120.5.15/triplecare/JsonRpcHandler.php?call={%22jsonrpc%22:%222.0%22,%22method%22:%22SelectTVInput%22,%22params%22:[3,154]}",
+					"protocol": "http",
+					"host": [
+						"10",
+						"120",
+						"5",
+						"15"
+					],
+					"path": [
+						"triplecare",
+						"JsonRpcHandler.php"
+					],
+					"query": [
+						{
+							"key": "call",
+							"value": "{%22jsonrpc%22:%222.0%22,%22method%22:%22SelectTVInput%22,%22params%22:[3,154]}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "RCU KeyPress - Titles",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://10.120.5.15/triplecare/JsonRpcHandler.php?call={%22jsonrpc%22:%222.0%22,%22method%22:%22HandleKeyPress%22,%22params%22:[3,\"Titles\"]}",
+					"protocol": "http",
+					"host": [
+						"10",
+						"120",
+						"5",
+						"15"
+					],
+					"path": [
+						"triplecare",
+						"JsonRpcHandler.php"
+					],
+					"query": [
+						{
+							"key": "call",
+							"value": "{%22jsonrpc%22:%222.0%22,%22method%22:%22HandleKeyPress%22,%22params%22:[3,\"Titles\"]}"
+						}
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "RCU KeyPress - Titles",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://10.120.5.15/triplecare/JsonRpcHandler.php?call={%22jsonrpc%22:%222.0%22,%22method%22:%22HandleKeyPress%22,%22params%22:[3,\"Titles\"]}",
+							"protocol": "http",
+							"host": [
+								"10",
+								"120",
+								"5",
+								"15"
+							],
+							"path": [
+								"triplecare",
+								"JsonRpcHandler.php"
+							],
+							"query": [
+								{
+									"key": "call",
+									"value": "{%22jsonrpc%22:%222.0%22,%22method%22:%22HandleKeyPress%22,%22params%22:[3,\"Titles\"]}"
+								}
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Server",
+							"value": "nginx/1.12.2"
+						},
+						{
+							"key": "Date",
+							"value": "Tue, 31 Aug 2021 16:12:59 GMT"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=UTF-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "41"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Expires",
+							"value": "Thu, 19 Nov 1981 08:52:00 GMT"
+						},
+						{
+							"key": "Cache-Control",
+							"value": "no-store, no-cache, must-revalidate"
+						},
+						{
+							"key": "Pragma",
+							"value": "no-cache"
+						},
+						{
+							"key": "Access-Control-Allow-Origin",
+							"value": "*"
+						},
+						{
+							"key": "Access-Control-Allow-Methods",
+							"value": "POST, GET, OPTIONS"
+						},
+						{
+							"key": "Access-Control-Max-Age",
+							"value": "1728000"
+						},
+						{
+							"key": "X-Frame-Options",
+							"value": "SAMEORIGIN"
+						},
+						{
+							"key": "X-Content-Type-Options",
+							"value": "nosniff"
+						},
+						{
+							"key": "X-XSS-Protection",
+							"value": "1; mode=block"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"jsonrpc\": \"2.0\",\n    \"id\": null,\n    \"result\": true\n}"
+				}
+			]
+		},
+		{
+			"name": "RCU KeyPress - Blue",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://10.120.5.15/triplecare/JsonRpcHandler.php?call={%22jsonrpc%22:%222.0%22,%22method%22:%22HandleKeyPress%22,%22params%22:[3,\"Blue\"]}",
+					"protocol": "http",
+					"host": [
+						"10",
+						"120",
+						"5",
+						"15"
+					],
+					"path": [
+						"triplecare",
+						"JsonRpcHandler.php"
+					],
+					"query": [
+						{
+							"key": "call",
+							"value": "{%22jsonrpc%22:%222.0%22,%22method%22:%22HandleKeyPress%22,%22params%22:[3,\"Blue\"]}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "RCU KeyPress - Home",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://10.120.5.15/triplecare/JsonRpcHandler.php?call={%22jsonrpc%22:%222.0%22,%22method%22:%22HandleKeyPress%22,%22params%22:[3,\"Home\"]}",
+					"protocol": "http",
+					"host": [
+						"10",
+						"120",
+						"5",
+						"15"
+					],
+					"path": [
+						"triplecare",
+						"JsonRpcHandler.php"
+					],
+					"query": [
+						{
+							"key": "call",
+							"value": "{%22jsonrpc%22:%222.0%22,%22method%22:%22HandleKeyPress%22,%22params%22:[3,\"Home\"]}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "RCU KeyPress - Mute Toggle",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://10.120.5.15/triplecare/JsonRpcHandler.php?call={%22jsonrpc%22:%222.0%22,%22method%22:%22HandleKeyPress%22,%22params%22:[3,\"Mute\"]}",
+					"protocol": "http",
+					"host": [
+						"10",
+						"120",
+						"5",
+						"15"
+					],
+					"path": [
+						"triplecare",
+						"JsonRpcHandler.php"
+					],
+					"query": [
+						{
+							"key": "call",
+							"value": "{%22jsonrpc%22:%222.0%22,%22method%22:%22HandleKeyPress%22,%22params%22:[3,\"Mute\"]}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "RCU KeyPress - ChannelUp",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://10.120.5.15/triplecare/JsonRpcHandler.php?call={%22jsonrpc%22:%222.0%22,%22method%22:%22HandleKeyPress%22,%22params%22:[3,\"ChannelUp\"]}",
+					"protocol": "http",
+					"host": [
+						"10",
+						"120",
+						"5",
+						"15"
+					],
+					"path": [
+						"triplecare",
+						"JsonRpcHandler.php"
+					],
+					"query": [
+						{
+							"key": "call",
+							"value": "{%22jsonrpc%22:%222.0%22,%22method%22:%22HandleKeyPress%22,%22params%22:[3,\"ChannelUp\"]}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "RCU KeyPress - ChannelDown",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://10.120.5.15/triplecare/JsonRpcHandler.php?call={%22jsonrpc%22:%222.0%22,%22method%22:%22HandleKeyPress%22,%22params%22:[3,\"ChannelDown\"]}",
+					"protocol": "http",
+					"host": [
+						"10",
+						"120",
+						"5",
+						"15"
+					],
+					"path": [
+						"triplecare",
+						"JsonRpcHandler.php"
+					],
+					"query": [
+						{
+							"key": "call",
+							"value": "{%22jsonrpc%22:%222.0%22,%22method%22:%22HandleKeyPress%22,%22params%22:[3,\"ChannelDown\"]}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "RCU KeyPress - Guide",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://10.120.5.15/triplecare/JsonRpcHandler.php?call={%22jsonrpc%22:%222.0%22,%22method%22:%22HandleKeyPress%22,%22params%22:[3,\"Guide\"]}",
+					"protocol": "http",
+					"host": [
+						"10",
+						"120",
+						"5",
+						"15"
+					],
+					"path": [
+						"triplecare",
+						"JsonRpcHandler.php"
+					],
+					"query": [
+						{
+							"key": "call",
+							"value": "{%22jsonrpc%22:%222.0%22,%22method%22:%22HandleKeyPress%22,%22params%22:[3,\"Guide\"]}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "RCU KeyPress - Back",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://10.120.5.15/triplecare/JsonRpcHandler.php?call={%22jsonrpc%22:%222.0%22,%22method%22:%22HandleKeyPress%22,%22params%22:[3,\"Back\"]}",
+					"protocol": "http",
+					"host": [
+						"10",
+						"120",
+						"5",
+						"15"
+					],
+					"path": [
+						"triplecare",
+						"JsonRpcHandler.php"
+					],
+					"query": [
+						{
+							"key": "call",
+							"value": "{%22jsonrpc%22:%222.0%22,%22method%22:%22HandleKeyPress%22,%22params%22:[3,\"Back\"]}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "RCU KeyPress - Ok",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://10.120.5.15/triplecare/JsonRpcHandler.php?call={%22jsonrpc%22:%222.0%22,%22method%22:%22HandleKeyPress%22,%22params%22:[3,\"OK\"]}",
+					"protocol": "http",
+					"host": [
+						"10",
+						"120",
+						"5",
+						"15"
+					],
+					"path": [
+						"triplecare",
+						"JsonRpcHandler.php"
+					],
+					"query": [
+						{
+							"key": "call",
+							"value": "{%22jsonrpc%22:%222.0%22,%22method%22:%22HandleKeyPress%22,%22params%22:[3,\"OK\"]}"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"protocolProfileBehavior": {}
+}
