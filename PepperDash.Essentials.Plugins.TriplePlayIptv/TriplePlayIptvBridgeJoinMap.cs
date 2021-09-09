@@ -265,10 +265,10 @@ namespace TriplePlayIptvPlugin
 			});
 
 		/// <summary>
-		/// RCU key press - menu
+		/// RCU key press - home
 		/// </summary>
-		[JoinName("RcuKpMenu")]
-		public JoinDataComplete RcuKpMenu = new JoinDataComplete(
+		[JoinName("RcuKpHome")]
+		public JoinDataComplete RcuKpHome = new JoinDataComplete(
 			new JoinData
 			{
 				JoinNumber = 26,
@@ -276,7 +276,7 @@ namespace TriplePlayIptvPlugin
 			},
 			new JoinMetadata
 			{
-				Description = "RCU key press Menu",
+				Description = "RCU key press Home",
 				JoinCapabilities = eJoinCapabilities.FromSIMPL,
 				JoinType = eJoinType.Digital
 			});
@@ -518,7 +518,143 @@ namespace TriplePlayIptvPlugin
 				JoinCapabilities = eJoinCapabilities.FromSIMPL,
 				JoinType = eJoinType.Digital
 			});
-		
+
+        /// <summary>
+        /// RCU key press - back
+        /// </summary>
+        [JoinName("RcuKpBack")]
+        public JoinDataComplete RcuKpBack = new JoinDataComplete(
+            new JoinData
+            {
+                JoinNumber = 41,
+                JoinSpan = 1
+            },
+            new JoinMetadata
+            {
+                Description = "RCU key press back",
+                JoinCapabilities = eJoinCapabilities.FromSIMPL,
+                JoinType = eJoinType.Digital
+            });
+
+        /// <summary>
+        /// RCU key press - Info
+        /// </summary>
+        [JoinName("RcuKpInfo")]
+        public JoinDataComplete RcuKpInfo = new JoinDataComplete(
+            new JoinData
+            {
+                JoinNumber = 42,
+                JoinSpan = 1
+            },
+            new JoinMetadata
+            {
+                Description = "RCU key press info",
+                JoinCapabilities = eJoinCapabilities.FromSIMPL,
+                JoinType = eJoinType.Digital
+            });
+
+        /// <summary>
+        /// RCU key press - PVR
+        /// </summary>
+        [JoinName("RcuKpPvr")]
+        public JoinDataComplete RcuKpPvr = new JoinDataComplete(
+            new JoinData
+            {
+                JoinNumber = 43,
+                JoinSpan = 1
+            },
+            new JoinMetadata
+            {
+                Description = "RCU key press PVR",
+                JoinCapabilities = eJoinCapabilities.FromSIMPL,
+                JoinType = eJoinType.Digital
+            });
+
+        /// <summary>
+        /// RCU key press - record
+        /// </summary>
+        [JoinName("RcuKpRecord")]
+        public JoinDataComplete RcuKpRecord = new JoinDataComplete(
+            new JoinData
+            {
+                JoinNumber = 44,
+                JoinSpan = 1
+            },
+            new JoinMetadata
+            {
+                Description = "RCU key press record",
+                JoinCapabilities = eJoinCapabilities.FromSIMPL,
+                JoinType = eJoinType.Digital
+            });
+
+        /// <summary>
+        /// RCU key press - titles (aka closed caption)
+        /// </summary>
+        [JoinName("RcuKpTitles")]
+        public JoinDataComplete RcuKpTitles = new JoinDataComplete(
+            new JoinData
+            {
+                JoinNumber = 45,
+                JoinSpan = 1
+            },
+            new JoinMetadata
+            {
+                Description = "RCU key press titles",
+                JoinCapabilities = eJoinCapabilities.FromSIMPL,
+                JoinType = eJoinType.Digital
+            });
+
+        /// <summary>
+        /// RCU key press - source
+        /// </summary>
+        [JoinName("RcuKpSource")]
+        public JoinDataComplete RcuKpSource = new JoinDataComplete(
+            new JoinData
+            {
+                JoinNumber = 46,
+                JoinSpan = 1
+            },
+            new JoinMetadata
+            {
+                Description = "RCU key press source",
+                JoinCapabilities = eJoinCapabilities.FromSIMPL,
+                JoinType = eJoinType.Digital
+            });
+        
+
+        /// <summary>
+        /// RCU key press - page up
+        /// </summary>
+        [JoinName("RcuKpPageUp")]
+        public JoinDataComplete RcuKpPageUp = new JoinDataComplete(
+            new JoinData
+            {
+                JoinNumber = 48,
+                JoinSpan = 1
+            },
+            new JoinMetadata
+            {
+                Description = "RCU key press page up",
+                JoinCapabilities = eJoinCapabilities.FromSIMPL,
+                JoinType = eJoinType.Digital
+            });
+
+        /// <summary>
+        /// RCU key press - page down
+        /// </summary>
+        [JoinName("RcuKpPageDown")]
+        public JoinDataComplete RcuKpPageDown = new JoinDataComplete(
+            new JoinData
+            {
+                JoinNumber = 49,
+                JoinSpan = 1
+            },
+            new JoinMetadata
+            {
+                Description = "RCU key press page down",
+                JoinCapabilities = eJoinCapabilities.FromSIMPL,
+                JoinType = eJoinType.Digital
+            });
 
 		/// <summary>
 		/// RCU key press - 0-9
@@ -538,7 +674,11 @@ namespace TriplePlayIptvPlugin
 			});
 
 		/// <summary>
-		/// Preset select, 1-24
+		/// Presets, 1-24
+		/// Digital in: select
+		/// Digital out: enabled
+		/// Analog out: Channel number
+		/// Serial out: Name
 		/// </summary>
 		[JoinName("Presets")]
 		public JoinDataComplete Presets = new JoinDataComplete(
@@ -946,7 +1086,7 @@ namespace TriplePlayIptvPlugin
         public JoinDataComplete PresetIconPaths = new JoinDataComplete(
             new JoinData
             {
-                JoinNumber = 51,
+                JoinNumber = 41,
                 JoinSpan = 24
             },
             new JoinMetadata

@@ -128,13 +128,13 @@ namespace TriplePlayIptvPlugin
 				? string.Format("{0}", request.Trim('/'))
 				: string.Format("{0}://{1}/{2}", Method.ToString().ToLower(), Host, request.Trim('/'));
 
-            Debug.Console(1, this, "SendRequest: {0}", url);
+            Debug.Console(0, this, "SendRequest: {0}", url);
 
 			switch (Method)
 			{
 				case eControlMethod.Http:
 					{
-                        Debug.Console(1, this, "SendRequest: _clientHttp.ProcessBusy {0}", _clientHttp.ProcessBusy);
+                        Debug.Console(0, this, "SendRequest: _clientHttp.ProcessBusy {0}", _clientHttp.ProcessBusy);
 						if (_clientHttp.ProcessBusy)
 							_requestQueue.Enqueue(() => DispatchHttpRequest(url, Crestron.SimplSharp.Net.Http.RequestType.Get));
 						else
@@ -143,7 +143,7 @@ namespace TriplePlayIptvPlugin
 					}
 				case eControlMethod.Https:
 					{
-                        Debug.Console(1, this, "SendRequest: _clientHttps.ProcessBusy {0}", _clientHttps.ProcessBusy);
+                        Debug.Console(0, this, "SendRequest: _clientHttps.ProcessBusy {0}", _clientHttps.ProcessBusy);
 						if (_clientHttps.ProcessBusy)
 							_requestQueue.Enqueue(() => DispatchHttpsRequest(url, Crestron.SimplSharp.Net.Https.RequestType.Get));
 						else

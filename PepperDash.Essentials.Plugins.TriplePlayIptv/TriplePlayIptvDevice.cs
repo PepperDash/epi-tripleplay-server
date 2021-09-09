@@ -167,6 +167,15 @@ namespace TriplePlayIptvPlugin
             StbId = config.StbId;
             _presets = new Dictionary<uint, TriplePlayServicesPresetsConfig>();
 
+            for (var p = 1; p < 24; p++)
+            {
+                var preset = (uint)p;
+                PresetEnabledFeedbacks.Add(preset, new BoolFeedback(() => false));
+                PresetNameFeedbacks.Add(preset, new StringFeedback(() => string.Format("Preset {0}", preset)));
+                PresetChannelFeedbacks.Add(preset, new IntFeedback(() => (int)preset));
+                PresetIconPathFeedbacks.Add(preset, new StringFeedback(() => string.Format("/path/to/preset{0}", preset)));
+            }
+
             Debug.Console(0, this, "Constructing new {0} instance complete", name);
             Debug.Console(0, new string('*', 80));
             Debug.Console(0, new string('*', 80));
@@ -209,7 +218,7 @@ namespace TriplePlayIptvPlugin
                 joinMap.SetCustomJoinData(customJoins);
             }
 
-            Debug.Console(1, "Linking to Trilist '{0}'", trilist.ID.ToString("X"));
+            Debug.Console(0, "Linking to Trilist '{0}'", trilist.ID.ToString("X"));
             Debug.Console(0, "Linking to Bridge Type {0}", GetType().Name);
 
             // links to bridge
@@ -241,7 +250,7 @@ namespace TriplePlayIptvPlugin
             trilist.SetSigTrueAction(joinMap.RcuKpChannelDown.JoinNumber, () => RcuKeyPress(RcuKeys.ChannelDown));
             trilist.SetSigTrueAction(joinMap.RcuKpGuide.JoinNumber, () => RcuKeyPress(RcuKeys.Guide));
             trilist.SetSigTrueAction(joinMap.RcuKpTv.JoinNumber, () => RcuKeyPress(RcuKeys.Tv));
-            trilist.SetSigTrueAction(joinMap.RcuKpMenu.JoinNumber, () => RcuKeyPress(RcuKeys.Menu));
+            trilist.SetSigTrueAction(joinMap.RcuKpHome.JoinNumber, () => RcuKeyPress(RcuKeys.Home));
             trilist.SetSigTrueAction(joinMap.RcuKpUp.JoinNumber, () => RcuKeyPress(RcuKeys.Up));
             trilist.SetSigTrueAction(joinMap.RcuKpDown.JoinNumber, () => RcuKeyPress(RcuKeys.Down));
             trilist.SetSigTrueAction(joinMap.RcuKpLeft.JoinNumber, () => RcuKeyPress(RcuKeys.Left));
@@ -256,6 +265,14 @@ namespace TriplePlayIptvPlugin
             trilist.SetSigTrueAction(joinMap.RcuKpPause.JoinNumber, () => RcuKeyPress(RcuKeys.Pause));
             trilist.SetSigTrueAction(joinMap.RcuKpRewind.JoinNumber, () => RcuKeyPress(RcuKeys.Rewind));
             trilist.SetSigTrueAction(joinMap.RcuKpForward.JoinNumber, () => RcuKeyPress(RcuKeys.Forward));
+            trilist.SetSigTrueAction(joinMap.RcuKpBack.JoinNumber, () => RcuKeyPress(RcuKeys.Back));
+            trilist.SetSigTrueAction(joinMap.RcuKpInfo.JoinNumber, () => RcuKeyPress(RcuKeys.Info));
+            trilist.SetSigTrueAction(joinMap.RcuKpPvr.JoinNumber, () => RcuKeyPress(RcuKeys.Pvr));
+            trilist.SetSigTrueAction(joinMap.RcuKpRecord.JoinNumber, () => RcuKeyPress(RcuKeys.Record));
+            trilist.SetSigTrueAction(joinMap.RcuKpTitles.JoinNumber, () => RcuKeyPress(RcuKeys.Titles));
+            trilist.SetSigTrueAction(joinMap.RcuKpSource.JoinNumber, () => RcuKeyPress(RcuKeys.Source));
+            trilist.SetSigTrueAction(joinMap.RcuKpPageUp.JoinNumber, () => RcuKeyPress(RcuKeys.PageUp));
+            trilist.SetSigTrueAction(joinMap.RcuKpPageDown.JoinNumber, () => RcuKeyPress(RcuKeys.PageDown));
 
             // stb rcu keypad numbers
             for (var n = 0; n < joinMap.RcuKpNumbers.JoinSpan; n++)
@@ -267,18 +284,19 @@ namespace TriplePlayIptvPlugin
             }
 
             // stb presets
-            for (var n = 0; n < joinMap.Presets.JoinSpan; n++)
+            for (var p = 1; p < joinMap.Presets.JoinSpan; p++)
             {
-                var presetJoin = (uint)(joinMap.Presets.JoinNumber + n);
-                var presetPathJoin = (uint)(joinMap.PresetIconPaths.JoinNumber + n);
-                var number = (uint)n;
-                // TODO [ ] Update to pass index of preset select pressed
-                trilist.SetSigTrueAction(presetJoin, () => PresetSelect(number));
+                var presetJoin = (uint)(joinMap.Presets.JoinNumber + p - 1);
+                var presetPathJoin = (uint)(joinMap.PresetIconPaths.JoinNumber + p - 1);
+                var preset = (uint)p;
 
-                PresetEnabledFeedbacks[number].LinkInputSig(trilist.BooleanInput[presetJoin]);
-                PresetNameFeedbacks[number].LinkInputSig(trilist.StringInput[presetJoin]);
-                PresetChannelFeedbacks[number].LinkInputSig(trilist.UShortInput[presetJoin]);
-                PresetIconPathFeedbacks[number].LinkInputSig(trilist.StringInput[presetPathJoin]);
+                // TODO [ ] Update to pass index of preset select pressed
+                trilist.SetSigTrueAction(presetJoin, () => PresetSelect(preset));
+
+                PresetEnabledFeedbacks[preset].LinkInputSig(trilist.BooleanInput[presetJoin]);
+                PresetNameFeedbacks[preset].LinkInputSig(trilist.StringInput[presetJoin]);
+                PresetChannelFeedbacks[preset].LinkInputSig(trilist.UShortInput[presetJoin]);
+                PresetIconPathFeedbacks[preset].LinkInputSig(trilist.StringInput[presetPathJoin]);
             }
 
             // stb presets
@@ -462,10 +480,10 @@ namespace TriplePlayIptvPlugin
             PresetIconPathFeedbacks[key].FireUpdate();
 
             // preset enable
-            if(PresetEnabledFeedbacks.ContainsKey(key))
-                PresetEnabledFeedbacks[key] = new BoolFeedback(()=>_presets[key].IsFavorite);
+            if (PresetEnabledFeedbacks.ContainsKey(key))
+                PresetEnabledFeedbacks[key] = new BoolFeedback(() => _presets[key].IsFavorite);
             else
-                PresetEnabledFeedbacks.Add(key, new BoolFeedback(()=>_presets[key].IsFavorite));
+                PresetEnabledFeedbacks.Add(key, new BoolFeedback(() => _presets[key].IsFavorite));
             PresetEnabledFeedbacks[key].FireUpdate();
         }
 
@@ -684,93 +702,137 @@ namespace TriplePlayIptvPlugin
             /// </summary>
             Number9 = 9,
             /// <summary>
-            /// RcuKeys Power
-            /// </summary>
-            Power = 10,
-            /// <summary>
             /// RcuKeys Channel Up
             /// </summary>
-            ChannelUp = 11,
+            ChannelUp = 10,
             /// <summary>
             /// RcuKeys Channel Down
             /// </summary>
-            ChannelDown = 12,
+            ChannelDown = 11,
             /// <summary>
-            /// RcuKeys Guide
+            /// RcuKeys Page Up
             /// </summary>
-            Guide = 13,
+            PageUp = 12,
             /// <summary>
-            /// RcuKeys TV
+            /// RcuKeys Page Down
             /// </summary>
-            Tv = 14,
-            /// <summary>
-            /// RcuKeys Back
-            /// </summary>
-            Back = 15,
-            /// <summary>
-            /// RcuKeys Menu
-            /// </summary>
-            Menu = 16,
+            PageDown = 13,
             /// <summary>
             /// RcuKeys Dpad Up
             /// </summary>
-            Up = 17,
+            Up = 14,
             /// <summary>
             /// RcuKeys Dpad Down
             /// </summary>
-            Down = 18,
+            Down = 15,
             /// <summary>
             /// RcuKeys Dpad Left
             /// </summary>
-            Left = 19,
+            Left = 16,
             /// <summary>
             /// RcuKeys Dpad Right
             /// </summary>
-            Right = 20,
-            /// <summary>
-            /// RcuKeys Dpad Ok
-            /// </summary>
-            Ok = 21,
+            Right = 17,
             /// <summary>
             /// RcuKeys red
             /// </summary>
-            Red = 22,
+            Red = 18,
             /// <summary>
             /// RcuKeys green
             /// </summary>
-            Green = 23,
+            Green = 19,
             /// <summary>
             /// RcuKeys yellow
             /// </summary>
-            Yellow = 24,
+            Yellow = 20,
             /// <summary>
             /// RcuKeys blue
             /// </summary>
-            Blue = 25,
+            Blue = 21,
             /// <summary>
-            /// RcuKeys play
+            /// RcuKeys Dpad Ok
             /// </summary>
-            Play = 26,
+            Ok = 22,
             /// <summary>
-            /// RcuKeys stop
+            /// RcuKeys Home
             /// </summary>
-            Stop = 27,
+            Home = 23,
             /// <summary>
-            /// RcuKeys pause
+            /// RcuKeys Back
             /// </summary>
-            Pause = 28,
+            Back = 24,
+            /// <summary>
+            /// RcuKeys Power
+            /// </summary>
+            Power = 25,
+            /// <summary>
+            /// RcuKeys Volume Up
+            /// </summary>
+            VolumeUp = 26,
+            /// <summary>
+            /// RcuKeys Volume Down
+            /// </summary>
+            VolumeDown = 27,
+            /// <summary>
+            /// RcuKeys Mute toggle
+            /// </summary>
+            Mute = 28,
+            /// <summary>
+            /// RcuKeys Source toggle
+            /// </summary>
+            Source = 29,
             /// <summary>
             /// RcuKeys rewind
             /// </summary>
-            Rewind = 29,
+            Rewind = 30,
+            /// <summary>
+            /// RcuKeys play
+            /// </summary>
+            Play = 31,
+            /// <summary>
+            /// RcuKeys pause
+            /// </summary>
+            Pause = 32,
             /// <summary>
             /// RcuKeys forward
             /// </summary>
-            Forward = 30,
+            Forward = 33,
             /// <summary>
-            /// RcuKeys closed caption
+            /// RcuKeys stop
             /// </summary>
-            CloseCaption = 31
+            Stop = 34,
+            /// <summary>
+            /// RcuKeys Record
+            /// </summary>
+            Record = 35,
+            /// <summary>
+            /// RcuKeys Guide
+            /// </summary>
+            Guide = 36,
+            /// <summary>
+            /// RcuKeys TV
+            /// </summary>
+            Tv = 37,
+            /// <summary>
+            /// RcuKeys Info
+            /// </summary>
+            Info = 38,
+            /// <summary>
+            /// RcuKeys Movies
+            /// </summary>
+            Movies = 39,
+            /// <summary>
+            /// RcuKeys PVR
+            /// </summary>
+            Pvr = 40,
+            /// <summary>
+            /// RcuKeys Music
+            /// </summary>
+            Music = 41,
+            /// <summary>
+            /// RcuKeys Titles (aka closed captions)
+            /// </summary>
+            Titles = 42
         }
 
         /// <summary>
