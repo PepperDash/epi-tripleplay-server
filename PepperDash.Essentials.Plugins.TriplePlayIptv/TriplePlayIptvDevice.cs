@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
 using Crestron.SimplSharp;
 using Crestron.SimplSharpPro.DeviceSupport;
 using Newtonsoft.Json;
@@ -9,9 +8,8 @@ using Newtonsoft.Json.Linq;
 using PepperDash.Core;
 using PepperDash.Essentials.Core;
 using PepperDash.Essentials.Core.Bridges;
-using PepperDash.Essentials.Core.Presets;
 
-namespace TriplePlayIptvPlugin
+namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
 {
     /// <summary>
     /// Plugin device
@@ -245,6 +243,7 @@ namespace TriplePlayIptvPlugin
             trilist.SetSigTrueAction(joinMap.VolumeMuteToggle.JoinNumber, VolumeMuteToggle);
             trilist.SetSigTrueAction(joinMap.VolumeMuteOn.JoinNumber, VolumeMuteOn);
             trilist.SetSigTrueAction(joinMap.VolumeMuteOff.JoinNumber, VolumeMuteOff);
+
             trilist.SetSigTrueAction(joinMap.RcuKpPower.JoinNumber, () => RcuKeyPress(RcuKeys.Power));
             trilist.SetSigTrueAction(joinMap.RcuKpChannelUp.JoinNumber, () => RcuKeyPress(RcuKeys.ChannelUp));
             trilist.SetSigTrueAction(joinMap.RcuKpChannelDown.JoinNumber, () => RcuKeyPress(RcuKeys.ChannelDown));
@@ -383,6 +382,30 @@ namespace TriplePlayIptvPlugin
 
         #endregion Overrides of EssentialsBridgeableDevice
 
+        private bool IsValidJson(string contentString)
+        {
+            if (string.IsNullOrEmpty(contentString)) return false;
+
+            contentString = contentString.Trim();
+            if ((!contentString.StartsWith("{") || !contentString.EndsWith("}")) &&
+                (!contentString.StartsWith("[") || !contentString.EndsWith("]"))) return false;
+
+            try
+            {
+                var obj = JToken.Parse(contentString);
+                return true;
+            }
+            catch (JsonReaderException jex)
+            {
+                Debug.Console(0, this, "IsValidJson: JsonReaderException:\r{0}", jex);
+                return false;
+            }
+            catch (Exception ex)
+            {
+                Debug.Console(0, this, "IsValidJson: Exception:\r{0}", ex);
+                return false;
+            }
+        }
 
         private void _comms_ResponseRecieved(object sender, GenericClientResponseEventArgs args)
         {
@@ -390,22 +413,33 @@ namespace TriplePlayIptvPlugin
             {
                 Debug.Console(0, this, "_comms_ResponseRecieved: Code = {0} | ContentString = {1}", args.Code, args.ContentString);
 
+                ResponseCode = args.Code;
+
                 if (string.IsNullOrEmpty(args.ContentString)) return;
 
-                // TODO [ ] Switch between result types for deserialization
                 // {"jsonrpc":"2.0","id":null,"result":true}
                 // {"jsonrpc":"2.0","id":null,"error":{"code":-32601,"message":"server error. method not found.\n\nGetPowerStatus"}}
                 // {"jsonrpc":"2.0","id":null,"result":[{"id":1,"channelNumber":1,"name":"CP24","isFavourite":false,"iconPath":"/portalImages/services/1_v2.png","accessControl":false,"serviceAccessControl":"1","recordingType":"NwPvr","type":1,"typeSpecificData":{"ipAddress":"239.0.8.2","port":2802,"videoCodec":"mpeg2","encryptionType":"None","encryptionId":""},"multipleTypeData":{"None":{"ipAddress":"239.0.8.2","port":2802,"videoCodec":"mpeg2","encryptionType":"None","encryptionId":""}},"geographicalArea":"0","isWatchable":true,"liveTrickplayRunning":false}]}
-                var jObject = JObject.Parse(args.ContentString);
-                var token = jObject.SelectToken("result");
-                var tokenType = token.Type;
+                if (IsValidJson(args.ContentString))
+                {
+                    var jObject = JObject.Parse(args.ContentString);
+                    var token = jObject.SelectToken("result");
+                    var tokenType = token.Type;
+                    if (tokenType != JTokenType.Array)
+                    {
+                        ResponseContentString = args.ContentString;
+                        return;
+                    }
 
-                if (tokenType != JTokenType.Array) return;
-
-                // if array, desrialize message
-                var services = JsonConvert.DeserializeObject<ServicesResponse>(args.ContentString);
-                if (services == null || services.Results == null) return;
-                ProcessResultsObject(services.Results);
+                    // if array, desrialize message
+                    var services = JsonConvert.DeserializeObject<ServicesResponse>(args.ContentString);
+                    if (services == null || services.Results == null) return;
+                    ProcessResultsObject(services.Results);
+                }
+                else
+                {
+                    ResponseContentString = args.ContentString;
+                }                
             }
             catch (Exception ex)
             {
@@ -513,7 +547,7 @@ namespace TriplePlayIptvPlugin
         {
             if (_comms == null || string.IsNullOrEmpty(text)) return;
 
-            _comms.SendRequest(string.Format("/triplecare/jsonrpchandler.php?call={\"jsonrpc\":\"2.0\",{0}}", text));
+            _comms.SendRequest(string.Format("/triplecare/jsonrpchandler.php?call={{\"jsonrpc\":\"2.0\",{0}}}", text));
         }
 
         /// <summary>
@@ -523,13 +557,15 @@ namespace TriplePlayIptvPlugin
         /// <param name="param"></param>
         public void SendCommand(string method, string param)
         {
+            Debug.Console(0, this, "SendCommand: method = {0} | param = {1}", method, param);
+
             if (_comms == null || string.IsNullOrEmpty(method)) return;
 
             var parameters = string.IsNullOrEmpty(param)
-                ? string.Format("[{0}]", StbId)
-                : string.Format("[{0}, {1}]", StbId, param);
+                ? string.Format("{0}", StbId)
+                : string.Format("{0}, {1}", StbId, param);
 
-            _comms.SendRequest(string.Format("/triplecare/jsonrpchandler.php?call={\"jsonrpc\":\"2.0\",\"method\":\"{0}\",\"params\":[{1}]}", method, parameters));
+            _comms.SendRequest(string.Format("/triplecare/jsonrpchandler.php?call={{\"jsonrpc\":\"2.0\",\"method\":\"{0}\",\"params\":[{1}]}}", method, parameters));
         }
 
         /// <summary>
@@ -841,7 +877,9 @@ namespace TriplePlayIptvPlugin
         /// <param name="key"></param>
         public void RcuKeyPress(RcuKeys key)
         {
-            SendCommand("HandleKeyPress", string.Format("\"{0}\"", key));
+            Debug.Console(0, this, "RcuKeyPress: key = {0}", key);
+            SendCommand("HandleKeyPress", string.Format("\u0022{0}\u0022", key));
+            //SendCommand("HandleKeyPress", key.ToString());
         }
 
         /// <summary>
@@ -849,8 +887,11 @@ namespace TriplePlayIptvPlugin
         /// </summary>
         public void RcuKpNumbers(int number)
         {
+            Debug.Console(0, this, "RcuKpNumbers: number = {0}", number);
+
             if (number < 0 && number > 9) return;
-            SendCommand("HandleKeyPress", string.Format("\"{0}\"", number));
+            SendCommand("HandleKeyPress", string.Format("\u0022Number{0}\u0022", number));
+            //SendCommand("HandleKeyPress", String.Format("Number{0}", number));
         }
 
         #endregion

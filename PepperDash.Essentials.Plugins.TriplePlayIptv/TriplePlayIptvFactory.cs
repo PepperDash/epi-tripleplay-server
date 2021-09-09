@@ -4,7 +4,7 @@ using PepperDash.Core;
 using PepperDash.Essentials.Core;
 using PepperDash.Essentials.Core.Config;
 
-namespace TriplePlayIptvPlugin
+namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
 {
 	/// <summary>
 	/// Plugin factory for devices that require communications using IBasicCommunications or custom communication methods

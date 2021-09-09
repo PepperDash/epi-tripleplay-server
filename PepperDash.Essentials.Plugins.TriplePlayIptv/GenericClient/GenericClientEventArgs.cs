@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace TriplePlayIptvPlugin
+namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
 {
 	/// <summary>
 	/// Cleint event args

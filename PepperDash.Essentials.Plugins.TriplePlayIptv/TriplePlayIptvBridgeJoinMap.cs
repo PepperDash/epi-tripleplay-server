@@ -1,6 +1,6 @@
 ﻿using PepperDash.Essentials.Core;
 
-namespace TriplePlayIptvPlugin
+namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
 {
 	/// <summary>
 	/// Plugin device Bridge Join Map

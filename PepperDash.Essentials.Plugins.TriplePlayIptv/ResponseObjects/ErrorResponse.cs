@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace TriplePlayIptvPlugin
+namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
 {
     /// <summary>
     /// Root response object for error responses
