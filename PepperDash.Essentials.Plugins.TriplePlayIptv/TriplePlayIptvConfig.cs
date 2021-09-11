@@ -88,15 +88,15 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
 		/// <summary>
 		/// Preset dictionary
 		/// </summary>
-		[JsonProperty("presets")]
-		public Dictionary<uint, TriplePlayPresetsConfig> Presets { get; set; }
+		[JsonProperty("presets", NullValueHandling = NullValueHandling.Ignore)]
+        public Dictionary<uint, TriplePlayServicesPresetsConfig> Presets { get; set; }
 
 		/// <summary>
 		/// Constuctor
 		/// </summary>
 		public TriplePlayIptvConfig()
 		{
-			Presets = new Dictionary<uint, TriplePlayPresetsConfig>();
+            Presets = new Dictionary<uint, TriplePlayServicesPresetsConfig>();
 		}
 	}
 
@@ -138,37 +138,37 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
         /// <summary>
         /// Result ID (received from GetAllServices result response)
         /// </summary>
-        [JsonProperty("id")]
+        [JsonProperty("id", NullValueHandling = NullValueHandling.Ignore)]
         public uint  Id { get; set; }
 
         /// <summary>
         /// Channel number (received from GetAllServices result response)
         /// </summary>
-        [JsonProperty("channelNumber")]
+        [JsonProperty("channelNumber", NullValueHandling = NullValueHandling.Ignore)]
         public uint ChannelNumber { get; set; }
 
         /// <summary>
         /// Name (received from GetAllServices result response)
         /// </summary>
-        [JsonProperty("name")]
+        [JsonProperty("name", NullValueHandling = NullValueHandling.Ignore)]
         public string Name { get; set; }
 
         /// <summary>
         /// Is favorite flag (recieeved from GetAllServices result response)
         /// </summary>
-        [JsonProperty("isFavorite")]
+        [JsonProperty("isFavorite", NullValueHandling = NullValueHandling.Ignore)]
         public bool IsFavorite { get; set; }
 
         /// <summary>
         /// Icon path (received from GetAllServices result response)
         /// </summary>
-        [JsonProperty("iconPath")]
+        [JsonProperty("iconPath", NullValueHandling = NullValueHandling.Ignore)]
         public string IconPath { get; set; }
 
         /// <summary>
         /// Is watchable (recieeved from GetAllServices result response)
         /// </summary>
-        [JsonProperty("isWatchable")]
+        [JsonProperty("isWatchable", NullValueHandling = NullValueHandling.Ignore)]
         public bool IsWatchable { get; set; }
     }
 }

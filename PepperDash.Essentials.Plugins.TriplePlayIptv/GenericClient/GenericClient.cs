@@ -19,8 +19,11 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
         public string Key { get; private set; }
 
         private eControlMethod Method { get; set; }
-        private string Host { get; set; }
-        private string AuthorizationBase64 { get; set; }
+        public string Host { get; private set; }
+        public int Port { get; private set; }
+        public string Username { get; private set; }
+        public string Password { get; private set; }
+        public string AuthorizationBase64 { get; set; }
 
         private static HttpClient _clientHttp;
         private static HttpClientRequest _requestHttp;
@@ -53,6 +56,10 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
             Key = string.Format("{0}-{1}-client", key, controlConfig.Method).ToLower();
             Method = controlConfig.Method;
             Host = controlConfig.TcpSshProperties.Address;
+            Port = (controlConfig.TcpSshProperties.Port >= 1 && controlConfig.TcpSshProperties.Port <= 65535) ? controlConfig.TcpSshProperties.Port : 80;
+            Username = controlConfig.TcpSshProperties.Username ?? "";
+            Password = controlConfig.TcpSshProperties.Password ?? "";
+            AuthorizationBase64 = EncodeBase64(Username, Password);
 
             switch (Method)
             {
@@ -63,18 +70,18 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
                         if (_requestHttp == null)
                             _requestHttp = new HttpClientRequest();
 
-                        _clientHttp.Port = (controlConfig.TcpSshProperties.Port >= 1 && controlConfig.TcpSshProperties.Port <= 65535) ? controlConfig.TcpSshProperties.Port : 80;
-                        _clientHttp.UserName = controlConfig.TcpSshProperties.Username ?? "";
-                        _clientHttp.Password = controlConfig.TcpSshProperties.Password ?? "";
+                        _clientHttp.Port = Port;
+                        _clientHttp.UserName = Username;
+                        _clientHttp.Password = Password;
                         _clientHttp.KeepAlive = false;
-                        
-                        _requestHttp.Header.ContentType = "application/json";
 
-                        AuthorizationBase64 = EncodeBase64(_clientHttp.UserName, _clientHttp.Password);
+                        //_requestHttp.Header.ContentType = "application/json";
+                        _requestHttp.Header.SetHeaderValue("Content-Type", "application/json");
                         if (!string.IsNullOrEmpty(AuthorizationBase64))
-                        {
+                        {                            
                             _requestHttp.Header.SetHeaderValue("Authorization", AuthorizationBase64);
                         }
+                        
                         break;
                     }
                 case eControlMethod.Https:
@@ -84,16 +91,15 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
                         if (_requestHttps == null)
                             _requestHttps = new HttpsClientRequest();
 
-
-                        _clientHttps.UserName = controlConfig.TcpSshProperties.Username ?? "";
-                        _clientHttps.Password = controlConfig.TcpSshProperties.Password ?? "";
+                        _clientHttps.UserName = Username;
+                        _clientHttps.Password = Password;
                         _clientHttps.KeepAlive = false;
                         _clientHttps.HostVerification = false;
                         _clientHttps.PeerVerification = false;
-                        
-                        _requestHttps.Header.ContentType = "application/json";
 
-                        AuthorizationBase64 = EncodeBase64(_clientHttps.UserName, _clientHttps.Password);
+                        //_requestHttps.Header.ContentType = "application/json";
+                        _requestHttps.Header.SetHeaderValue("Content-Type", "application/json");
+
                         if (!string.IsNullOrEmpty(AuthorizationBase64))
                         {
                             _clientHttps.AuthenticationMethod = AuthMethod.BASIC;
@@ -121,16 +127,7 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
                 return;
             }
 
-            char[] charsToTrim = { '/' };
-            //Debug.Console(0, this, "SendRequest: request = {0}", request);
-            //var requestTrimmed = request.Trim(charsToTrim);
-            //Debug.Console(0, this, "SendRequest: requestTrimmed = {0}", requestTrimmed);
-
-            //var url = requestTrimmed.StartsWith("http")
-            //    ? string.Format("{0}", requestTrimmed)
-            //    : string.Format("{0}://{1}/{2}", Method.ToString().ToLower(), Host, requestTrimmed);
-
-            Debug.Console(0, this, "SendRequest: request = {0}", request);
+            char[] charsToTrim = { '/' };            
             var url = request.StartsWith("http")
                 ? string.Format("{0}", request.Trim(charsToTrim))
                 : string.Format("{0}://{1}/{2}", Method.ToString().ToLower(), Host, request.Trim(charsToTrim));
@@ -166,7 +163,7 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
         }
 
         // dispatches requests to the client
-        private void DispatchHttpRequest(string request, Crestron.SimplSharp.Net.Http.RequestType type)
+        private void DispatchHttpRequest(string request, Crestron.SimplSharp.Net.Http.RequestType requestType)
         {
             if (string.IsNullOrEmpty(request))
             {
@@ -176,12 +173,16 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
 
             try
             {
-                //var uri = new Uri(request);
-                //Debug.Console(0, this, "DispatchHttpRequest: uri - {0}", uri);
+                //var uri = new Uri(request);                
                 //_requestHttp.Url.Parse(uri.AbsoluteUri);
-                _requestHttp.Url.Parse(request);
+                //_requestHttp.RequestType = requestType;
+
+                var uri = new Uri(string.Format("{0}//:{1}/triplecare/jsonrpchandler.php", Method.ToString().ToLower(), Host.Trim('/')));
+                _requestHttp.Url.Parse(uri.AbsoluteUri);
+                _requestHttp.RequestType = requestType;
+
+                Debug.Console(0, this, "DispatchHttpRequest: uri - {0}", uri);
                 Debug.Console(0, this, "DispatchHttpRequest: _requestHttp.Url = {0}", _requestHttp.Url);
-                _requestHttp.RequestType = type;
 
                 _dispatchHttpError = _clientHttp.DispatchAsync(_requestHttp, (response, error) =>
                 {
@@ -213,12 +214,13 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
 
             try
             {
-                //var uri = new Uri(request);
-                //Debug.Console(0, this, "DispatchHttpsRequest: uri - {0}", uri);
-                //_requestHttps.Url.Parse(uri.AbsoluteUri);
-                _requestHttps.Url.Parse(request);
-                Debug.Console(0, this, "DispatchHttpsRequest: _requestHttps.Url = {0}", _requestHttps.Url);
+                var uri = new Uri(request);
+                _requestHttps.Url.Parse(uri.AbsoluteUri);
                 _requestHttps.RequestType = requestType;
+
+                Debug.Console(0, this, "DispatchHttpsRequest: uri - {0}", uri);
+                Debug.Console(0, this, "DispatchHttpsRequest: _requestHttps.Url = {0}", _requestHttps.Url);
+                
 
                 _dispatchHttpsError = _clientHttps.DispatchAsync(_requestHttps, (response, error) =>
                 {
@@ -263,23 +265,20 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
 
         // encodes username and password, returning a Base64 encoded string
         private string EncodeBase64(string username, string password)
-        {
-            var authorization = "";
-
+        {         
             if (string.IsNullOrEmpty(username))
-                return authorization;
+                return "";
 
             try
             {
-                var base64String = Convert.ToBase64String(System.Text.Encoding.GetEncoding("ISO-8859-1").GetBytes(string.Format("{0}:{1}", username, password)));
-                authorization = string.Format("Basic {0}", base64String);
+                var base64String = Convert.ToBase64String(System.Text.Encoding.GetEncoding("ISO-8859-1").GetBytes(string.Format("{0}:{1}", username, password)));                
+                return string.Format("Basic {0}", base64String);
             }
             catch (Exception err)
             {
                 Debug.Console(0, this, Debug.ErrorLogLevel.Error, "EncodeBase64 Exception:\r{0}", err);
+                return "";
             }
-
-            return authorization;
         }
     }
 }

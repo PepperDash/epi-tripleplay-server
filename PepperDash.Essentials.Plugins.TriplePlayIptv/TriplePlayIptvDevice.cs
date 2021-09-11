@@ -19,11 +19,6 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
         // generic http/https client
         private readonly GenericClient _comms;
 
-        /// <summary>
-        /// It is often desirable to store the config
-        /// </summary>
-        //private TriplePlayIptvConfig _config;
-
         // preset dictionary
         private Dictionary<uint, TriplePlayServicesPresetsConfig> _presets;
 
@@ -146,9 +141,18 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
         {
             Debug.Console(0, this, "Constructing new {0} instance", name);
 
-            // TODO [ ] Update the constructor as needed for the plugin device being developed
+            if (config == null || config.Control == null)
+            {
+                Debug.Console(0, this, "Configuration or control object is null, unable to construct new {0} instance.  Check configuration.", name);
+                return;
+            }
 
             _comms = new GenericClient(Key, config.Control);
+            if (_comms == null)
+            {
+                Debug.Console(0, this, Debug.ErrorLogLevel.Error, "Failed to construct GenericClient using method {0}", config.Control.Method);
+                return;
+            }
             _comms.ResponseReceived += _comms_ResponseRecieved;
 
             StbIdFeedback = new IntFeedback(() => StbId);
@@ -163,9 +167,10 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
             ResponseErrorFeedback = new StringFeedback(() => ResponseError);
 
             StbId = config.StbId;
-            _presets = new Dictionary<uint, TriplePlayServicesPresetsConfig>();
 
+            _presets = new Dictionary<uint, TriplePlayServicesPresetsConfig>();
             for (var p = 1; p < 24; p++)
+            //foreach (var p in _presets)
             {
                 var preset = (uint)p;
                 PresetEnabledFeedbacks.Add(preset, new BoolFeedback(() => false));
@@ -439,7 +444,7 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
                 else
                 {
                     ResponseContentString = args.ContentString;
-                }                
+                }
             }
             catch (Exception ex)
             {

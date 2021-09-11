@@ -6,7 +6,7 @@
 			"requiredControlSofwareVersion": "",
 			"systemType": "huddle",
 			"lastModifiedDate": "2018-07-09T20:00:47.873Z",
-			"lastUid": 23,
+			"lastUid": 2,
 			"processorType": "rmc3"
 		},
 		"devices": [
@@ -21,42 +21,47 @@
 			},
 			{
 				"key": "iptv-tuner-1",
+				"uid": 1,
 				"name": "TriplePlay IPTV",
 				"type": "tripleplay",
 				"group": "pluginDevices",
 				"properties": {
 					"control": {
-						"method": "http",
-						"tcpSshProperties": {
-							"address": "10.0.0.200",
-							"port": 80,
+                        "method": "http",
+                        "tcpSshProperties": {
+                            "address": "10.1.0.199",
+                            "port": 80,
 							"username": "",
-							"password": "",
-							"autoReconnect": true,
-							"autoReconnectIntervalMs": 10000
-						}
-					},
-					"stbId": 1,
+							"password": ""
+                        }
+                    },
+					"stbId": 3,
 					"pollTimeMs": 30000,
 					"warningTimeoutMs": 180000,
 					"errorTimeoutMs": 300000,
 					"presets": {
 						"1": {
-							"name": "Item 1",
-							"icon": 1,
-							"channel": 101
+							"id": 1,
+							"channelNumber": 101,
+							"name": "Preset 1",
+							"isFavorite": true,
+							"iconPath": "/preset1/icon/path",
+							"isWatchable": true
 						},
 						"2": {
-							"name": "Item 2",
-							"icon": 2,
-							"channel": 102
+							"id": 2,
+							"channelNumber": 102,
+							"name": "Preset 2",
+							"isFavorite": true,
+							"iconPath": "/preset2/icon/path",
+							"isWatchable": true
 						}
 					}
 				}
 			},
 			{
 				"key": "plugin-bridge-1",
-				"uid": 11,
+				"uid": 2,
 				"name": "Plugin Bridge 1",
 				"group": "api",
 				"type": "eiscApiAdvanced",
@@ -66,12 +71,12 @@
 							"address": "127.0.0.2",
 							"port": 0
 						},
-						"ipid": "B1"
+						"ipid": "A5"
 					},
 					"devices": [
 						{
 							"deviceKey": "iptv-tuner-1",
-							"joinStart": 1
+							"joinStart": 501
 						}
 					]
 				}

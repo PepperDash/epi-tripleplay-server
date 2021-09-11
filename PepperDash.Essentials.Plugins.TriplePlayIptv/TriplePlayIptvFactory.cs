@@ -37,15 +37,12 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
 				
 				// get the plugin device properties configuration object & check for null 
 				var propertiesConfig = dc.Properties.ToObject<TriplePlayIptvConfig>();
-				if (propertiesConfig == null)
-				{
-					Debug.Console(0, "[{0}] Factory: failed to read properties config for {1}", dc.Key, dc.Name);
-					return null;
-				}
+			    if (propertiesConfig != null) return new TriplePlayIptvDevice(dc.Key, dc.Name, propertiesConfig);
+			    
+                Debug.Console(0, "[{0}] Factory: failed to read properties config for {1}", dc.Key, dc.Name);
+			    return null;
 
-				return new TriplePlayIptvDevice(dc.Key, dc.Name, propertiesConfig);
-				
-				// get the plugin device control properties configuratin object & check for null
+			    // get the plugin device control properties configuratin object & check for null
 				//var controlConfig = CommFactory.GetControlPropertiesConfig(dc);
 				//if (controlConfig == null)
 				//{
