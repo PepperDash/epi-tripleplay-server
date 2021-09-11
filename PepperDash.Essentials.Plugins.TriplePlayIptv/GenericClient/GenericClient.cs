@@ -183,6 +183,8 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
                 [20:19:43.433]App 1:[iptv-tuner-1-http-client] SendRequest: _clientHttp.ProcessBusy False
                 [20:19:43.439]App 1:[iptv-tuner-1-http-client] DispatchHttpRequest: request = /triplecare/jsonrpchandler.php?call={"jsonrpc":"2.0","method":"ChannelUp","params":[3]} | requestType = Get
                 [20:19:43.442]App 1:[iptv-tuner-1-http-client] Over-writing request = http://10.1.0.199/triplecare/jsonrpchandler.php
+                
+                // over-wrote request to test issue, currently finding the json body of the actual request (^^^see above^^^) is most likely causing the issue 
                 [20:19:43.454]App 1:[iptv-tuner-1-http-client] uri = http://10.1.0.199/triplecare/jsonrpchandler.php
                 [20:19:43.459]App 1:[iptv-tuner-1-http-client] uri.AbsolutePath = /triplecare/jsonrpchandler.php
                 [20:19:43.461]App 1:[iptv-tuner-1-http-client] uri.AbsoluteUri = http://10.1.0.199/triplecare/jsonrpchandler.php
