@@ -165,6 +165,8 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
         // dispatches requests to the client
         private void DispatchHttpRequest(string request, Crestron.SimplSharp.Net.Http.RequestType requestType)
         {
+            Debug.Console(0, this, "DispatchHttpRequest: request = {0} | requestType = {1}", request, requestType.ToString());
+
             if (string.IsNullOrEmpty(request))
             {
                 Debug.Console(0, this, "DispatchHttpRequest: request is null or empty, cannot dispatch request");
@@ -173,14 +175,37 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
 
             try
             {
-                //var uri = new Uri(request);                
-                //_requestHttp.Url.Parse(uri.AbsoluteUri);
-                //_requestHttp.RequestType = requestType;
+                request = string.Format("{0}://{1}/triplecare/jsonrpchandler.php", Method.ToString().ToLower(), Host.Trim('/'));
+                Debug.Console(0, this, "Over-writing request = {0}", request);
 
-                var uri = new Uri(string.Format("{0}//:{1}/triplecare/jsonrpchandler.php", Method.ToString().ToLower(), Host.Trim('/')));
+                var uri = new Uri(request);                                
+                Debug.Console(0, this, "uri = {0}", uri);
+                Debug.Console(0, this, "uri.AbsolutePath = {0}", uri.AbsolutePath);
+                Debug.Console(0, this, "uri.AbsoluteUri = {0}", uri.AbsoluteUri);
+                Debug.Console(0, this, "uri.Authority = {0}", uri.Authority);
+                Debug.Console(0, this, "uri.DnsSafeHost = {0}", uri.DnsSafeHost);
+                Debug.Console(0, this, "uri.Fragment = {0}", uri.Fragment);
+                Debug.Console(0, this, "uri.Host = {0}", uri.Host);
+                Debug.Console(0, this, "uri.HostNameType = {0}", uri.HostNameType);
+                Debug.Console(0, this, "uri.IsAbsoluteUri = {0}", uri.IsAbsoluteUri);
+                Debug.Console(0, this, "uri.IsDefaultPort = {0}", uri.IsDefaultPort);
+                Debug.Console(0, this, "uri.IsFile = {0}", uri.IsFile);
+                Debug.Console(0, this, "uri.IsLoopback = {0}", uri.IsLoopback);
+                Debug.Console(0, this, "uri.IsUnc = {0}", uri.IsUnc);
+                Debug.Console(0, this, "uri.IsWellFormedOriginalString = {0}", uri.IsWellFormedOriginalString());
+                Debug.Console(0, this, "uri.LocalPath = {0}", uri.LocalPath);
+                Debug.Console(0, this, "uri.OriginalString = {0}", uri.OriginalString);
+                Debug.Console(0, this, "uri.Port = {0}", uri.Port);
+                Debug.Console(0, this, "uri.PathAndQuery = {0}", uri.PathAndQuery);
+                Debug.Console(0, this, "uri.Query = {0}", uri.Query);
+                Debug.Console(0, this, "uri.Scheme = {0}", uri.Scheme);
+                //Debug.Console(0, this, "uri.Segments = {0}", uri.Segments);
+                Debug.Console(0, this, "uri.UserEscaped = {0}", uri.UserEscaped);
+                Debug.Console(0, this, "uri.UseerInfo = {0}", uri.UserInfo);
+
                 _requestHttp.Url.Parse(uri.AbsoluteUri);
                 _requestHttp.RequestType = requestType;
-
+                
                 Debug.Console(0, this, "DispatchHttpRequest: uri - {0}", uri);
                 Debug.Console(0, this, "DispatchHttpRequest: _requestHttp.Url = {0}", _requestHttp.Url);
 
