@@ -177,7 +177,41 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
             {
                 request = string.Format("{0}://{1}/triplecare/jsonrpchandler.php", Method.ToString().ToLower(), Host.Trim('/'));
                 Debug.Console(0, this, "Over-writing request = {0}", request);
-
+                /*
+                [20:19:43.426]App 1:[iptv-tuner-1] SendCommand: method = ChannelUp | param =
+                [20:19:43.431]App 1:[iptv-tuner-1-http-client] SendRequest: url = http://10.1.0.199/triplecare/jsonrpchandler.php?call={"jsonrpc":"2.0","method":"ChannelUp","params":[3]}
+                [20:19:43.433]App 1:[iptv-tuner-1-http-client] SendRequest: _clientHttp.ProcessBusy False
+                [20:19:43.439]App 1:[iptv-tuner-1-http-client] DispatchHttpRequest: request = /triplecare/jsonrpchandler.php?call={"jsonrpc":"2.0","method":"ChannelUp","params":[3]} | requestType = Get
+                [20:19:43.442]App 1:[iptv-tuner-1-http-client] Over-writing request = http://10.1.0.199/triplecare/jsonrpchandler.php
+                [20:19:43.454]App 1:[iptv-tuner-1-http-client] uri = http://10.1.0.199/triplecare/jsonrpchandler.php
+                [20:19:43.459]App 1:[iptv-tuner-1-http-client] uri.AbsolutePath = /triplecare/jsonrpchandler.php
+                [20:19:43.461]App 1:[iptv-tuner-1-http-client] uri.AbsoluteUri = http://10.1.0.199/triplecare/jsonrpchandler.php
+                [20:19:43.464]App 1:[iptv-tuner-1-http-client] uri.Authority = 10.1.0.199
+                [20:19:43.466]App 1:[iptv-tuner-1-http-client] uri.DnsSafeHost = 10.1.0.199
+                [20:19:43.469]App 1:[iptv-tuner-1-http-client] uri.Fragment =
+                [20:19:43.471]App 1:[iptv-tuner-1-http-client] uri.Host = 10.1.0.199
+                [20:19:43.474]App 1:[iptv-tuner-1-http-client] uri.HostNameType = IPv4
+                [20:19:43.476]App 1:[iptv-tuner-1-http-client] uri.IsAbsoluteUri = True
+                [20:19:43.479]App 1:[iptv-tuner-1-http-client] uri.IsDefaultPort = True
+                [20:19:43.480]App 1:[iptv-tuner-1-http-client] uri.IsFile = False
+                [20:19:43.482]App 1:[iptv-tuner-1-http-client] uri.IsLoopback = False
+                [20:19:43.484]App 1:[iptv-tuner-1-http-client] uri.IsUnc = False
+                [20:19:43.488]App 1:[iptv-tuner-1-http-client] uri.IsWellFormedOriginalString = True
+                [20:19:43.491]App 1:[iptv-tuner-1-http-client] uri.LocalPath = /triplecare/jsonrpchandler.php
+                [20:19:43.492]App 1:[iptv-tuner-1-http-client] uri.OriginalString = http://10.1.0.199/triplecare/jsonrpchandler.php
+                [20:19:43.495]App 1:[iptv-tuner-1-http-client] uri.Port = 80
+                [20:19:43.497]App 1:[iptv-tuner-1-http-client] uri.PathAndQuery = /triplecare/jsonrpchandler.php
+                [20:19:43.499]App 1:[iptv-tuner-1-http-client] uri.Query =
+                [20:19:43.501]App 1:[iptv-tuner-1-http-client] uri.Scheme = http
+                [20:19:43.503]App 1:[iptv-tuner-1-http-client] uri.UserEscaped = False
+                [20:19:43.505]App 1:[iptv-tuner-1-http-client] uri.UseerInfo =
+                [20:19:43.508]App 1:[iptv-tuner-1-http-client] DispatchHttpRequest: uri - http://10.1.0.199/triplecare/jsonrpchandler.php
+                [20:19:43.510]App 1:[iptv-tuner-1-http-client] DispatchHttpRequest: _requestHttp.Url = http://10.1.0.199/triplecare/jsonrpchandler.php
+                [20:19:43.516]App 1:[iptv-tuner-1-http-client] DispatchHttpsRequest: _dispatchHttpError 'PENDING'
+                [20:19:43.626]App 1:[plugin-bridge-1] EiscApiAdvanced change: Bool 511=False
+                [20:19:43.628]App 1:[plugin-bridge-1] Executing Action: System.Action`1[[System.Boolean, mscorlib, Version=3.5.0.0, Culture=neutral, PublicKeyToken=969DB8053D3322AC]]
+                [20:19:44.794]App 1:[iptv-tuner-1-http-client] DispatchRequest: response is null, error: UNKNOWN_ERROR
+                */
                 var uri = new Uri(request);                                
                 Debug.Console(0, this, "uri = {0}", uri);
                 Debug.Console(0, this, "uri.AbsolutePath = {0}", uri.AbsolutePath);
