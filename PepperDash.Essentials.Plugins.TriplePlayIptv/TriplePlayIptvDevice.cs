@@ -18,6 +18,9 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
     /// </summary>
     public class TriplePlayIptvDevice : EssentialsBridgeableDevice
     {
+        // request path for all commands
+        private string _requestPath = "/triplecare/jsonrpchandler.php";
+
         // generic http/https client
         private readonly GenericClient _comms;
 
@@ -572,7 +575,7 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
             if (_comms == null || string.IsNullOrEmpty(method)) return;
 
             var query = BuildQuery(StbId, method, strParam, null);
-            _comms.SendRequest("/triplecare/jsonrpchandler.php", query);
+            _comms.SendRequest(_requestPath, query);
         }
 
         /// <summary>
@@ -587,7 +590,7 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
             if (_comms == null || string.IsNullOrEmpty(method)) return;
 
             var query = BuildQuery(StbId, method, null, intParam);
-            _comms.SendRequest("/triplecare/jsonrpchandler.php", query);
+            _comms.SendRequest(_requestPath, query);
         }
 
         /// <summary>
@@ -603,7 +606,7 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
             if (_comms == null || string.IsNullOrEmpty(method)) return;
 
             var query = BuildQuery(StbId, method, strParam, intParam);
-            _comms.SendRequest("/triplecare/jsonrpchandler.php", query);
+            _comms.SendRequest(_requestPath, query);
         }
 
         private string BuildQuery(int stbId, string method, string strParam, int? intParam)
@@ -627,7 +630,7 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
             obj["params"] = array;
 
             var call = JsonConvert.SerializeObject(obj, Formatting.None);
-            Debug.Console(0, this, "BuildQuery: call = {0}", call);
+            Debug.Console(2, this, "BuildQuery: call = {0}", call);
             return string.Format("call={0}", call);
         }
 

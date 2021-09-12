@@ -165,9 +165,9 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
                     {
                         Debug.Console(0, this, "SendRequest: _clientHttps.ProcessBusy {0}", _clientHttps.ProcessBusy);
                         if (_clientHttps.ProcessBusy)
-                            _requestQueue.Enqueue(() => DispatchHttpsRequest(url, Crestron.SimplSharp.Net.Https.RequestType.Get));
+                            _requestQueue.Enqueue(() => DispatchHttpsRequest(url, contentString, Crestron.SimplSharp.Net.Https.RequestType.Get));
                         else
-                            DispatchHttpsRequest(url, Crestron.SimplSharp.Net.Https.RequestType.Get);
+                            DispatchHttpsRequest(url, contentString, Crestron.SimplSharp.Net.Https.RequestType.Get);
                         break;
                     }
                 default:
@@ -194,36 +194,8 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
 
             try
             {
-                //var uri = new Uri(request);
-                //Debug.Console(0, this, "DispatchHttpRequest: uri = {0}", uri);
-                //Debug.Console(0, this, "DispatchHttpRequest: uri.AbsolutePath = {0}", uri.AbsolutePath);
-                //Debug.Console(0, this, "DispatchHttpRequest: uri.AbsoluteUri = {0}", uri.AbsoluteUri);
-                //Debug.Console(0, this, "DispatchHttpRequest: uri.Authority = {0}", uri.Authority);
-                //Debug.Console(0, this, "DispatchHttpRequest: uri.DnsSafeHost = {0}", uri.DnsSafeHost);
-                //Debug.Console(0, this, "DispatchHttpRequest: uri.Fragment = {0}", uri.Fragment);
-                //Debug.Console(0, this, "DispatchHttpRequest: uri.Host = {0}", uri.Host);
-                //Debug.Console(0, this, "DispatchHttpRequest: uri.HostNameType = {0}", uri.HostNameType);
-                //Debug.Console(0, this, "DispatchHttpRequest: uri.IsAbsoluteUri = {0}", uri.IsAbsoluteUri);
-                //Debug.Console(0, this, "DispatchHttpRequest: uri.IsDefaultPort = {0}", uri.IsDefaultPort);
-                //Debug.Console(0, this, "DispatchHttpRequest: uri.IsFile = {0}", uri.IsFile);
-                //Debug.Console(0, this, "DispatchHttpRequest: uri.IsLoopback = {0}", uri.IsLoopback);
-                //Debug.Console(0, this, "DispatchHttpRequest: uri.IsUnc = {0}", uri.IsUnc);
-                //Debug.Console(0, this, "DispatchHttpRequest: uri.IsWellFormedOriginalString() = {0}", uri.IsWellFormedOriginalString());
-                //Debug.Console(0, this, "DispatchHttpRequest: uri.LocalPath = {0}", uri.LocalPath);
-                //Debug.Console(0, this, "DispatchHttpRequest: uri.OriginalString = {0}", uri.OriginalString);
-                //Debug.Console(0, this, "DispatchHttpRequest: uri.PathAndQuery = {0}", uri.PathAndQuery);
-                //Debug.Console(0, this, "DispatchHttpRequest: uri.Port = {0}", uri.Port);
-                //Debug.Console(0, this, "DispatchHttpRequest: uri.Query = {0}", uri.Query);
-                //Debug.Console(0, this, "DispatchHttpRequest: uri.Scheme = {0}", uri.Scheme);
-                //Debug.Console(0, this, "DispatchHttpRequest: uri.Segments = {0}", uri.Segments.ToString());
-                //Debug.Console(0, this, "DispatchHttpRequest: uri.UserEscaped = {0}", uri.UserEscaped);
-                //Debug.Console(0, this, "DispatchHttpRequest: uri.UserInfo = {0}", uri.UserInfo);
-
-                //_requestHttp.Url.Parse(uri.AbsoluteUri);
                 _requestHttp.Url.Parse(request);
                 _requestHttp.Url.Parse(string.Format("{0}?{1}", request, contentString));
-                //_requestHttp.Url.Parse(request + "?" + contentString);
-                //_requestHttp.Url.Parse(request + "?" + contentString.Replace(@"""", "%22"));
                 Debug.Console(0, this, "DispatchHttpRequest: _requestHttp.Url = {0}", _requestHttp.Url);
                 Debug.Console(0, this, "DispatchHttpRequest: _requestHttp.Url.Fragment = {0}", _requestHttp.Url.Fragment);
                 Debug.Console(0, this, "DispatchHttpRequest: _requestHttp.Url.Hostname = {0}", _requestHttp.Url.Hostname);
@@ -240,11 +212,6 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
                 Debug.Console(0, this, "DispatchHttpRequest: _requestHttp.Url.Port = {0}", _requestHttp.Url.Port);
                 Debug.Console(0, this, "DispatchHttpRequest: _requestHttp.Url.Protocol = {0}", _requestHttp.Url.Protocol);
                 Debug.Console(0, this, "DispatchHttpRequest: _requestHttp.Url.Url = {0}", _requestHttp.Url.Url);
-
-                //_requestHttp.ContentString = contentString;
-                //Debug.Console(0, this, "DispatchHttpRequest: _requestHttp.ContentString = {0}", _requestHttp.ContentString);
-                //Debug.Console(0, this, "DispatchHttpRequest: contentString (replace): {0}", contentString.Replace(@"""", "%22"));
-                //Debug.Console(0, this, "DispatchHttpRequest: contentString (encoded): {0}", HttpUtility.UrlEncode(contentString));
 
                 _requestHttp.RequestType = requestType;
 
@@ -269,7 +236,7 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
         }
 
         // dispatches requests to the client
-        private void DispatchHttpsRequest(string request, Crestron.SimplSharp.Net.Https.RequestType requestType)
+        private void DispatchHttpsRequest(string request, string contentString, Crestron.SimplSharp.Net.Https.RequestType requestType)
         {
             if (string.IsNullOrEmpty(request))
             {
@@ -279,15 +246,28 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
 
             try
             {
-                var uri = new Uri(request);
-                _requestHttps.Url.Parse(uri.AbsoluteUri);
+                _requestHttps.Url.Parse(request);
+                _requestHttps.Url.Parse(string.Format("{0}?{1}", request, contentString));
+                Debug.Console(0, this, "DispatchHttpsRequest: _requestHttps.Url = {0}", _requestHttps.Url);
+                Debug.Console(0, this, "DispatchHttpsRequest: _requestHttps.Url.Fragment = {0}", _requestHttps.Url.Fragment);
+                Debug.Console(0, this, "DispatchHttpsRequest: _requestHttps.Url.Hostname = {0}", _requestHttps.Url.Hostname);
+                Debug.Console(0, this, "DispatchHttpsRequest: _requestHttps.Url.HostnameAndPort = {0}", _requestHttps.Url.HostnameAndPort);
+                Debug.Console(0, this, "DispatchHttpsRequest: _requestHttps.Url.HostnameType = {0}", _requestHttps.Url.HostnameType);
+                Debug.Console(0, this, "DispatchHttpsRequest: _requestHttps.Url.IsAbsoluteUri = {0}", _requestHttps.Url.IsAbsoluteUri);
+                Debug.Console(0, this, "DispatchHttpsRequest: _requestHttps.Url.IsDefaultPort = {0}", _requestHttps.Url.IsDefaultPort);
+                Debug.Console(0, this, "DispatchHttpsRequest: _requestHttps.Url.IsFile = {0}", _requestHttps.Url.IsFile);
+                Debug.Console(0, this, "DispatchHttpsRequest: _requestHttps.Url.IsLoopback = {0}", _requestHttps.Url.IsLoopback);
+                Debug.Console(0, this, "DispatchHttpsRequest: _requestHttps.Url.IsUnc = {0}", _requestHttps.Url.IsUnc);
+                Debug.Console(0, this, "DispatchHttpsRequest: _requestHttps.Url.Params = {0}", _requestHttps.Url.Params);
+                Debug.Console(0, this, "DispatchHttpsRequest: _requestHttps.Url.Path = {0}", _requestHttps.Url.Path);
+                Debug.Console(0, this, "DispatchHttpsRequest: _requestHttps.Url.PathAndParams = {0}", _requestHttps.Url.PathAndParams);
+                Debug.Console(0, this, "DispatchHttpsRequest: _requestHttps.Url.Port = {0}", _requestHttps.Url.Port);
+                Debug.Console(0, this, "DispatchHttpsRequest: _requestHttps.Url.Protocol = {0}", _requestHttps.Url.Protocol);
+                Debug.Console(0, this, "DispatchHttpsRequest: _requestHttps.Url.Url = {0}", _requestHttps.Url.Url);
+
                 _requestHttps.RequestType = requestType;
 
-                Debug.Console(0, this, "DispatchHttpsRequest: uri - {0}", uri);
-                Debug.Console(0, this, "DispatchHttpsRequest: _requestHttps.Url = {0}", _requestHttps.Url);
-
-
-                _dispatchHttpsError = _clientHttps.DispatchAsync(_requestHttps, (response, error) =>
+               _dispatchHttpsError = _clientHttps.DispatchAsync(_requestHttps, (response, error) =>
                 {
                     if (response == null)
                     {
