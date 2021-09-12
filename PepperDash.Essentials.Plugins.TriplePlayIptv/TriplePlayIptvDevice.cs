@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Globalization;
 using Crestron.SimplSharp;
+using Crestron.SimplSharp.Net;
+using Crestron.SimplSharp.Net.Http;
 using Crestron.SimplSharpPro.DeviceSupport;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -545,29 +547,17 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
         }
 
         /// <summary>
-        /// Sends text to the device
-        /// </summary>
-        /// <param name="text"></param>
-        public void SendText(string text)
-        {
-            if (_comms == null || string.IsNullOrEmpty(text)) return;
-
-            _comms.SendRequest(string.Format("/triplecare/jsonrpchandler.php?call={{\"jsonrpc\":\"2.0\",{0}}}", text));
-        }
-
-        /// <summary>
         /// Sends commands to the device
         /// </summary>
         /// <param name="method"></param>
-        public void SendCommand(string method)
+        public void SendText(string method)
         {
-            Debug.Console(0, this, "SendCommand: method = {0}", method);
+            Debug.Console(0, this, "SendText: method = {0}", method);
 
             if (_comms == null || string.IsNullOrEmpty(method)) return;
 
-            var parameters = BuildJson(StbId, method, null, null);
-
-            _comms.SendRequest(string.Format("/triplecare/jsonrpchandler.php?call={0}", parameters));
+            var query = BuildQuery(StbId, method, null, null);
+            _comms.SendRequest("/triplecare/jsonrpchandler.php", query);
         }
 
         /// <summary>
@@ -575,15 +565,14 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
         /// </summary>
         /// <param name="method"></param>
         /// <param name="strParam"></param>
-        public void SendCommand(string method, string strParam)
+        public void SendText(string method, string strParam)
         {
-            Debug.Console(0, this, "SendCommand: method = {0} | strParam = {1}", method, strParam);
+            Debug.Console(0, this, "SendText: method = {0} | strParam = {1}", method, strParam);
 
             if (_comms == null || string.IsNullOrEmpty(method)) return;
 
-            var parameters = BuildJson(StbId, method, strParam, null);
-
-            _comms.SendRequest(string.Format("/triplecare/jsonrpchandler.php?call={0}", parameters));
+            var query = BuildQuery(StbId, method, strParam, null);
+            _comms.SendRequest("/triplecare/jsonrpchandler.php", query);
         }
 
         /// <summary>
@@ -591,15 +580,14 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
         /// </summary>
         /// <param name="method"></param>
         /// <param name="intParam"></param>
-        public void SendCommand(string method, int? intParam)
+        public void SendText(string method, int? intParam)
         {
-            Debug.Console(0, this, "SendCommand: method = {0} | intParam = {2}", method, intParam);
+            Debug.Console(0, this, "SendText: method = {0} | intParam = {1}", method, intParam);
 
             if (_comms == null || string.IsNullOrEmpty(method)) return;
 
-            var parameters = BuildJson(StbId, method, null, intParam);
-
-            _comms.SendRequest(string.Format("/triplecare/jsonrpchandler.php?call={0}", parameters));
+            var query = BuildQuery(StbId, method, null, intParam);
+            _comms.SendRequest("/triplecare/jsonrpchandler.php", query);
         }
 
         /// <summary>
@@ -608,18 +596,17 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
         /// <param name="method"></param>
         /// <param name="strParam"></param>
         /// <param name="intParam"></param>
-        public void SendCommand(string method, string strParam, int? intParam)
+        public void SendText(string method, string strParam, int? intParam)
         {
-            Debug.Console(0, this, "SendCommand: method = {0} | strParam = {1} | intParam = {2}", method, strParam, intParam);
+            Debug.Console(0, this, "SendText: method = {0} | strParam = {1} | intParam = {2}", method, strParam, intParam);
 
             if (_comms == null || string.IsNullOrEmpty(method)) return;
 
-            var parameters = BuildJson(StbId, method, strParam, intParam);
-
-            _comms.SendRequest(string.Format("/triplecare/jsonrpchandler.php?call={0}", parameters));
+            var query = BuildQuery(StbId, method, strParam, intParam);
+            _comms.SendRequest("/triplecare/jsonrpchandler.php", query);
         }
 
-        private string BuildJson(int stbId, string method, string strParam, int? intParam)
+        private string BuildQuery(int stbId, string method, string strParam, int? intParam)
         {
             if ((stbId <= 0) || string.IsNullOrEmpty(method)) return string.Empty;
 
@@ -639,7 +626,9 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
             };
             obj["params"] = array;
 
-            return JsonConvert.SerializeObject(obj, Formatting.None);
+            var call = JsonConvert.SerializeObject(obj, Formatting.None);
+            Debug.Console(0, this, "BuildQuery: call = {0}", call);
+            return string.Format("call={0}", call);
         }
 
         /// <summary>
@@ -660,7 +649,7 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
         /// </remarks>
         public void Poll()
         {
-            SendCommand("GetAllServices");
+            SendText("GetAllServices");
         }
 
         /// <summary>
@@ -668,7 +657,7 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
         /// </summary>
         public void RebootClient()
         {
-            SendCommand("Reboot");
+            SendText("Reboot");
         }
 
         /// <summary>
@@ -676,7 +665,7 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
         /// </summary>
         public void GetAllServices()
         {
-            SendCommand("GetAllServices");
+            SendText("GetAllServices");
         }
 
         /// <summary>
@@ -684,7 +673,7 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
         /// </summary>
         public void ChannelUp()
         {
-            SendCommand("ChannelUp");
+            SendText("ChannelUp");
         }
 
         /// <summary>
@@ -692,7 +681,7 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
         /// </summary>
         public void ChannelDown()
         {
-            SendCommand("ChannelDown");
+            SendText("ChannelDown");
         }
 
         /// <summary>
@@ -702,7 +691,7 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
         public void ChannelSet(int channel)
         {
             if (channel <= 0) return;
-            SendCommand("SelectChannel", channel);
+            SendText("SelectChannel", channel);
         }
 
         /// <summary>
@@ -728,7 +717,7 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
         public void VolumeSet(int level)
         {
             if (level < 0) return;
-            SendCommand("SetVolume", CrestronEnvironment.ScaleWithLimits(level, 65535, 0, 100, 0));
+            SendText("SetVolume", CrestronEnvironment.ScaleWithLimits(level, 65535, 0, 100, 0));
         }
 
         /// <summary>
@@ -744,7 +733,7 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
         /// </summary>
         public void VolumeMuteOn()
         {
-            SendCommand("SetMute", "true");
+            SendText("SetMute", "true");
         }
 
         /// <summary>
@@ -752,7 +741,7 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
         /// </summary>
         public void VolumeMuteOff()
         {
-            SendCommand("SetMute", "false");
+            SendText("SetMute", "false");
         }
 
         /// <summary>
@@ -760,7 +749,7 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
         /// </summary>
         public void GetVolumeMuteState()
         {
-            SendCommand("GetAudioState");
+            SendText("GetAudioState");
         }
 
         #region rcu kp presses
@@ -952,7 +941,7 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
         public void RcuKeyPress(RcuKeys key)
         {
             Debug.Console(0, this, "RcuKeyPress: key = {0}", key);
-            SendCommand("HandleKeyPress", key.ToString());
+            SendText("HandleKeyPress", key.ToString());
         }
 
         /// <summary>
@@ -963,7 +952,7 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
             Debug.Console(0, this, "RcuKpNumbers: number = {0}", number);
 
             if (number < 0 && number > 9) return;
-            SendCommand("HandleKeyPress", String.Format("Number{0}", number));
+            SendText("HandleKeyPress", String.Format("Number{0}", number));
         }
 
         #endregion
@@ -979,7 +968,7 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
         {
             TriplePlayServicesPresetsConfig preset;
             if (_presets.TryGetValue(index, out preset))
-                SendCommand("", (int)preset.ChannelNumber);
+                SendText("", (int)preset.ChannelNumber);
         }
 
         #endregion
@@ -1039,7 +1028,7 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
         /// </summary>
         public void TvPowerOn()
         {
-            SendCommand("PowerOnTv");
+            SendText("PowerOnTv");
         }
 
         /// <summary>
@@ -1047,7 +1036,7 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
         /// </summary>
         public void TvPowerOff()
         {
-            SendCommand("PowerOffTv");
+            SendText("PowerOffTv");
         }
 
         /// <summary>
@@ -1055,7 +1044,7 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
         /// </summary>
         public void GetTvPowerStatus()
         {
-            SendCommand("GetPowerStatus");
+            SendText("GetPowerStatus");
         }
 
         /// <summary>
@@ -1064,7 +1053,7 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
         /// <param name="input"></param>
         public void TvInputSelect(TvControlInputs input)
         {
-            SendCommand("SelectTvInput", (int)input);
+            SendText("SelectTvInput", (int)input);
         }
 
         /// <summary>
@@ -1074,7 +1063,7 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
         public void TvVolumeSet(int level)
         {
             if (level < 0) return;
-            SendCommand("SetTVVolume", CrestronEnvironment.ScaleWithLimits(level, 65535, 0, 100, 0));
+            SendText("SetTVVolume", CrestronEnvironment.ScaleWithLimits(level, 65535, 0, 100, 0));
         }
 
         #endregion
