@@ -175,22 +175,8 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
 
             try
             {
-                request = string.Format("{0}://{1}/triplecare/jsonrpchandler.php", Method.ToString().ToLower(), Host.Trim('/'));
-                Debug.Console(0, this, "Over-writing request = {0}", request);
-
-                //string host;
-                //string[] parameters;
-                //if (request.Contains("?"))
-                //{
-                //    var requestSplit = request.Split('?');
-                //    Debug.Console(0, this, "requestSplit.Length = {0}", requestSplit.Length);
-                //    host = requestSplit[0];
-                //    foreach (var parameter in parameters)
-                //    {
-                        
-                //    }
-                //    parameters = requestSplit[1];
-                //}
+                //request = string.Format("{0}://{1}/triplecare/jsonrpchandler.php", Method.ToString().ToLower(), Host.Trim('/'));
+                //Debug.Console(0, this, "Over-writing request = {0}", request);
 
                 /*
                 [20:19:43.426]App 1:[iptv-tuner-1] SendCommand: method = ChannelUp | param =
