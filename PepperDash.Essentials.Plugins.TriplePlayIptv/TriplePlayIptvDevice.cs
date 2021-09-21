@@ -152,6 +152,25 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
                 return;
             }
 
+            //switch (config.Control.Method)
+            //{
+            //    case eControlMethod.Http:
+            //    {
+            //        _comms = new GenericClientHttp(Key, config.Control);
+            //        break;
+            //    }
+            //    case eControlMethod.Https:
+            //    {
+            //        _comms = new GenericClientHttps(Key, config.Control);
+            //        break;
+            //    }
+            //    default:
+            //    {
+            //        Debug.Console(0, this, "Invalid control method {0}", config.Control.Method);
+            //        return;
+            //    }
+            //}
+
             _comms = new GenericClient(Key, config.Control);
             if (_comms == null)
             {
