@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using Crestron.SimplSharp;
-using Crestron.SimplSharp.Net;
-using Crestron.SimplSharp.Net.Http;
 using Crestron.SimplSharpPro.DeviceSupport;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -19,7 +16,7 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
     public class TriplePlayIptvDevice : EssentialsBridgeableDevice
     {
         // request path for all commands
-        private string _requestPath = "/triplecare/jsonrpchandler.php";
+        private const string RequestPath = "/triplecare/jsonrpchandler.php";
 
         // generic http/https client
         private readonly GenericClient _comms;
@@ -185,8 +182,8 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
             }
 
             Debug.Console(0, this, "Constructing new {0} instance complete", name);
-            Debug.Console(0, new string('*', 80));
-            Debug.Console(0, new string('*', 80));
+            Debug.Console(2, new string('*', 80));
+            Debug.Console(2, new string('*', 80));
         }
 
         /// <summary>
@@ -407,12 +404,12 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
             }
             catch (JsonReaderException jex)
             {
-                Debug.Console(0, this, "IsValidJson: JsonReaderException:\r{0}", jex);
+                Debug.Console(2, this, "IsValidJson: JsonReaderException:\r{0}", jex);
                 return false;
             }
             catch (Exception ex)
             {
-                Debug.Console(0, this, "IsValidJson: Exception:\r{0}", ex);
+                Debug.Console(2, this, "IsValidJson: Exception:\r{0}", ex);
                 return false;
             }
         }
@@ -421,7 +418,7 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
         {
             try
             {
-                Debug.Console(0, this, "_comms_ResponseRecieved: Code = {0} | ContentString = {1}", args.Code, args.ContentString);
+                Debug.Console(1, this, "_comms_ResponseRecieved: Code = {0} | ContentString = {1}", args.Code, args.ContentString);
 
                 ResponseCode = args.Code;
 
@@ -453,7 +450,7 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
             }
             catch (Exception ex)
             {
-                Debug.Console(0, this, Debug.ErrorLogLevel.Error, "_comms_ResponseRecieved Exception:\r{0}", ex);
+                Debug.Console(2, this, Debug.ErrorLogLevel.Error, "_comms_ResponseRecieved Exception:\r{0}", ex);
             }
         }
 
@@ -555,11 +552,16 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
         /// <param name="method"></param>
         public void SendText(string method)
         {
-            Debug.Console(0, this, "SendText: method = {0}", method);
+            Debug.Console(1, this, "SendText: method = {0}", method);
 
             if (_comms == null || string.IsNullOrEmpty(method)) return;
 
             var query = BuildQuery(StbId, method, null, null);
+            if (string.IsNullOrEmpty(query))
+            {
+                Debug.Console(1, this, "SendText: query ('{0}') is empty, unable to send text.", query);
+                return;
+            }
             _comms.SendRequest("/triplecare/jsonrpchandler.php", query);
         }
 
@@ -570,12 +572,17 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
         /// <param name="strParam"></param>
         public void SendText(string method, string strParam)
         {
-            Debug.Console(0, this, "SendText: method = {0} | strParam = {1}", method, strParam);
+            Debug.Console(1, this, "SendText: method = {0} | strParam = {1}", method, strParam);
 
             if (_comms == null || string.IsNullOrEmpty(method)) return;
 
             var query = BuildQuery(StbId, method, strParam, null);
-            _comms.SendRequest(_requestPath, query);
+            if (string.IsNullOrEmpty(query))
+            {
+                Debug.Console(1, this, "SendText: query ('{0}') is empty, unable to send text.", query);
+                return;
+            }
+            _comms.SendRequest(RequestPath, query);
         }
 
         /// <summary>
@@ -585,12 +592,17 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
         /// <param name="intParam"></param>
         public void SendText(string method, int? intParam)
         {
-            Debug.Console(0, this, "SendText: method = {0} | intParam = {1}", method, intParam);
+            Debug.Console(1, this, "SendText: method = {0} | intParam = {1}", method, intParam);
 
             if (_comms == null || string.IsNullOrEmpty(method)) return;
 
             var query = BuildQuery(StbId, method, null, intParam);
-            _comms.SendRequest(_requestPath, query);
+            if (string.IsNullOrEmpty(query))
+            {
+                Debug.Console(1, this, "SendText: query ('{0}') is empty, unable to send text.", query);
+                return;
+            }
+            _comms.SendRequest(RequestPath, query);
         }
 
         /// <summary>
@@ -601,17 +613,26 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
         /// <param name="intParam"></param>
         public void SendText(string method, string strParam, int? intParam)
         {
-            Debug.Console(0, this, "SendText: method = {0} | strParam = {1} | intParam = {2}", method, strParam, intParam);
+            Debug.Console(1, this, "SendText: method = {0} | strParam = {1} | intParam = {2}", method, strParam, intParam);
 
             if (_comms == null || string.IsNullOrEmpty(method)) return;
 
             var query = BuildQuery(StbId, method, strParam, intParam);
-            _comms.SendRequest(_requestPath, query);
+            if (string.IsNullOrEmpty(query))
+            {
+                Debug.Console(1, this, "SendText: query ('{0}') is empty, unable to send text.", query);
+                return;
+            }
+            _comms.SendRequest(RequestPath, query);
         }
 
         private string BuildQuery(int stbId, string method, string strParam, int? intParam)
         {
-            if ((stbId <= 0) || string.IsNullOrEmpty(method)) return string.Empty;
+            if ((stbId <= 0) || string.IsNullOrEmpty(method))
+            {
+                Debug.Console(1, this, "BuildQuery: invalid stbId {0}, unable to build query.", stbId);
+                return string.Empty;
+            }
 
             var array = new JArray
             {
@@ -943,7 +964,7 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
         /// <param name="key"></param>
         public void RcuKeyPress(RcuKeys key)
         {
-            Debug.Console(0, this, "RcuKeyPress: key = {0}", key);
+            Debug.Console(2, this, "RcuKeyPress: key = {0}", key);
             SendText("HandleKeyPress", key.ToString());
         }
 
@@ -952,7 +973,7 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
         /// </summary>
         public void RcuKpNumbers(int number)
         {
-            Debug.Console(0, this, "RcuKpNumbers: number = {0}", number);
+            Debug.Console(2, this, "RcuKpNumbers: number = {0}", number);
 
             if (number < 0 && number > 9) return;
             SendText("HandleKeyPress", String.Format("Number{0}", number));
