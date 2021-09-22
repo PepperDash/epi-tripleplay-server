@@ -42,6 +42,11 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
         public event EventHandler<GenericClientResponseEventArgs> ResponseReceived;
 
         /// <summary>
+        /// Client string response event
+        /// </summary>
+        public event EventHandler<GenericClientStringResponseEventArgs> StringResponseRecieved;
+
+        /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="key"></param>
@@ -77,20 +82,10 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
                         if (_clientHttp == null)
                             _clientHttp = new HttpClient();
                         if (_requestHttp == null)
-                            _requestHttp = new HttpClientRequest();
+                            _requestHttp = new HttpClientRequest();                                              
 
-                        _clientHttp.HostAddress = Host;
-                        _clientHttp.Port = Port;
-                        _clientHttp.UserName = Username;
-                        _clientHttp.Password = Password;
-                        _clientHttp.KeepAlive = false;
-
-                        //_requestHttp.Header.ContentType = "application/json";
-                        _requestHttp.Header.SetHeaderValue("Content-Type", "application/json");
-                        if (!string.IsNullOrEmpty(AuthorizationBase64))
-                        {
-                            _requestHttp.Header.SetHeaderValue("Authorization", AuthorizationBase64);
-                        }
+                        // TODO [ ] Turn off verbose logging
+                        _clientHttp.Verbose = true;
 
                         break;
                     }
@@ -101,20 +96,9 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
                         if (_requestHttps == null)
                             _requestHttps = new HttpsClientRequest();
 
-                        _clientHttps.UserName = Username;
-                        _clientHttps.Password = Password;
-                        _clientHttps.KeepAlive = false;
-                        _clientHttps.HostVerification = false;
-                        _clientHttps.PeerVerification = false;
+                        // TODO [ ] Turn off verbose logging
+                        _clientHttps.Verbose = true;
 
-                        //_requestHttps.Header.ContentType = "application/json";
-                        _requestHttps.Header.SetHeaderValue("Content-Type", "application/json");
-
-                        if (!string.IsNullOrEmpty(AuthorizationBase64))
-                        {
-                            _clientHttps.AuthenticationMethod = AuthMethod.BASIC;
-                            _requestHttps.Header.SetHeaderValue("Authorization", AuthorizationBase64);
-                        }
                         break;
                     }
                 default:
@@ -123,7 +107,7 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
                         break;
                     }
             }
-
+            
             Debug.Console(2, this, "{0}", new String('-', 80));
         }
 
@@ -194,28 +178,35 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
 
             try
             {
+                _clientHttp.UserName = Username;
+                _clientHttp.Password = Password;
+                _clientHttp.KeepAlive = false; 
+
                 _requestHttp.Url.Parse(request);
-                _requestHttp.Url.Parse(string.Format("{0}?{1}", request, contentString));
                 Debug.Console(2, this, "DispatchHttpRequest: _requestHttp.Url = {0}", _requestHttp.Url);
-                Debug.Console(2, this, "DispatchHttpRequest: _requestHttp.Url.Fragment = {0}", _requestHttp.Url.Fragment);
-                Debug.Console(2, this, "DispatchHttpRequest: _requestHttp.Url.Hostname = {0}", _requestHttp.Url.Hostname);
-                Debug.Console(2, this, "DispatchHttpRequest: _requestHttp.Url.HostnameAndPort = {0}", _requestHttp.Url.HostnameAndPort);
-                Debug.Console(2, this, "DispatchHttpRequest: _requestHttp.Url.HostnameType = {0}", _requestHttp.Url.HostnameType);
-                Debug.Console(2, this, "DispatchHttpRequest: _requestHttp.Url.IsAbsoluteUri = {0}", _requestHttp.Url.IsAbsoluteUri);
-                Debug.Console(2, this, "DispatchHttpRequest: _requestHttp.Url.IsDefaultPort = {0}", _requestHttp.Url.IsDefaultPort);
-                Debug.Console(2, this, "DispatchHttpRequest: _requestHttp.Url.IsFile = {0}", _requestHttp.Url.IsFile);
-                Debug.Console(2, this, "DispatchHttpRequest: _requestHttp.Url.IsLoopback = {0}", _requestHttp.Url.IsLoopback);
-                Debug.Console(2, this, "DispatchHttpRequest: _requestHttp.Url.IsUnc = {0}", _requestHttp.Url.IsUnc);
-                Debug.Console(2, this, "DispatchHttpRequest: _requestHttp.Url.Params = {0}", _requestHttp.Url.Params);
-                Debug.Console(2, this, "DispatchHttpRequest: _requestHttp.Url.Path = {0}", _requestHttp.Url.Path);
-                Debug.Console(2, this, "DispatchHttpRequest: _requestHttp.Url.PathAndParams = {0}", _requestHttp.Url.PathAndParams);
-                Debug.Console(2, this, "DispatchHttpRequest: _requestHttp.Url.Port = {0}", _requestHttp.Url.Port);
-                Debug.Console(2, this, "DispatchHttpRequest: _requestHttp.Url.Protocol = {0}", _requestHttp.Url.Protocol);
-                Debug.Console(2, this, "DispatchHttpRequest: _requestHttp.Url.Url = {0}", _requestHttp.Url.Url);
-
+                
                 _requestHttp.RequestType = requestType;
+                _requestHttp.Header.ContentType = "application/json";
+                _requestHttp.Header.SetHeaderValue("Content-Type", "application/json");
 
-                _dispatchHttpError = _clientHttp.DispatchAsync(_requestHttp, (response, error) =>
+                if (!string.IsNullOrEmpty(contentString))
+                    _requestHttp.ContentString = contentString;
+                
+                if (!string.IsNullOrEmpty(AuthorizationBase64))
+                    _requestHttp.Header.SetHeaderValue("Authorization", AuthorizationBase64);
+
+                //_dispatchHttpError = _clientHttp.DispatchAsync(_requestHttp, (response, error) =>
+                //{
+                //    if (response == null)
+                //    {
+                //        Debug.Console(1, this, "DispatchRequest: response is null, error: {0}", error);
+                //        return;
+                //    }
+
+                //    OnResponseRecieved(new GenericClientResponseEventArgs(response.Code, response.ContentString));
+                //});
+
+                _dispatchHttpError = _clientHttp.GetAsync(request, (response, error) =>
                 {
                     if (response == null)
                     {
@@ -223,9 +214,9 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
                         return;
                     }
 
-                    OnResponseRecieved(new GenericClientResponseEventArgs(response.Code, response.ContentString));
+                    OnStringResponseRecieved(new GenericClientStringResponseEventArgs(response));
                 });
-
+                
                 Debug.Console(1, this, "DispatchHttpsRequest: _dispatchHttpError '{0}'", _dispatchHttpError);
             }
             catch (Exception ex)
@@ -246,28 +237,40 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
 
             try
             {
+                _clientHttps.UserName = Username;
+                _clientHttps.Password = Password;
+                _clientHttps.KeepAlive = false;
+                _clientHttps.HostVerification = false;
+                _clientHttps.PeerVerification = false;
+
                 _requestHttps.Url.Parse(request);
-                _requestHttps.Url.Parse(string.Format("{0}?{1}", request, contentString));
                 Debug.Console(2, this, "DispatchHttpsRequest: _requestHttps.Url = {0}", _requestHttps.Url);
-                Debug.Console(2, this, "DispatchHttpsRequest: _requestHttps.Url.Fragment = {0}", _requestHttps.Url.Fragment);
-                Debug.Console(2, this, "DispatchHttpsRequest: _requestHttps.Url.Hostname = {0}", _requestHttps.Url.Hostname);
-                Debug.Console(2, this, "DispatchHttpsRequest: _requestHttps.Url.HostnameAndPort = {0}", _requestHttps.Url.HostnameAndPort);
-                Debug.Console(2, this, "DispatchHttpsRequest: _requestHttps.Url.HostnameType = {0}", _requestHttps.Url.HostnameType);
-                Debug.Console(2, this, "DispatchHttpsRequest: _requestHttps.Url.IsAbsoluteUri = {0}", _requestHttps.Url.IsAbsoluteUri);
-                Debug.Console(2, this, "DispatchHttpsRequest: _requestHttps.Url.IsDefaultPort = {0}", _requestHttps.Url.IsDefaultPort);
-                Debug.Console(2, this, "DispatchHttpsRequest: _requestHttps.Url.IsFile = {0}", _requestHttps.Url.IsFile);
-                Debug.Console(2, this, "DispatchHttpsRequest: _requestHttps.Url.IsLoopback = {0}", _requestHttps.Url.IsLoopback);
-                Debug.Console(2, this, "DispatchHttpsRequest: _requestHttps.Url.IsUnc = {0}", _requestHttps.Url.IsUnc);
-                Debug.Console(2, this, "DispatchHttpsRequest: _requestHttps.Url.Params = {0}", _requestHttps.Url.Params);
-                Debug.Console(2, this, "DispatchHttpsRequest: _requestHttps.Url.Path = {0}", _requestHttps.Url.Path);
-                Debug.Console(2, this, "DispatchHttpsRequest: _requestHttps.Url.PathAndParams = {0}", _requestHttps.Url.PathAndParams);
-                Debug.Console(2, this, "DispatchHttpsRequest: _requestHttps.Url.Port = {0}", _requestHttps.Url.Port);
-                Debug.Console(2, this, "DispatchHttpsRequest: _requestHttps.Url.Protocol = {0}", _requestHttps.Url.Protocol);
-                Debug.Console(2, this, "DispatchHttpsRequest: _requestHttps.Url.Url = {0}", _requestHttps.Url.Url);
 
                 _requestHttps.RequestType = requestType;
+                _requestHttps.Header.ContentType = "application/json";
+                _requestHttps.Header.SetHeaderValue("Content-Type", "application/json");
 
-               _dispatchHttpsError = _clientHttps.DispatchAsync(_requestHttps, (response, error) =>
+                if (!string.IsNullOrEmpty(contentString))
+                    _requestHttps.ContentString = contentString;
+
+                if (!string.IsNullOrEmpty(AuthorizationBase64))
+                {
+                    _clientHttps.AuthenticationMethod = AuthMethod.BASIC;
+                    _requestHttps.Header.SetHeaderValue("Authorization", AuthorizationBase64);
+                }
+
+               //_dispatchHttpsError = _clientHttps.DispatchAsync(_requestHttps, (response, error) =>
+               // {
+               //     if (response == null)
+               //     {
+               //         Debug.Console(1, this, "DispatchRequest: response is null, error: {0}", error);
+               //         return;
+               //     }
+
+               //     OnResponseRecieved(new GenericClientResponseEventArgs(response.Code, response.ContentString));
+               // });
+
+                _dispatchHttpsError = _clientHttps.GetAsync(request, (response, error) =>
                 {
                     if (response == null)
                     {
@@ -275,7 +278,7 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
                         return;
                     }
 
-                    OnResponseRecieved(new GenericClientResponseEventArgs(response.Code, response.ContentString));
+                    OnStringResponseRecieved(new GenericClientStringResponseEventArgs(response));
                 });
 
                 Debug.Console(1, this, "DispatchHttpsRequest: _dispatchHttpError '{0}'", _dispatchHttpsError);
@@ -294,6 +297,18 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
             CheckRequestQueue();
 
             var handler = ResponseReceived;
+            if (handler == null) return;
+
+            handler(this, args);
+        }
+
+        private void OnStringResponseRecieved(GenericClientStringResponseEventArgs args)
+        {
+            Debug.Console(2, this, "OnStringResponseReceived: args.ContentString = {0}", args.ContentString);
+
+            CheckRequestQueue();
+
+            var handler = StringResponseRecieved;
             if (handler == null) return;
 
             handler(this, args);

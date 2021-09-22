@@ -562,7 +562,7 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
                 Debug.Console(1, this, "SendText: query ('{0}') is empty, unable to send text.", query);
                 return;
             }
-            _comms.SendRequest("/triplecare/jsonrpchandler.php", query);
+            _comms.SendRequest(string.Format("{0}?{1}", RequestPath, query.Replace("\"", "%22")), null);
         }
 
         /// <summary>
@@ -579,10 +579,10 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
             var query = BuildQuery(StbId, method, strParam, null);
             if (string.IsNullOrEmpty(query))
             {
-                Debug.Console(1, this, "SendText: query ('{0}') is empty, unable to send text.", query);
+                Debug.Console(1, this, "SendText: query ('{0}') is empty, unable to send text.", null);
                 return;
             }
-            _comms.SendRequest(RequestPath, query);
+            _comms.SendRequest(string.Format("{0}?{1}", RequestPath, query.Replace("\"", "%22")), null);
         }
 
         /// <summary>
@@ -602,7 +602,7 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
                 Debug.Console(1, this, "SendText: query ('{0}') is empty, unable to send text.", query);
                 return;
             }
-            _comms.SendRequest(RequestPath, query);
+            _comms.SendRequest(string.Format("{0}?{1}", RequestPath, query.Replace("\"", "%22")), null);
         }
 
         /// <summary>
@@ -623,7 +623,7 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
                 Debug.Console(1, this, "SendText: query ('{0}') is empty, unable to send text.", query);
                 return;
             }
-            _comms.SendRequest(RequestPath, query);
+            _comms.SendRequest(string.Format("{0}?{1}", RequestPath, query.Replace("\"", "%22")), null);
         }
 
         private string BuildQuery(int stbId, string method, string strParam, int? intParam)
