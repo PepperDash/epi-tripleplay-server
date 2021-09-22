@@ -16,7 +16,7 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
     public class TriplePlayIptvDevice : EssentialsBridgeableDevice
     {
         // request path for all commands
-        private const string RequestPath = "/triplecare/jsonrpchandler.php";
+        private const string RequestPath = "triplecare/JsonRpcHandler.php";
 
         // generic http/https client
         private readonly IRestfulComms _comms;
@@ -26,6 +26,7 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
 
         // settop box id (stbId) field
         private int _stbId;
+        private string _hostIp;
 
         /// <summary>
         /// settop box id (stbId) property
@@ -150,6 +151,8 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
                 return;
             }
 
+            _hostIp = config.Control.TcpSshProperties.Address;
+
             //switch (config.Control.Method)
             //{
             //    case eControlMethod.Http:
@@ -192,14 +195,17 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
             StbId = config.StbId;
 
             _presets = new Dictionary<uint, TriplePlayServicesPresetsConfig>();
-            for (var p = 1; p < 24; p++)
-            //foreach (var p in _presets)
+            for (uint p = 1; p <= 24; p++)
             {
-                var preset = (uint)p;
-                PresetEnabledFeedbacks.Add(preset, new BoolFeedback(() => false));
-                PresetNameFeedbacks.Add(preset, new StringFeedback(() => string.Format("Preset {0}", preset)));
-                PresetChannelFeedbacks.Add(preset, new IntFeedback(() => (int)preset));
-                PresetIconPathFeedbacks.Add(preset, new StringFeedback(() => string.Format("/path/to/preset{0}", preset)));
+                var preset = p;
+
+                var emptyPreset = new TriplePlayServicesPresetsConfig {Id = preset};
+
+                _presets.Add(p, emptyPreset);
+                PresetEnabledFeedbacks.Add(preset, new BoolFeedback(() => _presets[preset].IsWatchable));
+                PresetNameFeedbacks.Add(preset, new StringFeedback(() => _presets[preset].Name));
+                PresetChannelFeedbacks.Add(preset, new IntFeedback(() => (int) _presets[preset].ChannelNumber));
+                PresetIconPathFeedbacks.Add(preset, new StringFeedback(() => _presets[preset].IconPath));
             }
 
             Debug.Console(0, this, "Constructing new {0} instance complete", name);
@@ -476,7 +482,6 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
             // isFavourite
             foreach (var result in results)
             {
-                if (_presets == null) _presets = new Dictionary<uint, TriplePlayServicesPresetsConfig>();
                 var key = result.Id;
 
                 if (_presets.ContainsKey(key))
@@ -484,7 +489,7 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
                     _presets[key].ChannelNumber = result.ChannelNumber;
                     _presets[key].Name = result.Name;
                     _presets[key].IsFavorite = result.IsFavourite;
-                    _presets[key].IconPath = result.IconPath;
+                    _presets[key].IconPath = String.Format("http://{0}{1}", _hostIp, result.IconPath);
                     _presets[key].IsWatchable = result.IsWatchable;
                 }
                 else
@@ -505,37 +510,31 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
 
         private void UpdatePresetFeedbacks(TriplePlayServicesPresetsConfig preset)
         {
-            if (preset == null) return;
+
+            if (preset == null)
+            {
+                Debug.Console(1, this, "Preset is null");
+                return;
+            }
+            Debug.Console(1, this, "Preset Id: {0}", preset.Id);
 
             var key = preset.Id;
 
             // preset name
             if (PresetNameFeedbacks.ContainsKey(key))
-                PresetNameFeedbacks[key] = new StringFeedback(() => _presets[key].Name);
-            else
-                PresetNameFeedbacks.Add(key, new StringFeedback(() => _presets[key].Name));
-            PresetNameFeedbacks[key].FireUpdate();
+                PresetNameFeedbacks[key].FireUpdate();
 
             // preset channel number
             if (PresetChannelFeedbacks.ContainsKey(key))
-                PresetChannelFeedbacks[key] = new IntFeedback(() => (int)_presets[key].ChannelNumber);
-            else
-                PresetChannelFeedbacks.Add(key, new IntFeedback(() => (int)_presets[key].ChannelNumber));
-            PresetChannelFeedbacks[key].FireUpdate();
+                PresetChannelFeedbacks[key].FireUpdate();
 
             // preset icon path
             if (PresetIconPathFeedbacks.ContainsKey(key))
-                PresetIconPathFeedbacks[key] = new StringFeedback(() => _presets[key].IconPath);
-            else
-                PresetIconPathFeedbacks.Add(key, new StringFeedback(() => _presets[key].IconPath));
-            PresetIconPathFeedbacks[key].FireUpdate();
+                PresetIconPathFeedbacks[key].FireUpdate();
 
             // preset enable
             if (PresetEnabledFeedbacks.ContainsKey(key))
-                PresetEnabledFeedbacks[key] = new BoolFeedback(() => _presets[key].IsFavorite);
-            else
-                PresetEnabledFeedbacks.Add(key, new BoolFeedback(() => _presets[key].IsFavorite));
-            PresetEnabledFeedbacks[key].FireUpdate();
+                PresetEnabledFeedbacks[key].FireUpdate();
         }
 
         /// <summary>
@@ -567,7 +566,7 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
             if (_comms == null || string.IsNullOrEmpty(method)) return;
 
             var query = BuildQuery(StbId, method, null, null);
-            _comms.SendRequest(String.Format("/triplecare/jsonrpchandler.php?{0}", query), String.Empty);
+            _comms.SendRequest(String.Format("{0}?{1}",RequestPath, query), String.Empty);
         }
 
         /// <summary>
@@ -978,7 +977,7 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
         {
             TriplePlayServicesPresetsConfig preset;
             if (_presets.TryGetValue(index, out preset))
-                SendText("", (int)preset.ChannelNumber);
+                SendText("SelectChannel", (int)preset.ChannelNumber);
         }
 
         #endregion
