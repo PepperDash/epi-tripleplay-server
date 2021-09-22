@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using Crestron.SimplSharp;
-using Crestron.SimplSharp.Net;
-using Crestron.SimplSharp.Net.Http;
 using Crestron.SimplSharpPro.DeviceSupport;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -19,10 +16,10 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
     public class TriplePlayIptvDevice : EssentialsBridgeableDevice
     {
         // request path for all commands
-        private string _requestPath = "/triplecare/jsonrpchandler.php";
+        private const string RequestPath = "/triplecare/jsonrpchandler.php";
 
         // generic http/https client
-        private readonly GenericClient _comms;
+        private readonly IRestfulComms _comms;
 
         // preset dictionary
         private Dictionary<uint, TriplePlayServicesPresetsConfig> _presets;
@@ -141,7 +138,8 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
         /// <param name="key">device key</param>
         /// <param name="name">device name</param>
         /// <param name="config">device configuration object</param>
-        public TriplePlayIptvDevice(string key, string name, TriplePlayIptvConfig config)
+        /// <param name="client"></param>
+        public TriplePlayIptvDevice(string key, string name, TriplePlayIptvConfig config, IRestfulComms client)
             : base(key, name)
         {
             Debug.Console(0, this, "Constructing new {0} instance", name);
@@ -171,12 +169,13 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
             //    }
             //}
 
-            _comms = new GenericClient(Key, config.Control);
+            _comms = client;
             if (_comms == null)
             {
                 Debug.Console(0, this, Debug.ErrorLogLevel.Error, "Failed to construct GenericClient using method {0}", config.Control.Method);
                 return;
             }
+
             _comms.ResponseReceived += _comms_ResponseRecieved;
 
             StbIdFeedback = new IntFeedback(() => StbId);
@@ -206,17 +205,6 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
             Debug.Console(0, this, "Constructing new {0} instance complete", name);
             Debug.Console(0, new string('*', 80));
             Debug.Console(0, new string('*', 80));
-        }
-
-        /// <summary>
-        /// Use the custom activiate to connect the device and start the comms monitor.
-        /// This method will be called when the device is built.
-        /// </summary>
-        /// <returns></returns>
-        public override bool CustomActivate()
-        {
-
-            return base.CustomActivate();
         }
 
         #region Overrides of EssentialsBridgeableDevice
@@ -579,7 +567,7 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
             if (_comms == null || string.IsNullOrEmpty(method)) return;
 
             var query = BuildQuery(StbId, method, null, null);
-            _comms.SendRequest("/triplecare/jsonrpchandler.php", query);
+            _comms.SendRequest(String.Format("/triplecare/jsonrpchandler.php?{0}", query), String.Empty);
         }
 
         /// <summary>
@@ -594,7 +582,7 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
             if (_comms == null || string.IsNullOrEmpty(method)) return;
 
             var query = BuildQuery(StbId, method, strParam, null);
-            _comms.SendRequest(_requestPath, query);
+            _comms.SendRequest(String.Format("{0}?{1}", RequestPath, query), String.Empty);
         }
 
         /// <summary>
@@ -609,7 +597,7 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
             if (_comms == null || string.IsNullOrEmpty(method)) return;
 
             var query = BuildQuery(StbId, method, null, intParam);
-            _comms.SendRequest(_requestPath, query);
+            _comms.SendRequest(String.Format("{0}?{1}", RequestPath, query), String.Empty);
         }
 
         /// <summary>
@@ -625,7 +613,7 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
             if (_comms == null || string.IsNullOrEmpty(method)) return;
 
             var query = BuildQuery(StbId, method, strParam, intParam);
-            _comms.SendRequest(_requestPath, query);
+            _comms.SendRequest(String.Format("{0}?{1}", RequestPath, query), String.Empty);
         }
 
         private string BuildQuery(int stbId, string method, string strParam, int? intParam)

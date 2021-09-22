@@ -1,59 +1,46 @@
 ﻿using System;
 using Crestron.SimplSharp;
-using Crestron.SimplSharp.CrestronIO;
 using Crestron.SimplSharp.Net;
 using Crestron.SimplSharp.Net.Http;
 using Crestron.SimplSharp.Net.Https;
 using PepperDash.Core;
-using PepperDash.Essentials.Core;
 
 namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
 {
     /// <summary>
     /// Http client
     /// </summary>
-    public class GenericClientHttps : IKeyed
+    public class GenericClientHttps : IRestfulComms
     {
-        /// <summary>
-        /// Implements IKeyed interface
-        /// </summary>
-        public string Key { get; private set; }
+        private const string DefaultRequestType = "GET";
+        private readonly HttpsClient _clientHttps;
 
-        private eControlMethod Method { get; set; }
-        public string Host { get; private set; }
-        public int Port { get; private set; }
-        public string Username { get; private set; }
-        public string Password { get; private set; }
-        public string AuthorizationBase64 { get; set; }
-
-        private static HttpsClient _clientHttps;
-        private static HttpsClientRequest _requestHttps;
-        private static HttpsClient.DISPATCHASYNC_ERROR _dispatchHttpsError;
 
         private readonly CrestronQueue<Action> _requestQueue = new CrestronQueue<Action>(20);
-
-        /// <summary>
-        /// Client response event
-        /// </summary>
-        public event EventHandler<GenericClientResponseEventArgs> ResponseReceived;
 
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="key"></param>
         /// <param name="controlConfig"></param>
-        public GenericClientHttps(string key, EssentialsControlPropertiesConfig controlConfig)
+        public GenericClientHttps(string key, ControlPropertiesConfig controlConfig)
         {
             if (string.IsNullOrEmpty(key) || controlConfig == null)
             {
-                Debug.Console(0, Debug.ErrorLogLevel.Error, "GenericClient key or host is null or empty, failed to instantiate client");
+                Debug.Console(0, Debug.ErrorLogLevel.Error,
+                    "GenericClient key or host is null or empty, failed to instantiate client");
                 return;
             }
 
             Key = string.Format("{0}-{1}-client", key, controlConfig.Method).ToLower();
-            Method = controlConfig.Method;
-            Host = controlConfig.TcpSshProperties.Address;
-            Port = (controlConfig.TcpSshProperties.Port >= 1 && controlConfig.TcpSshProperties.Port <= 65535) ? controlConfig.TcpSshProperties.Port : 80;
+
+            Host = (controlConfig.TcpSshProperties.Port >= 1 && controlConfig.TcpSshProperties.Port <= 65535)
+                ? String.Format("http://{0}:{1}", controlConfig.TcpSshProperties.Address,
+                    controlConfig.TcpSshProperties.Port)
+                : String.Format("http://{0}", controlConfig.TcpSshProperties.Address);
+            Port = (controlConfig.TcpSshProperties.Port >= 1 && controlConfig.TcpSshProperties.Port <= 65535)
+                ? controlConfig.TcpSshProperties.Port
+                : 80;
             Username = controlConfig.TcpSshProperties.Username ?? "";
             Password = controlConfig.TcpSshProperties.Password ?? "";
             AuthorizationBase64 = EncodeBase64(Username, Password);
@@ -66,28 +53,79 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
             Debug.Console(0, this, "GenericClient: Password = {0}", Password);
             Debug.Console(0, this, "GenericClient: AuthorizationBase64 = {0}", AuthorizationBase64);
 
-            if (_clientHttps == null)
-                _clientHttps = new HttpsClient();
-            if (_requestHttps == null)
-                _requestHttps = new HttpsClientRequest();
 
-            _clientHttps.UserName = Username;
-            _clientHttps.Password = Password;
-            _clientHttps.KeepAlive = false;
-            _clientHttps.HostVerification = false;
-            _clientHttps.PeerVerification = false;
+            _clientHttps = new HttpsClient
+            {
+                UserName = Username,
+                Password = Password,
+                KeepAlive = false,
+                HostVerification = false,
+                PeerVerification = false
+            };
+
 
             //_requestHttps.Header.ContentType = "application/json";
-            _requestHttps.Header.SetHeaderValue("Content-Type", "application/json");
+
+
+            Debug.Console(0, this, "{0}", new String('-', 80));
+        }
+
+        public string Host { get; private set; }
+        public int Port { get; private set; }
+        public string Username { get; private set; }
+        public string Password { get; private set; }
+        public string AuthorizationBase64 { get; set; }
+
+        #region IRestfulComms Members
+
+        /// <summary>
+        /// Implements IKeyed interface
+        /// </summary>
+        public string Key { get; private set; }
+
+        public void SendRequest(string requestType, string path, string content)
+        {
+            var request = new HttpsClientRequest
+            {
+                RequestType =
+                    (Crestron.SimplSharp.Net.Https.RequestType)
+                        Enum.Parse(typeof (Crestron.SimplSharp.Net.Https.RequestType), requestType, true),
+                Url = new UrlParser(String.Format("{0}/{1}", Host, path)),
+                ContentString = content.Replace("\"", "%22")
+            };
+
+            request.Header.SetHeaderValue("Content-Type", "application/json");
 
             if (!string.IsNullOrEmpty(AuthorizationBase64))
             {
                 _clientHttps.AuthenticationMethod = AuthMethod.BASIC;
-                _requestHttps.Header.SetHeaderValue("Authorization", AuthorizationBase64);
+                request.Header.SetHeaderValue("Authorization", AuthorizationBase64);
             }
 
-            Debug.Console(0, this, "{0}", new String('-', 80));
+            Debug.Console(1, this, @"Request:
+url: {0}
+content: {1}
+requestType: {2}", request.Url, request.ContentString, request.RequestType);
+
+            if (_clientHttps.ProcessBusy)
+            {
+                _requestQueue.Enqueue(() => _clientHttps.DispatchAsync(request, (response, error) =>
+                {
+                    if (response == null)
+                    {
+                        Debug.Console(0, this, "DispatchRequest: response is null, error: {0}", error);
+                        return;
+                    }
+
+                    OnResponseRecieved(new GenericClientResponseEventArgs(response.Code, response.ContentString));
+                }));
+            }
         }
+
+        /// <summary>
+        /// Client response event
+        /// </summary>
+        public event EventHandler<GenericClientResponseEventArgs> ResponseReceived;
 
         /// <summary>
         /// Sends OR queues a request to the client
@@ -102,27 +140,14 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
                 return;
             }
 
-            char[] charsToTrim = { '/' };
-            var url = request.StartsWith("http")
-                ? string.Format("{0}", request.Trim(charsToTrim))
-                : string.Format("{0}://{1}/{2}", Method.ToString().ToLower(), Host, request.Trim(charsToTrim));
 
-            Debug.Console(0, this, "{0}", new String('-', 80));
-            Debug.Console(0, this, "SendRequest: request = {0}", request);
-            Debug.Console(0, this, "SendRequest: contentString = {0}", contentString);
-            Debug.Console(0, this, "SendRequest: url = {0}", url);
-
-            Debug.Console(0, this, "SendRequest: _clientHttps.ProcessBusy {0}", _clientHttps.ProcessBusy);
-            if (_clientHttps.ProcessBusy)
-                _requestQueue.Enqueue(() => DispatchHttpsRequest(url, contentString, Crestron.SimplSharp.Net.Https.RequestType.Get));
-            else
-                DispatchHttpsRequest(url, contentString, Crestron.SimplSharp.Net.Https.RequestType.Get);
-            
-            Debug.Console(0, this, "{0}", new String('-', 80));
+            SendRequest(DefaultRequestType, request, contentString);
         }
 
+        #endregion
+
         // dispatches requests to the client
-        private void DispatchHttpsRequest(string request, string contentString, Crestron.SimplSharp.Net.Https.RequestType requestType)
+        /*private void DispatchHttpsRequest(string request, string contentString, Crestron.SimplSharp.Net.Https.RequestType requestType)
         {
             if (string.IsNullOrEmpty(request))
             {
@@ -170,17 +195,21 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
             {
                 Debug.Console(0, this, Debug.ErrorLogLevel.Error, "DispatchHttpsRequest Exception: {0}", ex);
             }
-        }
+        }*/
 
         // client response event handler
         private void OnResponseRecieved(GenericClientResponseEventArgs args)
         {
-            Debug.Console(0, this, "OnResponseReceived: args.Code = {0} | args.ContentString = {1}", args.Code, args.ContentString);
+            Debug.Console(0, this, "OnResponseReceived: args.Code = {0} | args.ContentString = {1}", args.Code,
+                args.ContentString);
 
             CheckRequestQueue();
 
             var handler = ResponseReceived;
-            if (handler == null) return;
+            if (handler == null)
+            {
+                return;
+            }
 
             handler(this, args);
         }
@@ -190,19 +219,28 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
         {
             Debug.Console(0, this, "CheckRequestQueue: _requestQueue.Count = {0}", _requestQueue.Count);
             var nextRequest = _requestQueue.TryToDequeue();
-            Debug.Console(0, this, "CheckRequestQueue: _requestQueue.TryToDequeue was {0}", (nextRequest == null) ? "unsuccessful" : "successful");
-            if (nextRequest != null) nextRequest();
+            Debug.Console(0, this, "CheckRequestQueue: _requestQueue.TryToDequeue was {0}",
+                (nextRequest == null) ? "unsuccessful" : "successful");
+            if (nextRequest != null)
+            {
+                nextRequest();
+            }
         }
 
         // encodes username and password, returning a Base64 encoded string
         private string EncodeBase64(string username, string password)
         {
             if (string.IsNullOrEmpty(username))
+            {
                 return "";
+            }
 
             try
             {
-                var base64String = Convert.ToBase64String(System.Text.Encoding.GetEncoding("ISO-8859-1").GetBytes(string.Format("{0}:{1}", username, password)));
+                var base64String =
+                    Convert.ToBase64String(
+                        System.Text.Encoding.GetEncoding("ISO-8859-1")
+                            .GetBytes(string.Format("{0}:{1}", username, password)));
                 return string.Format("Basic {0}", base64String);
             }
             catch (Exception err)

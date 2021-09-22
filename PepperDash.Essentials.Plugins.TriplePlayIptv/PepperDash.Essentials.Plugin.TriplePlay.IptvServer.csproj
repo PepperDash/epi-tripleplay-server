@@ -102,9 +102,9 @@
   <ItemGroup>
     <Compile Include="GenericClient\GenericClientHttps.cs" />
     <Compile Include="GenericClient\GenericClientHttp.cs" />
+    <Compile Include="GenericClient\IRestfulComms.cs" />
     <Compile Include="ResponseObjects\AcknowledgementResponse.cs" />
     <Compile Include="TriplePlayIptvBridgeJoinMap.cs" />
-    <Compile Include="GenericClient\GenericClient.cs" />
     <Compile Include="GenericClient\GenericClientEventArgs.cs" />
     <Compile Include="TriplePlayIptvDevice.cs" />
     <Compile Include="TriplePlayIptvConfig.cs" />

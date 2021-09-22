@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Text;
 using Crestron.SimplSharp;
+using Crestron.SimplSharp.Net;
 using Crestron.SimplSharp.Net.Http;
 using PepperDash.Core;
 using PepperDash.Essentials.Core;
@@ -9,25 +11,75 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
     /// <summary>
     /// Http client
     /// </summary>
-    public class GenericClientHttp : IKeyed
+    public class GenericClientHttp : IRestfulComms
     {
+        private const string DefaultRequestType = "GET";
+
         /// <summary>
         /// Implements IKeyed interface
         /// </summary>
         public string Key { get; private set; }
 
-        private eControlMethod Method { get; set; }
         public string Host { get; private set; }
         public int Port { get; private set; }
         public string Username { get; private set; }
         public string Password { get; private set; }
         public string AuthorizationBase64 { get; set; }
 
-        private static HttpClient _clientHttp;
-        private static HttpClientRequest _requestHttp;
-        private static HttpClient.DISPATCHASYNC_ERROR _dispatchHttpError;
+        private readonly HttpClient _clientHttp;
 
         private readonly CrestronQueue<Action> _requestQueue = new CrestronQueue<Action>(20);
+
+        public void SendRequest(string requestType, string path, string content)
+        {
+            var request = new HttpClientRequest
+            {
+                RequestType =
+                    (RequestType)
+                        Enum.Parse(typeof(RequestType), requestType, true),
+                Url = new UrlParser(String.Format("{0}/{1}", Host, path)),
+                ContentString = content
+            };
+
+            request.Header.SetHeaderValue("Content-Type", "application/json");
+
+            if (!string.IsNullOrEmpty(AuthorizationBase64))
+            {
+                request.Header.SetHeaderValue("Authorization", AuthorizationBase64);
+            }
+
+            Debug.Console(1, this, @"Request:
+url: {0}
+content: {1}
+requestType: {2}", request.Url, request.ContentString, request.RequestType);
+
+            if (_clientHttp.ProcessBusy)
+            {
+                _requestQueue.Enqueue(() => _clientHttp.DispatchAsync(request, (response, error) =>
+                {
+                    if (response == null)
+                    {
+                        Debug.Console(0, this, "DispatchRequest: response is null, error: {0}", error);
+                        return;
+                    }
+
+                    OnResponseRecieved(new GenericClientResponseEventArgs(response.Code, response.ContentString));
+                }));
+            }
+            else
+            {
+                _clientHttp.DispatchAsync(request, (response, error) =>
+                {
+                    if (response == null)
+                    {
+                        Debug.Console(0, this, "DispatchRequest: response is null, error: {0}", error);
+                        return;
+                    }
+
+                    OnResponseRecieved(new GenericClientResponseEventArgs(response.Code, response.ContentString));
+                });
+            }
+        }
 
         /// <summary>
         /// Client response event
@@ -48,8 +100,12 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
             }
 
             Key = string.Format("{0}-{1}-client", key, controlConfig.Method).ToLower();
-            Method = controlConfig.Method;
-            Host = controlConfig.TcpSshProperties.Address;
+            
+            Host = (controlConfig.TcpSshProperties.Port >= 1 && controlConfig.TcpSshProperties.Port <= 65535)
+                ? String.Format("http://{0}:{1}", controlConfig.TcpSshProperties.Address,
+                    controlConfig.TcpSshProperties.Port)
+                : String.Format("http://{0}", controlConfig.TcpSshProperties.Address);
+
             Port = (controlConfig.TcpSshProperties.Port >= 1 && controlConfig.TcpSshProperties.Port <= 65535) ? controlConfig.TcpSshProperties.Port : 80;
             Username = controlConfig.TcpSshProperties.Username ?? "";
             Password = controlConfig.TcpSshProperties.Password ?? "";
@@ -63,18 +119,14 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
             Debug.Console(0, this, "GenericClient: Password = {0}", Password);
             Debug.Console(0, this, "GenericClient: AuthorizationBase64 = {0}", AuthorizationBase64);
 
-            _clientHttp.HostAddress = Host;
-            _clientHttp.Port = Port;
-            _clientHttp.UserName = Username;
-            _clientHttp.Password = Password;
-            _clientHttp.KeepAlive = false;
-
-            //_requestHttp.Header.ContentType = "application/json";
-            _requestHttp.Header.SetHeaderValue("Content-Type", "application/json");
-            if (!string.IsNullOrEmpty(AuthorizationBase64))
+            _clientHttp = new HttpClient
             {
-                _requestHttp.Header.SetHeaderValue("Authorization", AuthorizationBase64);
-            }
+                HostAddress = Host,
+                Port = Port,
+                UserName = Username,
+                Password = Password,
+                KeepAlive = false
+            };
 
             Debug.Console(0, this, "{0}", new String('-', 80));
         }
@@ -92,27 +144,11 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
                 return;
             }
 
-            char[] charsToTrim = { '/' };
-            var url = request.StartsWith("http")
-                ? string.Format("{0}", request.Trim(charsToTrim))
-                : string.Format("{0}://{1}/{2}", Method.ToString().ToLower(), Host, request.Trim(charsToTrim));
-
-            Debug.Console(0, this, "{0}", new String('-', 80));
-            Debug.Console(0, this, "SendRequest: request = {0}", request);
-            Debug.Console(0, this, "SendRequest: contentString = {0}", contentString);
-            Debug.Console(0, this, "SendRequest: url = {0}", url);
-
-            Debug.Console(0, this, "SendRequest: _clientHttp.ProcessBusy {0}", _clientHttp.ProcessBusy);
-            if (_clientHttp.ProcessBusy)
-                _requestQueue.Enqueue(() => DispatchHttpRequest(url, contentString, Crestron.SimplSharp.Net.Http.RequestType.Get));
-            else
-                DispatchHttpRequest(url, contentString, Crestron.SimplSharp.Net.Http.RequestType.Get);
-            
-            Debug.Console(0, this, "{0}", new String('-', 80));
+            SendRequest(DefaultRequestType, request, contentString);
         }
 
         // dispatches requests to the client
-        private void DispatchHttpRequest(string request, string contentString, Crestron.SimplSharp.Net.Http.RequestType requestType)
+        /* private void DispatchHttpRequest(string request, string contentString, RequestType requestType)
         {
             Debug.Console(0, this, "{0}", new String('-', 80));
             Debug.Console(0, this, "DispatchHttpRequest: request = {0} | contentString = {1} | requestType = {2}", request, contentString, requestType.ToString());
@@ -164,7 +200,7 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
                 Debug.Console(0, this, Debug.ErrorLogLevel.Error, "DispatchHttpRequest Exception: {0}", ex);
             }
             Debug.Console(0, this, "{0}", new String('-', 80));
-        }
+        }*/
 
         
 
@@ -198,7 +234,7 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
 
             try
             {
-                var base64String = Convert.ToBase64String(System.Text.Encoding.GetEncoding("ISO-8859-1").GetBytes(string.Format("{0}:{1}", username, password)));
+                var base64String = Convert.ToBase64String(Encoding.GetEncoding("ISO-8859-1").GetBytes(string.Format("{0}:{1}", username, password)));
                 return string.Format("Basic {0}", base64String);
             }
             catch (Exception err)
