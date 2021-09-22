@@ -206,6 +206,7 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
                 //    OnResponseRecieved(new GenericClientResponseEventArgs(response.Code, response.ContentString));
                 //});
 
+                //_dispatchHttpError = _clientHttp.GetAsync(_requestHttp.Url.Url, (response, error) =>
                 _dispatchHttpError = _clientHttp.GetAsync(request, (response, error) =>
                 {
                     if (response == null)
