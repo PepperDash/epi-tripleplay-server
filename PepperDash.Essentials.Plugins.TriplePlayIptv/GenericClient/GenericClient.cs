@@ -188,13 +188,12 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
                 _requestHttp.RequestType = requestType;
                 _requestHttp.Header.ContentType = "application/json";
                 _requestHttp.Header.SetHeaderValue("Content-Type", "application/json");
+                if (!string.IsNullOrEmpty(AuthorizationBase64))
+                    _requestHttp.Header.SetHeaderValue("Authorization", AuthorizationBase64);
 
                 if (!string.IsNullOrEmpty(contentString))
                     _requestHttp.ContentString = contentString;
                 
-                if (!string.IsNullOrEmpty(AuthorizationBase64))
-                    _requestHttp.Header.SetHeaderValue("Authorization", AuthorizationBase64);
-
                 //_dispatchHttpError = _clientHttp.DispatchAsync(_requestHttp, (response, error) =>
                 //{
                 //    if (response == null)
@@ -250,15 +249,14 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
                 _requestHttps.RequestType = requestType;
                 _requestHttps.Header.ContentType = "application/json";
                 _requestHttps.Header.SetHeaderValue("Content-Type", "application/json");
-
-                if (!string.IsNullOrEmpty(contentString))
-                    _requestHttps.ContentString = contentString;
-
                 if (!string.IsNullOrEmpty(AuthorizationBase64))
                 {
                     _clientHttps.AuthenticationMethod = AuthMethod.BASIC;
                     _requestHttps.Header.SetHeaderValue("Authorization", AuthorizationBase64);
                 }
+
+                if (!string.IsNullOrEmpty(contentString))
+                    _requestHttps.ContentString = contentString;
 
                //_dispatchHttpsError = _clientHttps.DispatchAsync(_requestHttps, (response, error) =>
                // {
@@ -271,6 +269,7 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
                //     OnResponseRecieved(new GenericClientResponseEventArgs(response.Code, response.ContentString));
                // });
 
+                //_dispatchHttpsError = _clientHttps.GetAsync(_requestHttps.Url.Url, (response, error) =>
                 _dispatchHttpsError = _clientHttps.GetAsync(request, (response, error) =>
                 {
                     if (response == null)
