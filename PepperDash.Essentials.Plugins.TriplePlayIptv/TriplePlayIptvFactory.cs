@@ -31,8 +31,8 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
 		{
 			try
 			{
-				Debug.Console(0, new string('*', 80));
-				Debug.Console(0, new string('*', 80));
+				Debug.Console(2, new string('*', 80));
+				Debug.Console(2, new string('*', 80));
 				Debug.Console(0, "[{0}] Factory Attempting to create new device from type: {1}", dc.Key, dc.Type);				
 				
 				// get the plugin device properties configuration object & check for null 
