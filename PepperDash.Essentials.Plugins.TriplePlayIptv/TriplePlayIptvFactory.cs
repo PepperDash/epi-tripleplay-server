@@ -37,24 +37,31 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
 				
 				// get the plugin device properties configuration object & check for null 
 				var propertiesConfig = dc.Properties.ToObject<TriplePlayIptvConfig>();
-			    if (propertiesConfig != null) return new TriplePlayIptvDevice(dc.Key, dc.Name, propertiesConfig);
-			    
-                Debug.Console(0, "[{0}] Factory: failed to read properties config for {1}", dc.Key, dc.Name);
-			    return null;
 
-			    // get the plugin device control properties configuratin object & check for null
-				//var controlConfig = CommFactory.GetControlPropertiesConfig(dc);
-				//if (controlConfig == null)
-				//{
-				//    Debug.Console(0, "[{0}] Factory: failed to read control config for {1}", dc.Key, dc.Name);
-				//}
-				
-				//// build the plugin device comms (for all other comms methods) & check for null			
-				//var comms = CommFactory.CreateCommForDevice(dc);
-				//if (comms != null) return new TriplePlayIptvDevice(dc.Key, dc.Name, propertiesConfig, comms);
-				
-				//Debug.Console(0, "[{0}] Factory: failed to create comm for {1}", dc.Key, dc.Name);
-				//return null;
+			    if (propertiesConfig == null)
+			    {
+			        Debug.Console(0, "[{0}] Unable to get configuration. Please check configuration.", dc.Key);
+			        return null;
+			    }
+
+			    IRestfulComms client;
+
+			    switch (propertiesConfig.Control.Method)
+			    {
+			        case eControlMethod.Http:
+			            client = new GenericClientHttp(String.Format("{0}-http", dc.Key), propertiesConfig.Control);
+			            break;
+			        case eControlMethod.Https:
+			            client = new GenericClientHttps(String.Format("{0}-https", dc.Key), propertiesConfig.Control);
+			            break;
+			        default:
+			            Debug.Console(0, "[{0}] Control method {1} NOT supported. Please check configuration", dc.Key,
+			                propertiesConfig.Control.Method);
+			            return null;
+			    }
+
+			    return new TriplePlayIptvDevice(dc.Key, dc.Name, propertiesConfig, client);
+			    
 			}
 			catch (Exception ex)
 			{

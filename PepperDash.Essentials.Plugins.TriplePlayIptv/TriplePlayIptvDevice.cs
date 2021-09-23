@@ -16,16 +16,18 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
     public class TriplePlayIptvDevice : EssentialsBridgeableDevice
     {
         // request path for all commands
-        private const string RequestPath = "/triplecare/jsonrpchandler.php";
+
+        private const string RequestPath = "triplecare/JsonRpcHandler.php";
 
         // generic http/https client
-        private readonly GenericClient _comms;
+        private readonly IRestfulComms _comms;
 
         // preset dictionary
         private Dictionary<uint, TriplePlayServicesPresetsConfig> _presets;
 
         // settop box id (stbId) field
         private int _stbId;
+        private string _hostIp;
 
         /// <summary>
         /// settop box id (stbId) property
@@ -138,7 +140,8 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
         /// <param name="key">device key</param>
         /// <param name="name">device name</param>
         /// <param name="config">device configuration object</param>
-        public TriplePlayIptvDevice(string key, string name, TriplePlayIptvConfig config)
+        /// <param name="client"></param>
+        public TriplePlayIptvDevice(string key, string name, TriplePlayIptvConfig config, IRestfulComms client)
             : base(key, name)
         {
             Debug.Console(0, this, "Constructing new {0} instance", name);
@@ -149,12 +152,34 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
                 return;
             }
 
-            _comms = new GenericClient(Key, config.Control);
+            _hostIp = config.Control.TcpSshProperties.Address;
+
+            //switch (config.Control.Method)
+            //{
+            //    case eControlMethod.Http:
+            //    {
+            //        _comms = new GenericClientHttp(Key, config.Control);
+            //        break;
+            //    }
+            //    case eControlMethod.Https:
+            //    {
+            //        _comms = new GenericClientHttps(Key, config.Control);
+            //        break;
+            //    }
+            //    default:
+            //    {
+            //        Debug.Console(0, this, "Invalid control method {0}", config.Control.Method);
+            //        return;
+            //    }
+            //}
+
+            _comms = client;
             if (_comms == null)
             {
                 Debug.Console(0, this, Debug.ErrorLogLevel.Error, "Failed to construct GenericClient using method {0}", config.Control.Method);
                 return;
             }
+
             _comms.ResponseReceived += _comms_ResponseRecieved;
 
             StbIdFeedback = new IntFeedback(() => StbId);
@@ -171,30 +196,22 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
             StbId = config.StbId;
 
             _presets = new Dictionary<uint, TriplePlayServicesPresetsConfig>();
-            for (var p = 1; p < 24; p++)
-            //foreach (var p in _presets)
+            for (uint p = 1; p <= 24; p++)
             {
-                var preset = (uint)p;
-                PresetEnabledFeedbacks.Add(preset, new BoolFeedback(() => false));
-                PresetNameFeedbacks.Add(preset, new StringFeedback(() => string.Format("Preset {0}", preset)));
-                PresetChannelFeedbacks.Add(preset, new IntFeedback(() => (int)preset));
-                PresetIconPathFeedbacks.Add(preset, new StringFeedback(() => string.Format("/path/to/preset{0}", preset)));
+                var preset = p;
+
+                var emptyPreset = new TriplePlayServicesPresetsConfig {Id = preset};
+
+                _presets.Add(p, emptyPreset);
+                PresetEnabledFeedbacks.Add(preset, new BoolFeedback(() => _presets[preset].IsWatchable));
+                PresetNameFeedbacks.Add(preset, new StringFeedback(() => _presets[preset].Name));
+                PresetChannelFeedbacks.Add(preset, new IntFeedback(() => (int) _presets[preset].ChannelNumber));
+                PresetIconPathFeedbacks.Add(preset, new StringFeedback(() => _presets[preset].IconPath));
             }
 
             Debug.Console(0, this, "Constructing new {0} instance complete", name);
             Debug.Console(2, new string('*', 80));
             Debug.Console(2, new string('*', 80));
-        }
-
-        /// <summary>
-        /// Use the custom activiate to connect the device and start the comms monitor.
-        /// This method will be called when the device is built.
-        /// </summary>
-        /// <returns></returns>
-        public override bool CustomActivate()
-        {
-
-            return base.CustomActivate();
         }
 
         #region Overrides of EssentialsBridgeableDevice
@@ -466,7 +483,6 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
             // isFavourite
             foreach (var result in results)
             {
-                if (_presets == null) _presets = new Dictionary<uint, TriplePlayServicesPresetsConfig>();
                 var key = result.Id;
 
                 if (_presets.ContainsKey(key))
@@ -474,7 +490,7 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
                     _presets[key].ChannelNumber = result.ChannelNumber;
                     _presets[key].Name = result.Name;
                     _presets[key].IsFavorite = result.IsFavourite;
-                    _presets[key].IconPath = result.IconPath;
+                    _presets[key].IconPath = String.Format("http://{0}{1}", _hostIp, result.IconPath);
                     _presets[key].IsWatchable = result.IsWatchable;
                 }
                 else
@@ -495,37 +511,31 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
 
         private void UpdatePresetFeedbacks(TriplePlayServicesPresetsConfig preset)
         {
-            if (preset == null) return;
+
+            if (preset == null)
+            {
+                Debug.Console(1, this, "Preset is null");
+                return;
+            }
+            Debug.Console(1, this, "Preset Id: {0}", preset.Id);
 
             var key = preset.Id;
 
             // preset name
             if (PresetNameFeedbacks.ContainsKey(key))
-                PresetNameFeedbacks[key] = new StringFeedback(() => _presets[key].Name);
-            else
-                PresetNameFeedbacks.Add(key, new StringFeedback(() => _presets[key].Name));
-            PresetNameFeedbacks[key].FireUpdate();
+                PresetNameFeedbacks[key].FireUpdate();
 
             // preset channel number
             if (PresetChannelFeedbacks.ContainsKey(key))
-                PresetChannelFeedbacks[key] = new IntFeedback(() => (int)_presets[key].ChannelNumber);
-            else
-                PresetChannelFeedbacks.Add(key, new IntFeedback(() => (int)_presets[key].ChannelNumber));
-            PresetChannelFeedbacks[key].FireUpdate();
+                PresetChannelFeedbacks[key].FireUpdate();
 
             // preset icon path
             if (PresetIconPathFeedbacks.ContainsKey(key))
-                PresetIconPathFeedbacks[key] = new StringFeedback(() => _presets[key].IconPath);
-            else
-                PresetIconPathFeedbacks.Add(key, new StringFeedback(() => _presets[key].IconPath));
-            PresetIconPathFeedbacks[key].FireUpdate();
+                PresetIconPathFeedbacks[key].FireUpdate();
 
             // preset enable
             if (PresetEnabledFeedbacks.ContainsKey(key))
-                PresetEnabledFeedbacks[key] = new BoolFeedback(() => _presets[key].IsFavorite);
-            else
-                PresetEnabledFeedbacks.Add(key, new BoolFeedback(() => _presets[key].IsFavorite));
-            PresetEnabledFeedbacks[key].FireUpdate();
+                PresetEnabledFeedbacks[key].FireUpdate();
         }
 
         /// <summary>
@@ -557,12 +567,7 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
             if (_comms == null || string.IsNullOrEmpty(method)) return;
 
             var query = BuildQuery(StbId, method, null, null);
-            if (string.IsNullOrEmpty(query))
-            {
-                Debug.Console(1, this, "SendText: query ('{0}') is empty, unable to send text.", query);
-                return;
-            }
-            _comms.SendRequest(string.Format("{0}?{1}", RequestPath, query.Replace("\"", "%22")), null);
+            _comms.SendRequest(String.Format("{0}?{1}",RequestPath, query), String.Empty);
         }
 
         /// <summary>
@@ -577,12 +582,7 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
             if (_comms == null || string.IsNullOrEmpty(method)) return;
 
             var query = BuildQuery(StbId, method, strParam, null);
-            if (string.IsNullOrEmpty(query))
-            {
-                Debug.Console(1, this, "SendText: query ('{0}') is empty, unable to send text.", null);
-                return;
-            }
-            _comms.SendRequest(string.Format("{0}?{1}", RequestPath, query.Replace("\"", "%22")), null);
+            _comms.SendRequest(String.Format("{0}?{1}", RequestPath, query), String.Empty);
         }
 
         /// <summary>
@@ -597,12 +597,7 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
             if (_comms == null || string.IsNullOrEmpty(method)) return;
 
             var query = BuildQuery(StbId, method, null, intParam);
-            if (string.IsNullOrEmpty(query))
-            {
-                Debug.Console(1, this, "SendText: query ('{0}') is empty, unable to send text.", query);
-                return;
-            }
-            _comms.SendRequest(string.Format("{0}?{1}", RequestPath, query.Replace("\"", "%22")), null);
+            _comms.SendRequest(String.Format("{0}?{1}", RequestPath, query), String.Empty);
         }
 
         /// <summary>
@@ -618,12 +613,7 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
             if (_comms == null || string.IsNullOrEmpty(method)) return;
 
             var query = BuildQuery(StbId, method, strParam, intParam);
-            if (string.IsNullOrEmpty(query))
-            {
-                Debug.Console(1, this, "SendText: query ('{0}') is empty, unable to send text.", query);
-                return;
-            }
-            _comms.SendRequest(string.Format("{0}?{1}", RequestPath, query.Replace("\"", "%22")), null);
+            _comms.SendRequest(String.Format("{0}?{1}", RequestPath, query), String.Empty);
         }
 
         private string BuildQuery(int stbId, string method, string strParam, int? intParam)
@@ -992,7 +982,7 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
         {
             TriplePlayServicesPresetsConfig preset;
             if (_presets.TryGetValue(index, out preset))
-                SendText("", (int)preset.ChannelNumber);
+                SendText("SelectChannel", (int)preset.ChannelNumber);
         }
 
         #endregion
