@@ -1067,7 +1067,7 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
         /// <param name="input"></param>
         public void TvInputSelect(TvControlInputs input)
         {
-            SendText("SelectTvInput", (int)input);
+            SendText("SelectTVInput", (int)input);
         }
 
         /// <summary>
