@@ -6,7 +6,7 @@
 			"requiredControlSofwareVersion": "",
 			"systemType": "huddle",
 			"lastModifiedDate": "2018-07-09T20:00:47.873Z",
-			"lastUid": 23,
+			"lastUid": 2,
 			"processorType": "rmc3"
 		},
 		"devices": [
@@ -20,52 +20,49 @@
 				"name": "RMC3"
 			},
 			{
-				"key": "example-plugin-1",
-				"name": "Example Plugin Name",
-				"type": "examplePluginDevice",
+				"key": "iptv-tuner-1",
+				"uid": 1,
+				"name": "TriplePlay IPTV",
+				"type": "tripleplay",
 				"group": "pluginDevices",
 				"properties": {
 					"control": {
-						"method": "tcpIp",
-						"controlPortDevKey": "processor",
-						"controlPortNumber": 1,
-						"comParams": {
-							"baudRate": 9600,
-							"dataBits": 8,
-							"stopBits": 1,
-							"parity": "None",
-							"protocol": "RS232",
-							"hardwareHandshake": "None",
-							"softwareHandshake": "None"
-						},
-						"tcpSshProperties": {
-							"address": "10.0.0.200",
-							"port": 23,
-							"username": "admin",
-							"password": "password",
-							"autoReconnect": true,
-							"autoReconnectIntervalMs": 10000
-						}
-					},
+                        "method": "http",
+                        "tcpSshProperties": {
+                            "address": "10.1.0.199",
+                            "port": 80,
+							"username": "",
+							"password": ""
+                        }
+                    },
+					"stbId": 3,
 					"pollTimeMs": 30000,
 					"warningTimeoutMs": 180000,
 					"errorTimeoutMs": 300000,
-					"pluginCollection": {
+					"presets": {
 						"1": {
-							"name": "Item 1",
-							"value": 1
+							"id": 1,
+							"channelNumber": 101,
+							"name": "Preset 1",
+							"isFavorite": true,
+							"iconPath": "/preset1/icon/path",
+							"isWatchable": true
 						},
 						"2": {
-							"name": "Item 2",
-							"value": 2
+							"id": 2,
+							"channelNumber": 102,
+							"name": "Preset 2",
+							"isFavorite": true,
+							"iconPath": "/preset2/icon/path",
+							"isWatchable": true
 						}
 					}
 				}
 			},
 			{
-				"key": "example-plugin-bridge-1",
-				"uid": 11,
-				"name": "Example Plugin Bridge",
+				"key": "plugin-bridge-1",
+				"uid": 2,
+				"name": "Plugin Bridge 1",
 				"group": "api",
 				"type": "eiscApiAdvanced",
 				"properties": {
@@ -74,12 +71,12 @@
 							"address": "127.0.0.2",
 							"port": 0
 						},
-						"ipid": "B1"
+						"ipid": "A5"
 					},
 					"devices": [
 						{
-							"deviceKey": "example-plugin-1",
-							"joinStart": 1
+							"deviceKey": "iptv-tuner-1",
+							"joinStart": 501
 						}
 					]
 				}
