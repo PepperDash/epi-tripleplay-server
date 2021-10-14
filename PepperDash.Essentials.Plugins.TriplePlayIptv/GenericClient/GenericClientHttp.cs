@@ -26,7 +26,7 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
         {
             if (string.IsNullOrEmpty(key) || controlConfig == null)
             {
-                Debug.Console(0, Debug.ErrorLogLevel.Error,
+                Debug.Console(2, Debug.ErrorLogLevel.Error,
                     "GenericClient key or host is null or empty, failed to instantiate client");
                 return;
             }
@@ -44,13 +44,13 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
             Password = controlConfig.TcpSshProperties.Password ?? "";
             AuthorizationBase64 = EncodeBase64(Username, Password);
 
-            Debug.Console(0, this, "{0}", new String('-', 80));
-            Debug.Console(0, this, "GenericClient: Key = {0}", Key);
-            Debug.Console(0, this, "GenericClient: Host = {0}", Host);
-            Debug.Console(0, this, "GenericClient: Port = {0}", Port);
-            Debug.Console(0, this, "GenericClient: Username = {0}", Username);
-            Debug.Console(0, this, "GenericClient: Password = {0}", Password);
-            Debug.Console(0, this, "GenericClient: AuthorizationBase64 = {0}", AuthorizationBase64);
+            Debug.Console(2, this, "{0}", new String('-', 80));
+            Debug.Console(2, this, "GenericClient: Key = {0}", Key);
+            Debug.Console(2, this, "GenericClient: Host = {0}", Host);
+            Debug.Console(2, this, "GenericClient: Port = {0}", Port);
+            Debug.Console(2, this, "GenericClient: Username = {0}", Username);
+            Debug.Console(2, this, "GenericClient: Password = {0}", Password);
+            Debug.Console(2, this, "GenericClient: AuthorizationBase64 = {0}", AuthorizationBase64);
 
             _clientHttp = new HttpClient
             {
@@ -61,9 +61,9 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
                 KeepAlive = false
             };
 
-            Debug.Console(0, this, "clientUrl: {0}", _clientHttp.Url.ToString());
+            Debug.Console(2, this, "clientUrl: {0}", _clientHttp.Url.ToString());
 
-            Debug.Console(0, this, "{0}", new String('-', 80));
+            Debug.Console(2, this, "{0}", new String('-', 80));
         }
 
         public string Host { get; private set; }
@@ -98,9 +98,10 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
             }
 
             Debug.Console(1, this, @"Request:
-url: {0}
-content: {1}
-requestType: {2}", request.Url, request.ContentString, request.RequestType);
+                    url: {0}
+                    content: {1}
+                    requestType: {2}", 
+                    request.Url, request.ContentString, request.RequestType);
 
             if (_clientHttp.ProcessBusy)
             {
@@ -108,7 +109,7 @@ requestType: {2}", request.Url, request.ContentString, request.RequestType);
                 {
                     if (response == null)
                     {
-                        Debug.Console(0, this, "DispatchRequest: response is null, error: {0}", error);
+                        Debug.Console(1, this, "DispatchRequest: response is null, error: {0}", error);
                         return;
                     }
 
@@ -121,7 +122,7 @@ requestType: {2}", request.Url, request.ContentString, request.RequestType);
                 {
                     if (response == null)
                     {
-                        Debug.Console(0, this, "DispatchRequest: response is null, error: {0}", error);
+                        Debug.Console(1, this, "DispatchRequest: response is null, error: {0}", error);
                         return;
                     }
 
@@ -144,7 +145,7 @@ requestType: {2}", request.Url, request.ContentString, request.RequestType);
         {
             if (string.IsNullOrEmpty(request))
             {
-                Debug.Console(0, this, Debug.ErrorLogLevel.Error, "SendRequest: request is null or empty");
+                Debug.Console(1, this, Debug.ErrorLogLevel.Error, "SendRequest: request is null or empty");
                 return;
             }
 
@@ -153,66 +154,11 @@ requestType: {2}", request.Url, request.ContentString, request.RequestType);
 
         #endregion
 
-        // dispatches requests to the client
-        /* private void DispatchHttpRequest(string request, string contentString, RequestType requestType)
-        {
-            Debug.Console(0, this, "{0}", new String('-', 80));
-            Debug.Console(0, this, "DispatchHttpRequest: request = {0} | contentString = {1} | requestType = {2}", request, contentString, requestType.ToString());
-
-            if (string.IsNullOrEmpty(request))
-            {
-                Debug.Console(0, this, "DispatchHttpRequest: request is null or empty, cannot dispatch request");
-                return;
-            }
-
-            try
-            {
-                _requestHttp.Url.Parse(request);
-                _requestHttp.Url.Parse(string.Format("{0}?{1}", request, contentString));
-                Debug.Console(0, this, "DispatchHttpRequest: _requestHttp.Url = {0}", _requestHttp.Url);
-                Debug.Console(0, this, "DispatchHttpRequest: _requestHttp.Url.Fragment = {0}", _requestHttp.Url.Fragment);
-                Debug.Console(0, this, "DispatchHttpRequest: _requestHttp.Url.Hostname = {0}", _requestHttp.Url.Hostname);
-                Debug.Console(0, this, "DispatchHttpRequest: _requestHttp.Url.HostnameAndPort = {0}", _requestHttp.Url.HostnameAndPort);
-                Debug.Console(0, this, "DispatchHttpRequest: _requestHttp.Url.HostnameType = {0}", _requestHttp.Url.HostnameType);
-                Debug.Console(0, this, "DispatchHttpRequest: _requestHttp.Url.IsAbsoluteUri = {0}", _requestHttp.Url.IsAbsoluteUri);
-                Debug.Console(0, this, "DispatchHttpRequest: _requestHttp.Url.IsDefaultPort = {0}", _requestHttp.Url.IsDefaultPort);
-                Debug.Console(0, this, "DispatchHttpRequest: _requestHttp.Url.IsFile = {0}", _requestHttp.Url.IsFile);
-                Debug.Console(0, this, "DispatchHttpRequest: _requestHttp.Url.IsLoopback = {0}", _requestHttp.Url.IsLoopback);
-                Debug.Console(0, this, "DispatchHttpRequest: _requestHttp.Url.IsUnc = {0}", _requestHttp.Url.IsUnc);
-                Debug.Console(0, this, "DispatchHttpRequest: _requestHttp.Url.Params = {0}", _requestHttp.Url.Params);
-                Debug.Console(0, this, "DispatchHttpRequest: _requestHttp.Url.Path = {0}", _requestHttp.Url.Path);
-                Debug.Console(0, this, "DispatchHttpRequest: _requestHttp.Url.PathAndParams = {0}", _requestHttp.Url.PathAndParams);
-                Debug.Console(0, this, "DispatchHttpRequest: _requestHttp.Url.Port = {0}", _requestHttp.Url.Port);
-                Debug.Console(0, this, "DispatchHttpRequest: _requestHttp.Url.Protocol = {0}", _requestHttp.Url.Protocol);
-                Debug.Console(0, this, "DispatchHttpRequest: _requestHttp.Url.Url = {0}", _requestHttp.Url.Url);
-
-                _requestHttp.RequestType = requestType;
-
-                _dispatchHttpError = _clientHttp.DispatchAsync(_requestHttp, (response, error) =>
-                {
-                    if (response == null)
-                    {
-                        Debug.Console(0, this, "DispatchRequest: response is null, error: {0}", error);
-                        return;
-                    }
-
-                    OnResponseRecieved(new GenericClientResponseEventArgs(response.Code, response.ContentString));
-                });
-
-                Debug.Console(0, this, "DispatchHttpsRequest: _dispatchHttpError '{0}'", _dispatchHttpError);
-            }
-            catch (Exception ex)
-            {
-                Debug.Console(0, this, Debug.ErrorLogLevel.Error, "DispatchHttpRequest Exception: {0}", ex);
-            }
-            Debug.Console(0, this, "{0}", new String('-', 80));
-        }*/
-
 
         // client response event handler
         private void OnResponseRecieved(GenericClientResponseEventArgs args)
         {
-            Debug.Console(0, this, "OnResponseReceived: args.Code = {0} | args.ContentString = {1}", args.Code,
+            Debug.Console(1, this, "OnResponseReceived: args.Code = {0} | args.ContentString = {1}", args.Code,
                 args.ContentString);
 
             CheckRequestQueue();
@@ -229,9 +175,9 @@ requestType: {2}", request.Url, request.ContentString, request.RequestType);
         // Checks request queue and issues next request
         private void CheckRequestQueue()
         {
-            Debug.Console(0, this, "CheckRequestQueue: _requestQueue.Count = {0}", _requestQueue.Count);
+            Debug.Console(2, this, "CheckRequestQueue: _requestQueue.Count = {0}", _requestQueue.Count);
             var nextRequest = _requestQueue.TryToDequeue();
-            Debug.Console(0, this, "CheckRequestQueue: _requestQueue.TryToDequeue was {0}",
+            Debug.Console(2, this, "CheckRequestQueue: _requestQueue.TryToDequeue was {0}",
                 (nextRequest == null) ? "unsuccessful" : "successful");
             if (nextRequest != null)
             {
@@ -256,7 +202,7 @@ requestType: {2}", request.Url, request.ContentString, request.RequestType);
             }
             catch (Exception err)
             {
-                Debug.Console(0, this, Debug.ErrorLogLevel.Error, "EncodeBase64 Exception:\r{0}", err);
+                Debug.Console(2, this, Debug.ErrorLogLevel.Error, "EncodeBase64 Exception:\r{0}", err);
                 return "";
             }
         }
