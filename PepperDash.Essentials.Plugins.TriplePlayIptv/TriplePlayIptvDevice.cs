@@ -153,26 +153,6 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
             }
 
             _hostIp = config.Control.TcpSshProperties.Address;
-
-            //switch (config.Control.Method)
-            //{
-            //    case eControlMethod.Http:
-            //    {
-            //        _comms = new GenericClientHttp(Key, config.Control);
-            //        break;
-            //    }
-            //    case eControlMethod.Https:
-            //    {
-            //        _comms = new GenericClientHttps(Key, config.Control);
-            //        break;
-            //    }
-            //    default:
-            //    {
-            //        Debug.Console(0, this, "Invalid control method {0}", config.Control.Method);
-            //        return;
-            //    }
-            //}
-
             _comms = client;
             if (_comms == null)
             {
