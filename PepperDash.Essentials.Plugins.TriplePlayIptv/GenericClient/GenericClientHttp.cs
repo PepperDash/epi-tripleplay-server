@@ -79,14 +79,20 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
         /// </summary>
         public string Key { get; private set; }
 
+        /// <summary>
+        /// Sends request to the client
+        /// </summary>
+        /// <param name="requestType"></param>
+        /// <param name="path"></param>
+        /// <param name="content"></param>
         public void SendRequest(string requestType, string path, string content)
         {
             var request = new HttpClientRequest
             {
                 RequestType =
                     (RequestType)
-                        Enum.Parse(typeof (RequestType), requestType, true),
-                Url = new UrlParser(String.Format("{0}{1}", _clientHttp.Url,path)),
+                        Enum.Parse(typeof(RequestType), requestType, true),
+                Url = new UrlParser(String.Format("{0}{1}", _clientHttp.Url, path)),
                 ContentString = content
             };
 
@@ -100,7 +106,7 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
             Debug.Console(1, this, @"Request:
                     url: {0}
                     content: {1}
-                    requestType: {2}", 
+                    requestType: {2}",
                     request.Url, request.ContentString, request.RequestType);
 
             if (_clientHttp.ProcessBusy)
