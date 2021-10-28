@@ -544,9 +544,11 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
         {
             Debug.Console(1, this, "SendText: method = {0}", method);
 
-            if (_comms == null || string.IsNullOrEmpty(method)) return;
+            if (_comms == null) return;
 
             var query = BuildQuery(StbId, method, null, null);
+            if (string.IsNullOrEmpty(query)) return;
+
             _comms.SendRequest(String.Format("{0}?{1}",RequestPath, query), String.Empty);
         }
 
@@ -559,9 +561,11 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
         {
             Debug.Console(1, this, "SendText: method = {0} | strParam = {1}", method, strParam);
 
-            if (_comms == null || string.IsNullOrEmpty(method)) return;
+            if (_comms == null) return;
 
             var query = BuildQuery(StbId, method, strParam, null);
+            if (string.IsNullOrEmpty(query)) return;
+
             _comms.SendRequest(String.Format("{0}?{1}", RequestPath, query), String.Empty);
         }
 
@@ -574,9 +578,11 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
         {
             Debug.Console(1, this, "SendText: method = {0} | intParam = {1}", method, intParam);
 
-            if (_comms == null || string.IsNullOrEmpty(method)) return;
+            if (_comms == null) return;
 
             var query = BuildQuery(StbId, method, null, intParam);
+            if (string.IsNullOrEmpty(query)) return;
+
             _comms.SendRequest(String.Format("{0}?{1}", RequestPath, query), String.Empty);
         }
 
@@ -590,9 +596,11 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
         {
             Debug.Console(1, this, "SendText: method = {0} | strParam = {1} | intParam = {2}", method, strParam, intParam);
 
-            if (_comms == null || string.IsNullOrEmpty(method)) return;
+            if (_comms == null) return;
 
             var query = BuildQuery(StbId, method, strParam, intParam);
+            if (string.IsNullOrEmpty(query)) return;
+
             _comms.SendRequest(String.Format("{0}?{1}", RequestPath, query), String.Empty);
         }
 
@@ -601,7 +609,7 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
             if ((stbId <= 0) || string.IsNullOrEmpty(method))
             {
                 Debug.Console(1, this, "BuildQuery: invalid stbId {0}, unable to build query.", stbId);
-                return string.Empty;
+                return null;
             }
 
             var array = new JArray
