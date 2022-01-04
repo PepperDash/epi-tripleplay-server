@@ -532,10 +532,27 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
 
             if (_comms == null) return;
 
-            var query = BuildQuery(StbId, method, null, null);
+            var query = BuildQuery(StbId, method, null, null, null);
             if (string.IsNullOrEmpty(query)) return;
 
             _comms.SendRequest(String.Format("{0}?{1}",RequestPath, query), String.Empty);
+        }
+
+        /// <summary>
+        /// Sends commands to the device
+        /// </summary>
+        /// <param name="method"></param>
+        /// <param name="boolParam"></param>
+        public void SendText(string method, bool boolParam)
+        {
+            Debug.Console(DebugLevel1, this, "SendText: method = {0} | strParam = {1}", method, boolParam);
+
+            if (_comms == null) return;
+
+            var query = BuildQuery(StbId, method, null, null, boolParam);
+            if (string.IsNullOrEmpty(query)) return;
+
+            _comms.SendRequest(String.Format("{0}?{1}", RequestPath, query), String.Empty);
         }
 
         /// <summary>
@@ -549,7 +566,7 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
 
             if (_comms == null) return;
 
-            var query = BuildQuery(StbId, method, strParam, null);
+            var query = BuildQuery(StbId, method, strParam, null, null);
             if (string.IsNullOrEmpty(query)) return;
 
             _comms.SendRequest(String.Format("{0}?{1}", RequestPath, query), String.Empty);
@@ -566,7 +583,7 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
 
             if (_comms == null) return;
 
-            var query = BuildQuery(StbId, method, null, intParam);
+            var query = BuildQuery(StbId, method, null, intParam, null);
             if (string.IsNullOrEmpty(query)) return;
 
             _comms.SendRequest(String.Format("{0}?{1}", RequestPath, query), String.Empty);
@@ -584,13 +601,14 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
 
             if (_comms == null) return;
 
-            var query = BuildQuery(StbId, method, strParam, intParam);
+            var query = BuildQuery(StbId, method, strParam, intParam, null);
             if (string.IsNullOrEmpty(query)) return;
 
             _comms.SendRequest(String.Format("{0}?{1}", RequestPath, query), String.Empty);
-        }
+        }        
 
-        private string BuildQuery(int stbId, string method, string strParam, int? intParam)
+        // builds query with string and/or int parameter
+        private string BuildQuery(int stbId, string method, string strParam, int? intParam, bool? boolParam)
         {
             if ((stbId <= 0) || string.IsNullOrEmpty(method))
             {
@@ -606,6 +624,8 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
                 array.Add(strParam);
             if (intParam != null)
                 array.Add(intParam);
+            if(boolParam != null)
+                array.Add(boolParam);
 
             var obj = new JObject
             {
@@ -617,7 +637,7 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
             var call = JsonConvert.SerializeObject(obj, Formatting.None);
             Debug.Console(DebugLevel2, this, "BuildQuery: call = {0}", call);
             return string.Format("call={0}", call);
-        }
+        }       
 
         /// <summary>
         /// Allows bridge to change the settop box id (stbId) to be controlled
@@ -724,7 +744,7 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
         /// </summary>
         public void VolumeMuteOn()
         {
-            SendText("SetMute", "true");
+            SendText("SetMute", true);
         }
 
         /// <summary>
@@ -732,7 +752,7 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
         /// </summary>
         public void VolumeMuteOff()
         {
-            SendText("SetMute", "false");
+            SendText("SetMute", false);
         }
 
         /// <summary>
