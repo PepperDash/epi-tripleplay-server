@@ -387,12 +387,16 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
             }
             catch (JsonReaderException jex)
             {
-                Debug.Console(DebugLevel2, this, "IsValidJson: JsonReaderException:\r{0}", jex);
+                Debug.Console(DebugLevel1, this, "IsValidJson Exception Message: {0}", jex.Message);
+                Debug.Console(DebugLevel2, this, "IsValidJson Inner Exception: {0}", jex.InnerException);
+                Debug.Console(DebugLevel2, this, "IsValidJson Stack Trace: {0}", jex.StackTrace);
                 return false;
             }
             catch (Exception ex)
             {
-                Debug.Console(DebugLevel2, this, "IsValidJson: Exception:\r{0}", ex);
+                Debug.Console(DebugLevel1, this, "IsValidJson Exception Message: {0}", ex.Message);
+                Debug.Console(DebugLevel2, this, "IsValidJson Inner Exception: {0}", ex.InnerException);
+                Debug.Console(DebugLevel2, this, "IsValidJson Stack Trace: {0}", ex.StackTrace);
                 return false;
             }
         }
@@ -433,7 +437,9 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
             }
             catch (Exception ex)
             {
-                Debug.Console(DebugLevel2, this, Debug.ErrorLogLevel.Error, "_comms_ResponseRecieved Exception:\r{0}", ex);
+                Debug.Console(DebugLevel1, this, Debug.ErrorLogLevel.Error, "_comms_ResponseRecieved Exception Message: {0}", ex.Message);
+                Debug.Console(DebugLevel2, this, Debug.ErrorLogLevel.Error, "_comms_ResponseRecieved Inner Exception {0}", ex.InnerException);
+                Debug.Console(DebugLevel2, this, Debug.ErrorLogLevel.Error, "_comms_ResponseRecieved Stack Trace: {0}", ex.StackTrace);
             }
         }
 
@@ -951,7 +957,7 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
         /// <param name="key"></param>
         public void RcuKeyPress(RcuKeys key)
         {
-            Debug.Console(2, this, "RcuKeyPress: key = {0}", key);
+            Debug.Console(DebugLevel2, this, "RcuKeyPress: key = {0}", key);
             SendText("HandleKeyPress", key.ToString());
         }
 
@@ -960,7 +966,7 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
         /// </summary>
         public void RcuKpNumbers(int number)
         {
-            Debug.Console(2, this, "RcuKpNumbers: number = {0}", number);
+            Debug.Console(DebugLevel2, this, "RcuKpNumbers: number = {0}", number);
 
             if (number < 0 && number > 9) return;
             SendText("HandleKeyPress", String.Format("Number{0}", number));
