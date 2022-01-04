@@ -15,8 +15,10 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
     /// </summary>
     public class TriplePlayIptvDevice : EssentialsBridgeableDevice
     {
-        // request path for all commands
+        private const int DebugLevel1 = 1;
+        private const int DebugLevel2 = 2;
 
+        // request path for all commands
         private const string RequestPath = "triplecare/JsonRpcHandler.php";
 
         // generic http/https client
@@ -190,8 +192,8 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
             }
 
             Debug.Console(0, this, "Constructing new {0} instance complete", name);
-            Debug.Console(2, new string('*', 80));
-            Debug.Console(2, new string('*', 80));
+            Debug.Console(DebugLevel2, new string('*', 80));
+            Debug.Console(DebugLevel2, new string('*', 80));
         }
 
         #region Overrides of EssentialsBridgeableDevice
@@ -220,11 +222,11 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
                 joinMap.SetCustomJoinData(customJoins);
             }
 
-            Debug.Console(0, "Linking to Trilist '{0}'", trilist.ID.ToString("X"));
-            Debug.Console(0, "Linking to Bridge Type {0}", GetType().Name);
+            Debug.Console(0, this, "Linking to Trilist '{0}'", trilist.ID.ToString("X"));
+            Debug.Console(0, this, "Linking to Bridge Type {0}", GetType().Name);
 
             // links to bridge
-            trilist.SetString(joinMap.DeviceName.JoinNumber, Name);
+            trilist.SetString(joinMap.DeviceName.JoinNumber, Name);           
 
             // TODO [ ] If connection state is managed by Essentials, delete the following.  If connection is managed by SiMPL, uncomment the following
             //trilist.SetBoolSigAction(joinMap.Connect.JoinNumber, sig => Connect = sig);
@@ -302,27 +304,6 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
                 PresetIconPathFeedbacks[preset].LinkInputSig(trilist.StringInput[presetPathJoin]);
             }
 
-            // stb presets
-            //foreach (var preset in _presets)
-            //{
-            //    var join = joinMap.Presets.JoinNumber + preset.Value.BridgeIndex;
-            //    var presetBridgeIndex = preset.Value.BridgeIndex;
-            //    Debug.Console(0, this, "[join-{0}] preset-{1}, name-{2}, channel-{3}, icon-{4}, bridgeIndex-{5}",
-            //        join, preset.Key, preset.Value.Name, preset.Value.Channel, preset.Value.Icon, preset.Value.BridgeIndex);
-
-            //    // bridge selects preset - digital
-            //    // TODO [ ] Update to pass in int index of selected preset
-            //    trilist.SetSigTrueAction(join, () => PresetSelect(presetBridgeIndex));
-
-            //    // feedbacks
-            //    if (!string.IsNullOrEmpty(preset.Value.Name))
-            //    {
-            //        PresetEnabledFeedbacks[preset.Key].LinkInputSig(trilist.BooleanInput[join]);
-            //        PresetNameFeedbacks[preset.Key].LinkInputSig(trilist.StringInput[join]);
-            //        PresetIconFeedbacks[preset.Key].LinkInputSig(trilist.UShortInput[join]);
-            //    }
-            //}
-
             // tv control
             trilist.SetSigTrueAction(joinMap.TvPowerOn.JoinNumber, TvPowerOn);
             trilist.SetSigTrueAction(joinMap.TvPowerOff.JoinNumber, TvPowerOff);
@@ -352,9 +333,14 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
 
             UpdateFeedbacks();
 
-            trilist.OnlineStatusChange += (o, a) =>
+            trilist.OnlineStatusChange += (sender, args) =>
             {
-                if (!a.DeviceOnLine) return;
+                if (args.DeviceOnLine == false) return;
+
+                Debug.Console(DebugLevel2, this, "{0}", new String('*', 50));
+                Debug.Console(DebugLevel2, this, "LinkToApi args.DeviceOnline: {0}", args.DeviceOnLine);
+                Debug.Console(DebugLevel2, this, "LinkToApi Name: {0}", Name);
+                Debug.Console(DebugLevel2, this, "{0}", new String('*', 50));
 
                 trilist.SetString(joinMap.DeviceName.JoinNumber, Name);
                 UpdateFeedbacks();
@@ -401,12 +387,12 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
             }
             catch (JsonReaderException jex)
             {
-                Debug.Console(2, this, "IsValidJson: JsonReaderException:\r{0}", jex);
+                Debug.Console(DebugLevel2, this, "IsValidJson: JsonReaderException:\r{0}", jex);
                 return false;
             }
             catch (Exception ex)
             {
-                Debug.Console(2, this, "IsValidJson: Exception:\r{0}", ex);
+                Debug.Console(DebugLevel2, this, "IsValidJson: Exception:\r{0}", ex);
                 return false;
             }
         }
@@ -415,7 +401,7 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
         {
             try
             {
-                Debug.Console(1, this, "_comms_ResponseRecieved: Code = {0} | ContentString = {1}", args.Code, args.ContentString);
+                Debug.Console(DebugLevel1, this, "_comms_ResponseRecieved: Code = {0} | ContentString = {1}", args.Code, args.ContentString);
 
                 ResponseCode = args.Code;
 
@@ -447,7 +433,7 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
             }
             catch (Exception ex)
             {
-                Debug.Console(2, this, Debug.ErrorLogLevel.Error, "_comms_ResponseRecieved Exception:\r{0}", ex);
+                Debug.Console(DebugLevel2, this, Debug.ErrorLogLevel.Error, "_comms_ResponseRecieved Exception:\r{0}", ex);
             }
         }
 
@@ -494,10 +480,10 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
 
             if (preset == null)
             {
-                Debug.Console(1, this, "Preset is null");
+                Debug.Console(DebugLevel1, this, "Preset is null");
                 return;
             }
-            Debug.Console(1, this, "Preset Id: {0}", preset.Id);
+            Debug.Console(DebugLevel1, this, "Preset Id: {0}", preset.Id);
 
             var key = preset.Id;
 
@@ -542,7 +528,7 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
         /// <param name="method"></param>
         public void SendText(string method)
         {
-            Debug.Console(1, this, "SendText: method = {0}", method);
+            Debug.Console(DebugLevel1, this, "SendText: method = {0}", method);
 
             if (_comms == null) return;
 
@@ -559,7 +545,7 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
         /// <param name="strParam"></param>
         public void SendText(string method, string strParam)
         {
-            Debug.Console(1, this, "SendText: method = {0} | strParam = {1}", method, strParam);
+            Debug.Console(DebugLevel1, this, "SendText: method = {0} | strParam = {1}", method, strParam);
 
             if (_comms == null) return;
 
@@ -576,7 +562,7 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
         /// <param name="intParam"></param>
         public void SendText(string method, int? intParam)
         {
-            Debug.Console(1, this, "SendText: method = {0} | intParam = {1}", method, intParam);
+            Debug.Console(DebugLevel1, this, "SendText: method = {0} | intParam = {1}", method, intParam);
 
             if (_comms == null) return;
 
@@ -594,7 +580,7 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
         /// <param name="intParam"></param>
         public void SendText(string method, string strParam, int? intParam)
         {
-            Debug.Console(1, this, "SendText: method = {0} | strParam = {1} | intParam = {2}", method, strParam, intParam);
+            Debug.Console(DebugLevel1, this, "SendText: method = {0} | strParam = {1} | intParam = {2}", method, strParam, intParam);
 
             if (_comms == null) return;
 
@@ -608,7 +594,7 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
         {
             if ((stbId <= 0) || string.IsNullOrEmpty(method))
             {
-                Debug.Console(1, this, "BuildQuery: invalid stbId {0}, unable to build query.", stbId);
+                Debug.Console(DebugLevel1, this, "BuildQuery: invalid stbId {0}, unable to build query.", stbId);
                 return null;
             }
 
@@ -629,7 +615,7 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
             obj["params"] = array;
 
             var call = JsonConvert.SerializeObject(obj, Formatting.None);
-            Debug.Console(2, this, "BuildQuery: call = {0}", call);
+            Debug.Console(DebugLevel2, this, "BuildQuery: call = {0}", call);
             return string.Format("call={0}", call);
         }
 
