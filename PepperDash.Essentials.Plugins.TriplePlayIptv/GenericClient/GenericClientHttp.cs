@@ -12,6 +12,9 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
     /// </summary>
     public class GenericClientHttp : IRestfulComms
     {
+        private const int DebugLevel1 = 1;
+        private const int DebugLevel2 = 2;
+
         private const string DefaultRequestType = "GET";
         private readonly HttpClient _clientHttp;
 
@@ -26,7 +29,7 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
         {
             if (string.IsNullOrEmpty(key) || controlConfig == null)
             {
-                Debug.Console(2, Debug.ErrorLogLevel.Error,
+                Debug.Console(DebugLevel2, Debug.ErrorLogLevel.Error,
                     "GenericClient key or host is null or empty, failed to instantiate client");
                 return;
             }
@@ -44,13 +47,13 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
             Password = controlConfig.TcpSshProperties.Password ?? "";
             AuthorizationBase64 = EncodeBase64(Username, Password);
 
-            Debug.Console(2, this, "{0}", new String('-', 80));
-            Debug.Console(2, this, "GenericClient: Key = {0}", Key);
-            Debug.Console(2, this, "GenericClient: Host = {0}", Host);
-            Debug.Console(2, this, "GenericClient: Port = {0}", Port);
-            Debug.Console(2, this, "GenericClient: Username = {0}", Username);
-            Debug.Console(2, this, "GenericClient: Password = {0}", Password);
-            Debug.Console(2, this, "GenericClient: AuthorizationBase64 = {0}", AuthorizationBase64);
+            Debug.Console(DebugLevel2, this, "{0}", new String('-', 80));
+            Debug.Console(DebugLevel2, this, "GenericClient: Key = {0}", Key);
+            Debug.Console(DebugLevel2, this, "GenericClient: Host = {0}", Host);
+            Debug.Console(DebugLevel2, this, "GenericClient: Port = {0}", Port);
+            Debug.Console(DebugLevel2, this, "GenericClient: Username = {0}", Username);
+            Debug.Console(DebugLevel2, this, "GenericClient: Password = {0}", Password);
+            Debug.Console(DebugLevel2, this, "GenericClient: AuthorizationBase64 = {0}", AuthorizationBase64);
 
             _clientHttp = new HttpClient
             {
@@ -61,9 +64,9 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
                 KeepAlive = false
             };
 
-            Debug.Console(2, this, "clientUrl: {0}", _clientHttp.Url.ToString());
+            Debug.Console(DebugLevel2, this, "clientUrl: {0}", _clientHttp.Url.ToString());
 
-            Debug.Console(2, this, "{0}", new String('-', 80));
+            Debug.Console(DebugLevel2, this, "{0}", new String('-', 80));
         }
 
         public string Host { get; private set; }
@@ -103,7 +106,7 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
                 request.Header.SetHeaderValue("Authorization", AuthorizationBase64);
             }
 
-            Debug.Console(1, this, @"Request:
+            Debug.Console(DebugLevel1, this, @"Request:
                     url: {0}
                     content: {1}
                     requestType: {2}",
@@ -115,7 +118,7 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
                 {
                     if (response == null)
                     {
-                        Debug.Console(1, this, "DispatchRequest: response is null, error: {0}", error);
+                        Debug.Console(DebugLevel1, this, "DispatchRequest: response is null, error: {0}", error);
                         return;
                     }
 
@@ -128,7 +131,7 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
                 {
                     if (response == null)
                     {
-                        Debug.Console(1, this, "DispatchRequest: response is null, error: {0}", error);
+                        Debug.Console(DebugLevel1, this, "DispatchRequest: response is null, error: {0}", error);
                         return;
                     }
 
@@ -151,7 +154,7 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
         {
             if (string.IsNullOrEmpty(request))
             {
-                Debug.Console(1, this, Debug.ErrorLogLevel.Error, "SendRequest: request is null or empty");
+                Debug.Console(DebugLevel1, this, Debug.ErrorLogLevel.Error, "SendRequest: request is null or empty");
                 return;
             }
 
@@ -164,7 +167,7 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
         // client response event handler
         private void OnResponseRecieved(GenericClientResponseEventArgs args)
         {
-            Debug.Console(1, this, "OnResponseReceived: args.Code = {0} | args.ContentString = {1}", args.Code,
+            Debug.Console(DebugLevel1, this, "OnResponseReceived: args.Code = {0} | args.ContentString = {1}", args.Code,
                 args.ContentString);
 
             CheckRequestQueue();
@@ -181,9 +184,9 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
         // Checks request queue and issues next request
         private void CheckRequestQueue()
         {
-            Debug.Console(2, this, "CheckRequestQueue: _requestQueue.Count = {0}", _requestQueue.Count);
+            Debug.Console(DebugLevel2, this, "CheckRequestQueue: _requestQueue.Count = {0}", _requestQueue.Count);
             var nextRequest = _requestQueue.TryToDequeue();
-            Debug.Console(2, this, "CheckRequestQueue: _requestQueue.TryToDequeue was {0}",
+            Debug.Console(DebugLevel2, this, "CheckRequestQueue: _requestQueue.TryToDequeue was {0}",
                 (nextRequest == null) ? "unsuccessful" : "successful");
             if (nextRequest != null)
             {
@@ -208,7 +211,7 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
             }
             catch (Exception err)
             {
-                Debug.Console(2, this, Debug.ErrorLogLevel.Error, "EncodeBase64 Exception:\r{0}", err);
+                Debug.Console(DebugLevel2, this, Debug.ErrorLogLevel.Error, "EncodeBase64 Exception:\r{0}", err);
                 return "";
             }
         }

@@ -11,6 +11,9 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
 	/// </summary>
 	public class TriplePlayIptvFactory : EssentialsPluginDeviceFactory<TriplePlayIptvDevice>
 	{
+        private const int DebugLevel1 = 1;
+        private const int DebugLevel2 = 2;
+
 		/// <summary>
 		/// Plugin device factory constructor
 		/// </summary>
@@ -31,8 +34,8 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
 		{
 			try
 			{
-				Debug.Console(2, new string('*', 80));
-				Debug.Console(2, new string('*', 80));
+				Debug.Console(DebugLevel2, new string('*', 80));
+				Debug.Console(DebugLevel2, new string('*', 80));
 				Debug.Console(0, "[{0}] Factory Attempting to create new device from type: {1}", dc.Key, dc.Type);				
 				
 				// get the plugin device properties configuration object & check for null 
