@@ -687,7 +687,8 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
         /// </summary>
         public void VolumeUp()
         {
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
+            SendText("HandleKeyPress", RcuKeys.VolumeUp.ToString());
         }
 
         /// <summary>
@@ -695,7 +696,8 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
         /// </summary>
         public void VolumeDown()
         {
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
+            SendText("HandleKeyPress", RcuKeys.VolumeDown.ToString());
         }
 
         /// <summary>
@@ -713,7 +715,8 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
         /// </summary>
         public void VolumeMuteToggle()
         {
-            throw new NotImplementedException();
+            //throw new NotImplementedException()
+            SendText("HandleKeyPress", RcuKeys.Mute.ToString());
         }
 
         /// <summary>
