@@ -34,16 +34,16 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
 		{
 			try
 			{
-				Debug.Console(DebugLevel2, new string('*', 80));
-				Debug.Console(DebugLevel2, new string('*', 80));
-				Debug.Console(0, "[{0}] Factory Attempting to create new device from type: {1}", dc.Key, dc.Type);				
+				Debug.Console(TriplePlayDebug.Verbose, new string('*', 80));
+				Debug.Console(TriplePlayDebug.Verbose, new string('*', 80));
+				Debug.Console(TriplePlayDebug.Info, "[{0}] Factory Attempting to create new device from type: {1}", dc.Key, dc.Type);				
 				
 				// get the plugin device properties configuration object & check for null 
 				var propertiesConfig = dc.Properties.ToObject<TriplePlayIptvConfig>();
 
 			    if (propertiesConfig == null)
 			    {
-			        Debug.Console(0, "[{0}] Unable to get configuration. Please check configuration.", dc.Key);
+			        Debug.Console(TriplePlayDebug.Info, "[{0}] Unable to get configuration. Please check configuration.", dc.Key);
 			        return null;
 			    }
 
@@ -58,7 +58,7 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
 			            client = new GenericClientHttps(String.Format("{0}-https", dc.Key), propertiesConfig.Control);
 			            break;
 			        default:
-			            Debug.Console(0, "[{0}] Control method {1} NOT supported. Please check configuration", dc.Key,
+			            Debug.Console(TriplePlayDebug.Info, "[{0}] Control method {1} NOT supported. Please check configuration", dc.Key,
 			                propertiesConfig.Control.Method);
 			            return null;
 			    }
@@ -68,7 +68,7 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
 			}
 			catch (Exception ex)
 			{
-				Debug.Console(0, "[{0}] Factory BuildDevice Exception: {1}", dc.Key, ex);
+				Debug.Console(TriplePlayDebug.Info, "[{0}] Factory BuildDevice Exception: {1}", dc.Key, ex);
 				return null;
 			}
 		}

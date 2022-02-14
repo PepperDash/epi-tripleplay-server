@@ -12,9 +12,6 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
     /// </summary>
     public class GenericClientHttps : IRestfulComms
     {
-        private const int DebugLevel1 = 1;
-        private const int DebugLevel2 = 2;
-
         private const string DefaultRequestType = "GET";
         private readonly HttpsClient _clientHttps;
 
@@ -30,7 +27,7 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
         {
             if (string.IsNullOrEmpty(key) || controlConfig == null)
             {
-                Debug.Console(DebugLevel2, Debug.ErrorLogLevel.Error,
+                Debug.Console(TriplePlayDebug.Verbose, Debug.ErrorLogLevel.Error,
                     "GenericClient key or host is null or empty, failed to instantiate client");
                 return;
             }
@@ -48,13 +45,13 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
             Password = controlConfig.TcpSshProperties.Password ?? "";
             AuthorizationBase64 = EncodeBase64(Username, Password);
 
-            Debug.Console(DebugLevel2, this, "{0}", new String('-', 80));
-            Debug.Console(DebugLevel2, this, "GenericClient: Key = {0}", Key);
-            Debug.Console(DebugLevel2, this, "GenericClient: Host = {0}", Host);
-            Debug.Console(DebugLevel2, this, "GenericClient: Port = {0}", Port);
-            Debug.Console(DebugLevel2, this, "GenericClient: Username = {0}", Username);
-            Debug.Console(DebugLevel2, this, "GenericClient: Password = {0}", Password);
-            Debug.Console(DebugLevel2, this, "GenericClient: AuthorizationBase64 = {0}", AuthorizationBase64);
+            Debug.Console(TriplePlayDebug.Verbose, this, "{0}", new String('-', 80));
+            Debug.Console(TriplePlayDebug.Verbose, this, "GenericClient: Key = {0}", Key);
+            Debug.Console(TriplePlayDebug.Verbose, this, "GenericClient: Host = {0}", Host);
+            Debug.Console(TriplePlayDebug.Verbose, this, "GenericClient: Port = {0}", Port);
+            Debug.Console(TriplePlayDebug.Verbose, this, "GenericClient: Username = {0}", Username);
+            Debug.Console(TriplePlayDebug.Verbose, this, "GenericClient: Password = {0}", Password);
+            Debug.Console(TriplePlayDebug.Verbose, this, "GenericClient: AuthorizationBase64 = {0}", AuthorizationBase64);
 
 
             _clientHttps = new HttpsClient
@@ -66,7 +63,7 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
                 PeerVerification = false
             };
 
-            Debug.Console(DebugLevel2, this, "{0}", new String('-', 80));
+            Debug.Console(TriplePlayDebug.Verbose, this, "{0}", new String('-', 80));
         }
 
         public string Host { get; private set; }
@@ -101,7 +98,7 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
                 request.Header.SetHeaderValue("Authorization", AuthorizationBase64);
             }
 
-            Debug.Console(DebugLevel1, this, @"Request:
+            Debug.Console(TriplePlayDebug.Debug, this, @"Request:
                                     url: {0}
                                     content: {1}
                                     requestType: {2}", 
@@ -113,7 +110,7 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
                 {
                     if (response == null)
                     {
-                        Debug.Console(DebugLevel1, this, "DispatchRequest: response is null, error: {0}", error);
+                        Debug.Console(TriplePlayDebug.Debug, this, "DispatchRequest: response is null, error: {0}", error);
                         return;
                     }
 
@@ -136,7 +133,7 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
         {
             if (string.IsNullOrEmpty(request))
             {
-                Debug.Console(DebugLevel1, this, Debug.ErrorLogLevel.Error, "SendRequest: request is null or empty");
+                Debug.Console(TriplePlayDebug.Debug, this, Debug.ErrorLogLevel.Error, "SendRequest: request is null or empty");
                 return;
             }
 
@@ -150,7 +147,7 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
         // client response event handler
         private void OnResponseRecieved(GenericClientResponseEventArgs args)
         {
-            Debug.Console(DebugLevel1, this, "OnResponseReceived: args.Code = {0} | args.ContentString = {1}", args.Code,
+            Debug.Console(TriplePlayDebug.Debug, this, "OnResponseReceived: args.Code = {0} | args.ContentString = {1}", args.Code,
                 args.ContentString);
 
             CheckRequestQueue();
@@ -167,9 +164,9 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
         // Checks request queue and issues next request
         private void CheckRequestQueue()
         {
-            Debug.Console(DebugLevel2, this, "CheckRequestQueue: _requestQueue.Count = {0}", _requestQueue.Count);
+            Debug.Console(TriplePlayDebug.Verbose, this, "CheckRequestQueue: _requestQueue.Count = {0}", _requestQueue.Count);
             var nextRequest = _requestQueue.TryToDequeue();
-            Debug.Console(DebugLevel2, this, "CheckRequestQueue: _requestQueue.TryToDequeue was {0}",
+            Debug.Console(TriplePlayDebug.Verbose, this, "CheckRequestQueue: _requestQueue.TryToDequeue was {0}",
                 (nextRequest == null) ? "unsuccessful" : "successful");
             if (nextRequest != null)
             {
@@ -195,7 +192,7 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
             }
             catch (Exception err)
             {
-                Debug.Console(DebugLevel2, this, Debug.ErrorLogLevel.Error, "EncodeBase64 Exception:\r{0}", err);
+                Debug.Console(TriplePlayDebug.Verbose, this, Debug.ErrorLogLevel.Error, "EncodeBase64 Exception:\r{0}", err);
                 return "";
             }
         }

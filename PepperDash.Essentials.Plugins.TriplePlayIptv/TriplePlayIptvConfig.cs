@@ -34,6 +34,7 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
 	///					"warningTimeoutMs": 180000,
 	///					"errorTimeoutMs": 300000,
 	///					"stbId": 1,
+	///                 "presetsMaxAllowed": 24,
 	///					"presets": {
 	///						"1": {
 	///							"name": "Preset 1",
@@ -85,6 +86,12 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
 		[JsonProperty("stbId")]
 		public int StbId { get; set; }
 
+        /// <summary>
+        /// Allows configuration of maximum allowed presets used, defaults to 24 if not defined
+        /// </summary>
+        [JsonProperty("presetsMaxAllowed")]
+        public int? PresetsMaxAllowed { get; set; }
+
 		/// <summary>
 		/// Preset dictionary
 		/// </summary>
@@ -105,6 +112,12 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
 	/// </summary>
 	public class TriplePlayPresetsConfig
 	{
+        /// <summary>
+        /// Deserializes ID as API ID
+        /// </summary>
+        [JsonProperty("ApiId")]
+        public int ApiId { get; set; }
+
 		/// <summary>
 		/// Serializes collection name property
 		/// </summary>
