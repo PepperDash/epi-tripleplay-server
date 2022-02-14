@@ -183,8 +183,9 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
             ResponseErrorFeedback = new StringFeedback(() => ResponseError);
 
             StbId = config.StbId;
-            PresetsMaxAllowed = config.PresetsMaxAllowed ?? PresetsMaxAllowedDefault;
 
+            // TODO [ ] Issue #6 - Preset indexing
+            PresetsMaxAllowed = config.PresetsMaxAllowed ?? PresetsMaxAllowedDefault;
             _presets = new Dictionary<int, TriplePlayServicesPresetsConfig>();
             for (var p = 1; p <= PresetsMaxAllowed; p++)
             {
@@ -450,6 +451,7 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
             }
         }
 
+        // TODO [ ] Issue #6 - Preset indexing
         private void ProcessResultsObject(IList<ResultsObject> results)
         {
             if (results == null) return;
@@ -493,6 +495,7 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
             }
         }
 
+        // TODO [ ] Issue #6 - Preset indexing
         private void UpdatePresetFeedbacks(int index, TriplePlayServicesPresetsConfig preset)
         {
 
