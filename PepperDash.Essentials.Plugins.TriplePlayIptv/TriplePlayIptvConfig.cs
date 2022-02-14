@@ -113,10 +113,10 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
 	public class TriplePlayPresetsConfig
 	{
         /// <summary>
-        /// Deserializes ID as API ID
+        /// Preset ID
         /// </summary>
-        [JsonProperty("ApiId")]
-        public int ApiId { get; set; }
+        [JsonProperty("Id")]
+        public int Id { get; set; }
 
 		/// <summary>
 		/// Serializes collection name property

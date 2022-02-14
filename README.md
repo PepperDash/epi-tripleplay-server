@@ -61,6 +61,40 @@ Update the configuration object as needed for the plugin being developed.
 }
 ```
 
+#### Optional configuration propeties
+The following properties are optional and do not need to be defined.  
+
+The `presets` dictionary will be automatically populated by the `GetAllServices` query, but can be 
+defined via config if needed.
+
+```json
+{
+	"devices": [
+		{
+			"key": "iptv-server-1",
+			"name": "TriplePlay IPTV Server",
+			"type": "tripleplayiptv",
+			"group": "pluginDevices",
+			"properties": {
+				"presetsMaxAllowed": 24,	// if not defined, plugin will default to 24 to match the bridge
+				"presets": {
+					"1": {
+						"name": "Preset 1",
+						"icon": 1,
+						"channel": 101
+					},
+					"24": {
+						"name": "Preset 24",
+						"icon": 24,
+						"channel": 124
+					}
+				}
+			}
+		}		
+	]
+}
+```
+
 ### Plugin Bridge Configuration Object
 
 Update the bridge configuration object as needed for the plugin being developed.
