@@ -104,6 +104,7 @@
     <Compile Include="GenericClient\GenericClientHttp.cs" />
     <Compile Include="GenericClient\IRestfulComms.cs" />
     <Compile Include="ResponseObjects\AcknowledgementResponse.cs" />
+    <Compile Include="TriplePlayDebug.cs" />
     <Compile Include="TriplePlayIptvBridgeJoinMap.cs" />
     <Compile Include="GenericClient\GenericClientEventArgs.cs" />
     <Compile Include="TriplePlayIptvDevice.cs" />
