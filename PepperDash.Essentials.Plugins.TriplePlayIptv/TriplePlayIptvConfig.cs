@@ -86,6 +86,66 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
 		[JsonProperty("stbId")]
 		public int StbId { get; set; }
 
+		/// <summary>
+		/// Input device id - vga
+		/// </summary>
+		[JsonProperty("inputVgaId")]
+		public int? InputVgaId { get; set; }
+
+		/// <summary>
+		/// Input device id - hdmi
+		/// </summary>
+		[JsonProperty("inputHdmiId")]
+		public int? InputHdmiId { get; set; }
+
+		/// <summary>
+		/// Input device id - hdmi 1
+		/// </summary>
+		[JsonProperty("inputHdmi1Id")]
+		public int? InputHdmi1Id { get; set; }
+
+		/// <summary>
+		/// Input device id - hdmi 2
+		/// </summary>
+		[JsonProperty("inputHdmi2Id")]
+		public int? InputHdmi2Id { get; set; }
+
+		/// <summary>
+		/// Input device id - hdmi 3
+		/// </summary>
+		[JsonProperty("inputHdmi3Id")]
+		public int? InputHdmi3Id { get; set; }
+
+		/// <summary>
+		/// Input device id - hdmi 4
+		/// </summary>
+		[JsonProperty("inputHdmi4Id")]
+		public int? InputHdmi4Id { get; set; }
+
+		/// <summary>
+		/// Input device id - dvi
+		/// </summary>
+		[JsonProperty("inputDviId")]
+		public int? InputDviId { get; set; }
+
+		/// <summary>
+		/// Input device id - display port
+		/// </summary>
+		[JsonProperty("inputDisplayPortId")]
+		public int? InputDisplayPortId { get; set; }
+
+		/// <summary>
+		/// Input device id - pc
+		/// </summary>
+		[JsonProperty("inputPcId")]
+		public int? InputPcId { get; set; }
+
+		/// <summary>
+		/// Input device id - media
+		/// </summary>
+		[JsonProperty("inputMediaId")]
+		public int? InputMediaId { get; set; }
+
         /// <summary>
         /// Allows configuration of maximum allowed presets used, defaults to 24 if not defined
         /// </summary>

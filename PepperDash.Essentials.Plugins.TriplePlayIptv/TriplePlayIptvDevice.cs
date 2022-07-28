@@ -19,6 +19,19 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
         // request path for all commands
         private const string RequestPath = "triplecare/JsonRpcHandler.php";        
 
+		// default input device ID's
+	    private readonly int _inputVgaId;
+	    private readonly int _inputHdmiId;
+	    private readonly int _inputHdmi1Id;
+	    private readonly int _inputHdmi2Id;
+	    private readonly int _inputHdmi3Id;
+	    private readonly int _inputHdmi4Id;
+	    private readonly int _inputDviId;
+	    private readonly int _inputDisplayPortId;
+	    private readonly int _inputPcId;
+	    private readonly int _inputMediaId;
+	    
+
         // generic http/https client
         private readonly IRestfulComms _comms;
 
@@ -183,8 +196,17 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
             ResponseErrorFeedback = new StringFeedback(() => ResponseError);
 
             StbId = config.StbId;
+			_inputVgaId = config.InputVgaId ?? (int)TvControlInputs.Vga;
+			_inputHdmiId = config.InputHdmiId ?? (int)TvControlInputs.Hdmi;
+			_inputHdmi1Id = config.InputHdmi1Id ?? (int)TvControlInputs.Hdmi1;
+			_inputHdmi2Id = config.InputHdmi2Id ?? (int)TvControlInputs.Hdmi2;
+			_inputHdmi3Id = config.InputHdmi3Id ?? (int)TvControlInputs.Hdmi3;
+			_inputHdmi4Id = config.InputHdmi4Id ?? (int)TvControlInputs.Hdmi4;
+			_inputDviId = config.InputDviId ?? (int)TvControlInputs.Dvi;
+			_inputDisplayPortId = config.InputDisplayPortId ?? (int)TvControlInputs.DisplayPort;
+			_inputPcId = config.InputPcId ?? (int)TvControlInputs.Pc;
+			_inputMediaId = config.InputMediaId ?? (int)TvControlInputs.Media;
 
-            // TODO [ ] Issue #6 - Preset indexing
             PresetsMaxAllowed = config.PresetsMaxAllowed ?? PresetsMaxAllowedDefault;
             _presets = new Dictionary<int, TriplePlayServicesPresetsConfig>();
             for (var p = 1; p <= PresetsMaxAllowed; p++)
@@ -292,7 +314,6 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
             {
                 var join = joinMap.RcuKpNumbers.JoinNumber + n;
                 var number = n;
-                // TODO [ ] Update to pass index of keypad number pressed
                 trilist.SetSigTrueAction((uint)join, () => RcuKpNumbers(number));
             }
 
@@ -303,7 +324,6 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
                 var presetPathJoin = (uint)(joinMap.PresetIconPaths.JoinNumber + p - 1);
                 var preset = (uint)p;
 
-                // TODO [ ] Update to pass index of preset select pressed
                 trilist.SetSigTrueAction(presetJoin, () => PresetSelect(preset));
 
                 PresetEnabledFeedbacks[preset].LinkInputSig(trilist.BooleanInput[presetJoin]);
@@ -315,16 +335,16 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
             // tv control
             trilist.SetSigTrueAction(joinMap.TvPowerOn.JoinNumber, TvPowerOn);
             trilist.SetSigTrueAction(joinMap.TvPowerOff.JoinNumber, TvPowerOff);
-            trilist.SetSigTrueAction(joinMap.TvInputHdmi1.JoinNumber, () => TvInputSelect(TvControlInputs.Hdmi1));
-            trilist.SetSigTrueAction(joinMap.TvInputHdmi2.JoinNumber, () => TvInputSelect(TvControlInputs.Hdmi2));
-            trilist.SetSigTrueAction(joinMap.TvInputHdmi3.JoinNumber, () => TvInputSelect(TvControlInputs.Hdmi3));
-            trilist.SetSigTrueAction(joinMap.TvInputHdmi4.JoinNumber, () => TvInputSelect(TvControlInputs.Hdmi4));
-            trilist.SetSigTrueAction(joinMap.TvInputHdmi.JoinNumber, () => TvInputSelect(TvControlInputs.Hdmi));
-            trilist.SetSigTrueAction(joinMap.TvInputDvi.JoinNumber, () => TvInputSelect(TvControlInputs.Dvi));
-            trilist.SetSigTrueAction(joinMap.TvInputDisplayPort.JoinNumber, () => TvInputSelect(TvControlInputs.DisplayPort));
-            trilist.SetSigTrueAction(joinMap.TvInputPc.JoinNumber, () => TvInputSelect(TvControlInputs.Pc));
-            trilist.SetSigTrueAction(joinMap.TvInputVga.JoinNumber, () => TvInputSelect(TvControlInputs.Vga));
-            trilist.SetSigTrueAction(joinMap.TvInputMedia.JoinNumber, () => TvInputSelect(TvControlInputs.Media));
+            trilist.SetSigTrueAction(joinMap.TvInputHdmi1.JoinNumber, () => TvInputSelect(_inputHdmi1Id));
+			trilist.SetSigTrueAction(joinMap.TvInputHdmi2.JoinNumber, () => TvInputSelect(_inputHdmi2Id));
+			trilist.SetSigTrueAction(joinMap.TvInputHdmi3.JoinNumber, () => TvInputSelect(_inputHdmi3Id));
+			trilist.SetSigTrueAction(joinMap.TvInputHdmi4.JoinNumber, () => TvInputSelect(_inputHdmi4Id));
+			trilist.SetSigTrueAction(joinMap.TvInputHdmi.JoinNumber, () => TvInputSelect(_inputHdmiId));
+			trilist.SetSigTrueAction(joinMap.TvInputDvi.JoinNumber, () => TvInputSelect(_inputDviId));
+			trilist.SetSigTrueAction(joinMap.TvInputDisplayPort.JoinNumber, () => TvInputSelect(_inputDisplayPortId));
+			trilist.SetSigTrueAction(joinMap.TvInputPc.JoinNumber, () => TvInputSelect(_inputPcId));
+			trilist.SetSigTrueAction(joinMap.TvInputVga.JoinNumber, () => TvInputSelect(_inputVgaId));
+			trilist.SetSigTrueAction(joinMap.TvInputMedia.JoinNumber, () => TvInputSelect(_inputMediaId));
 
             // stb id
             trilist.SetUShortSigAction(joinMap.StbId.JoinNumber, id => ChangeStbId(id));
@@ -451,7 +471,6 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
             }
         }
 
-        // TODO [ ] Issue #6 - Preset indexing
         private void ProcessResultsObject(IList<ResultsObject> results)
         {
             if (results == null) return;
@@ -495,7 +514,6 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
             }
         }
 
-        // TODO [ ] Issue #6 - Preset indexing
         private void UpdatePresetFeedbacks(int index, TriplePlayServicesPresetsConfig preset)
         {
 
@@ -790,7 +808,7 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
 
         /// <summary>
         /// rcu key press enum
-        /// </summary>
+        /// </summary>        
         public enum RcuKeys
         {
             /// <summary>
@@ -1012,7 +1030,7 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
         /// <summary>
         /// client tv inputs
         /// </summary>
-        public enum TvControlInputs
+		public enum TvControlInputs
         {
             /// <summary>
             /// TV Input Select - HDMI (101)
@@ -1084,9 +1102,9 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
         /// client tv control - input select
         /// </summary>
         /// <param name="input"></param>
-        public void TvInputSelect(TvControlInputs input)
+        public void TvInputSelect(int input)
         {
-            SendText("SelectTVInput", (int)input);
+            SendText("SelectTVInput", input);
         }
 
         /// <summary>

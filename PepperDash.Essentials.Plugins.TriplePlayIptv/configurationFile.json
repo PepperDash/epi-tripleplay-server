@@ -39,22 +39,29 @@
 					"pollTimeMs": 30000,
 					"warningTimeoutMs": 180000,
 					"errorTimeoutMs": 300000,
+					"inputVgaId": 103,
+					"inputHdmiId": 101,
+					"inputHdmi1Id": 153,
+					"inputHdmi2Id": 154,
+					"inputHdmi3Id": 155,
+					"inputHdmi4Id": 156,
+					"inputDviId": 102,
+					"inputDisplayPortId": 139,
+					"inputPcId": 160,
+					"inputMediaId": 158,
+					"presetsMaxAllowed": 24,
 					"presets": {
 						"1": {
 							"id": 1,
-							"channelNumber": 101,
 							"name": "Preset 1",
-							"isFavorite": true,
-							"iconPath": "/preset1/icon/path",
-							"isWatchable": true
+							"icon": 1,
+							"channel": 101
 						},
-						"2": {
-							"id": 2,
-							"channelNumber": 102,
-							"name": "Preset 2",
-							"isFavorite": true,
-							"iconPath": "/preset2/icon/path",
-							"isWatchable": true
+						"24": {
+							"id": 24,
+							"name": "Preset 24",
+							"icon": 24,
+							"channel": 124
 						}
 					}
 				}

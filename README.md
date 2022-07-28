@@ -75,15 +75,30 @@ defined via config if needed.
 			"name": "TriplePlay IPTV Server",
 			"type": "tripleplayiptv",
 			"group": "pluginDevices",
-			"properties": {
-				"presetsMaxAllowed": 24,	// if not defined, plugin will default to 24 to match the bridge
+			"properties": {				
+				// if input ID's are not defined, they default to the API documented values (captured below and plugin as an ENUM)
+				"inputVgaId": 103,
+				"inputHdmiId": 101,
+				"inputHdmi1Id": 153,
+				"inputHdmi2Id": 154,
+				"inputHdmi3Id": 155,
+				"inputHdmi4Id": 156,
+				"inputDviId": 102,
+				"inputDisplayPortId": 139,
+				"inputPcId": 160,
+				"inputMediaId": 158,		
+				// if presetMaxAllowed is not defined, plugin will default to 24 to match the bridge span
+				"presetsMaxAllowed": 24,
+				// presets object is optionial, polling GetAllServices will return presets ** IF DEFINED ON THE SERVER **	
 				"presets": {
 					"1": {
+						"id": 1,
 						"name": "Preset 1",
 						"icon": 1,
 						"channel": 101
 					},
 					"24": {
+						"id": 24,
 						"name": "Preset 24",
 						"icon": 24,
 						"channel": 124
