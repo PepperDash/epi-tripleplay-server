@@ -17,7 +17,7 @@ on:
 
 jobs:
   call-workflow:
-    uses: PepperDash/workflow-templates/.github/workflows/essentialsplugins-builds.yml@main
+    uses: PepperDash/workflow-templates/.github/workflows/essentialsplugins-builds.yml@create-nuspec
     secrets: inherit
     with: 
       branch: "main"
