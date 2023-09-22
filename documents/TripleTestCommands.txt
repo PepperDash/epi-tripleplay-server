@@ -1,16 +1,16 @@
 http://<SERVER_IP>/triplecare/JsonRpcHandler.php?call={%22jsonrpc%22:%222.0%22,%22method%22:%22<COMMAND>%22,%22params%22:[<STB_ID>(,<PARAM>)]}
 
 
-http://10.120.5.15/triplecare/JsonRpcHandler.php?call={%22jsonrpc%22:%222.0%22,%22method%22:%22GetAllServices%22,%22params%22:[5]}
+http://<SERVER_IP>/triplecare/JsonRpcHandler.php?call={%22jsonrpc%22:%222.0%22,%22method%22:%22GetAllServices%22,%22params%22:[5]}
 
-http://10.120.5.15/triplecare/JsonRpcHandler.php?call={%22jsonrpc%22:%222.0%22,%22method%22:%22ChannelUp%22,%22params%22:[5]}
-http://10.120.5.15/triplecare/JsonRpcHandler.php?call={%22jsonrpc%22:%222.0%22,%22method%22:%22ChannelDown%22,%22params%22:[5]}
+http://<SERVER_IP>/triplecare/JsonRpcHandler.php?call={%22jsonrpc%22:%222.0%22,%22method%22:%22ChannelUp%22,%22params%22:[5]}
+http://<SERVER_IP>/triplecare/JsonRpcHandler.php?call={%22jsonrpc%22:%222.0%22,%22method%22:%22ChannelDown%22,%22params%22:[5]}
 
-http://10.120.5.15/triplecare/JsonRpcHandler.php?call={%22jsonrpc%22:%222.0%22,%22method%22:%22ChannelSelect%22,%22params%22:[<STB_ID>,<CH_#>]}
+http://<SERVER_IP>/triplecare/JsonRpcHandler.php?call={%22jsonrpc%22:%222.0%22,%22method%22:%22ChannelSelect%22,%22params%22:[<STB_ID>,<CH_#>]}
 
-http://10.120.5.15/triplecare/JsonRpcHandler.php?call={%22jsonrpc%22:%222.0%22,%22method%22:%22HandleKeyPress%22,%22params%22:[<STB_ID>,"Home"]}
-http://10.120.5.15/triplecare/JsonRpcHandler.php?call={%22jsonrpc%22:%222.0%22,%22method%22:%22HandleKeyPress%22,%22params%22:[<STB_ID>,"OK"]}
-http://10.120.5.15/triplecare/JsonRpcHandler.php?call={%22jsonrpc%22:%222.0%22,%22method%22:%22HandleKeyPress%22,%22params%22:[<STB_ID>,"Number0"]}
-http://10.120.5.15/triplecare/JsonRpcHandler.php?call={%22jsonrpc%22:%222.0%22,%22method%22:%22HandleKeyPress%22,%22params%22:[<STB_ID>,"Number9"]}
-http://10.120.5.15/triplecare/JsonRpcHandler.php?call={%22jsonrpc%22:%222.0%22,%22method%22:%22HandleKeyPress%22,%22params%22:[<STB_ID>,"Up"]}
-http://10.120.5.15/triplecare/JsonRpcHandler.php?call={%22jsonrpc%22:%222.0%22,%22method%22:%22HandleKeyPress%22,%22params%22:[<STB_ID>,"Down"]}
+http://<SERVER_IP>/triplecare/JsonRpcHandler.php?call={%22jsonrpc%22:%222.0%22,%22method%22:%22HandleKeyPress%22,%22params%22:[<STB_ID>,"Home"]}
+http://<SERVER_IP>/triplecare/JsonRpcHandler.php?call={%22jsonrpc%22:%222.0%22,%22method%22:%22HandleKeyPress%22,%22params%22:[<STB_ID>,"OK"]}
+http://<SERVER_IP>/triplecare/JsonRpcHandler.php?call={%22jsonrpc%22:%222.0%22,%22method%22:%22HandleKeyPress%22,%22params%22:[<STB_ID>,"Number0"]}
+http://<SERVER_IP>/triplecare/JsonRpcHandler.php?call={%22jsonrpc%22:%222.0%22,%22method%22:%22HandleKeyPress%22,%22params%22:[<STB_ID>,"Number9"]}
+http://<SERVER_IP>/triplecare/JsonRpcHandler.php?call={%22jsonrpc%22:%222.0%22,%22method%22:%22HandleKeyPress%22,%22params%22:[<STB_ID>,"Up"]}
+http://<SERVER_IP>/triplecare/JsonRpcHandler.php?call={%22jsonrpc%22:%222.0%22,%22method%22:%22HandleKeyPress%22,%22params%22:[<STB_ID>,"Down"]}
