@@ -11,7 +11,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://10.120.5.15/triplecare/JsonRpcHandler.php?call={%22jsonrpc%22:%222.0%22,%22method%22:%22GetPowerStatus%22,%22params%22:[3]}",
+					"raw": "http://{{serverIp}}/triplecare/JsonRpcHandler.php?call={%22jsonrpc%22:%222.0%22,%22method%22:%22GetPowerStatus%22,%22params%22:[3]}",
 					"protocol": "http",
 					"host": [
 						"10",
@@ -38,7 +38,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://10.120.5.15/triplecare/JsonRpcHandler.php?call={%22jsonrpc%22:%222.0%22,%22method%22:%22GetPowerStatus%22,%22params%22:[3]}",
+							"raw": "http://{{serverIp}}/triplecare/JsonRpcHandler.php?call={%22jsonrpc%22:%222.0%22,%22method%22:%22GetPowerStatus%22,%22params%22:[3]}",
 							"protocol": "http",
 							"host": [
 								"10",
@@ -130,7 +130,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://10.120.5.15/triplecare/JsonRpcHandler.php?call={%22jsonrpc%22:%222.0%22,%22method%22:%22GetAudioState%22,%22params%22:[3]}",
+					"raw": "http://{{serverIp}}/triplecare/JsonRpcHandler.php?call={%22jsonrpc%22:%222.0%22,%22method%22:%22GetAudioState%22,%22params%22:[3]}",
 					"protocol": "http",
 					"host": [
 						"10",
@@ -157,7 +157,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://10.120.5.15/triplecare/JsonRpcHandler.php?call={%22jsonrpc%22:%222.0%22,%22method%22:%22GetAudioState%22,%22params%22:[3]}",
+							"raw": "http://{{serverIp}}/triplecare/JsonRpcHandler.php?call={%22jsonrpc%22:%222.0%22,%22method%22:%22GetAudioState%22,%22params%22:[3]}",
 							"protocol": "http",
 							"host": [
 								"10",
@@ -249,7 +249,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://10.120.5.15/triplecare/JsonRpcHandler.php?call={%22jsonrpc%22:%222.0%22,%22method%22:%22SetVolume%22,%22params%22:[3,15]}",
+					"raw": "http://{{serverIp}}/triplecare/JsonRpcHandler.php?call={%22jsonrpc%22:%222.0%22,%22method%22:%22SetVolume%22,%22params%22:[3,15]}",
 					"protocol": "http",
 					"host": [
 						"10",
@@ -276,7 +276,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://10.120.5.15/triplecare/JsonRpcHandler.php?call={%22jsonrpc%22:%222.0%22,%22method%22:%22SetVolume%22,%22params%22:[3,15]}",
+							"raw": "http://{{serverIp}}/triplecare/JsonRpcHandler.php?call={%22jsonrpc%22:%222.0%22,%22method%22:%22SetVolume%22,%22params%22:[3,15]}",
 							"protocol": "http",
 							"host": [
 								"10",
@@ -368,7 +368,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://10.120.5.15/triplecare/JsonRpcHandler.php?call={%22jsonrpc%22:%222.0%22,%22method%22:%22SetMute%22,%22params%22:[3,false]}",
+					"raw": "http://{{serverIp}}/triplecare/JsonRpcHandler.php?call={%22jsonrpc%22:%222.0%22,%22method%22:%22SetMute%22,%22params%22:[3,false]}",
 					"protocol": "http",
 					"host": [
 						"10",
@@ -395,7 +395,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://10.120.5.15/triplecare/JsonRpcHandler.php?call={%22jsonrpc%22:%222.0%22,%22method%22:%22SetMute%22,%22params%22:[3,false]}",
+							"raw": "http://{{serverIp}}/triplecare/JsonRpcHandler.php?call={%22jsonrpc%22:%222.0%22,%22method%22:%22SetMute%22,%22params%22:[3,false]}",
 							"protocol": "http",
 							"host": [
 								"10",
@@ -487,7 +487,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://10.120.5.15/triplecare/JsonRpcHandler.php?call={%22jsonrpc%22:%222.0%22,%22method%22:%22ChannelUp%22,%22params%22:[3]}",
+					"raw": "http://{{serverIp}}/triplecare/JsonRpcHandler.php?call={%22jsonrpc%22:%222.0%22,%22method%22:%22ChannelUp%22,%22params%22:[3]}",
 					"protocol": "http",
 					"host": [
 						"10",
@@ -514,7 +514,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://10.120.5.15/triplecare/JsonRpcHandler.php?call={%22jsonrpc%22:%222.0%22,%22method%22:%22ChannelUp%22,%22params%22:[3]}",
+							"raw": "http:/{{serverIp}}/triplecare/JsonRpcHandler.php?call={%22jsonrpc%22:%222.0%22,%22method%22:%22ChannelUp%22,%22params%22:[3]}",
 							"protocol": "http",
 							"host": [
 								"10",
@@ -606,7 +606,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://10.120.5.15/triplecare/JsonRpcHandler.php?call={%22jsonrpc%22:%222.0%22,%22method%22:%22ChannelDown%22,%22params%22:[3]}",
+					"raw": "http://{{serverIp}}/triplecare/JsonRpcHandler.php?call={%22jsonrpc%22:%222.0%22,%22method%22:%22ChannelDown%22,%22params%22:[3]}",
 					"protocol": "http",
 					"host": [
 						"10",
@@ -633,7 +633,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://10.120.5.15/triplecare/JsonRpcHandler.php?call={%22jsonrpc%22:%222.0%22,%22method%22:%22ChannelDown%22,%22params%22:[3]}",
+							"raw": "http://{{serverIp}}/triplecare/JsonRpcHandler.php?call={%22jsonrpc%22:%222.0%22,%22method%22:%22ChannelDown%22,%22params%22:[3]}",
 							"protocol": "http",
 							"host": [
 								"10",
@@ -725,7 +725,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://10.120.5.15/triplecare/JsonRpcHandler.php?call={%22jsonrpc%22:%222.0%22,%22method%22:%22SelectChannel%22,%22params%22:[3,1]}",
+					"raw": "http://{{serverIp}}/triplecare/JsonRpcHandler.php?call={%22jsonrpc%22:%222.0%22,%22method%22:%22SelectChannel%22,%22params%22:[3,1]}",
 					"protocol": "http",
 					"host": [
 						"10",
@@ -753,7 +753,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://10.120.5.15/triplecare/JsonRpcHandler.php?call={%22jsonrpc%22:%222.0%22,%22method%22:%22GetAllServices%22,%22params%22:[3]}",
+					"raw": "http://{{serverIp}}/triplecare/JsonRpcHandler.php?call={%22jsonrpc%22:%222.0%22,%22method%22:%22GetAllServices%22,%22params%22:[3]}",
 					"protocol": "http",
 					"host": [
 						"10",
@@ -780,7 +780,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://10.120.5.15/triplecare/JsonRpcHandler.php?call={%22jsonrpc%22:%222.0%22,%22method%22:%22GetAllServices%22,%22params%22:[3]}",
+							"raw": "http://{{serverIp}}/triplecare/JsonRpcHandler.php?call={%22jsonrpc%22:%222.0%22,%22method%22:%22GetAllServices%22,%22params%22:[3]}",
 							"protocol": "http",
 							"host": [
 								"10",
@@ -872,7 +872,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://10.120.5.15/triplecare/JsonRpcHandler.php?call={%22jsonrpc%22:%222.0%22,%22method%22:%22PowerOnTv%22,%22params%22:[3]}",
+					"raw": "http://{{serverIp}}/triplecare/JsonRpcHandler.php?call={%22jsonrpc%22:%222.0%22,%22method%22:%22PowerOnTv%22,%22params%22:[3]}",
 					"protocol": "http",
 					"host": [
 						"10",
@@ -899,7 +899,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://10.120.5.15/triplecare/JsonRpcHandler.php?call={%22jsonrpc%22:%222.0%22,%22method%22:%22PowerOnTv%22,%22params%22:[3]}",
+							"raw": "http://{{serverIp}}/triplecare/JsonRpcHandler.php?call={%22jsonrpc%22:%222.0%22,%22method%22:%22PowerOnTv%22,%22params%22:[3]}",
 							"protocol": "http",
 							"host": [
 								"10",
@@ -991,7 +991,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://10.120.5.15/triplecare/JsonRpcHandler.php?call={%22jsonrpc%22:%222.0%22,%22method%22:%22PowerOffTv%22,%22params%22:[3]}",
+					"raw": "http://{{serverIp}}/triplecare/JsonRpcHandler.php?call={%22jsonrpc%22:%222.0%22,%22method%22:%22PowerOffTv%22,%22params%22:[3]}",
 					"protocol": "http",
 					"host": [
 						"10",
@@ -1019,7 +1019,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://10.120.5.15/triplecare/JsonRpcHandler.php?call={%22jsonrpc%22:%222.0%22,%22method%22:%22SetTVVolume%22,%22params%22:[3,10]}",
+					"raw": "http://{{serverIp}}/triplecare/JsonRpcHandler.php?call={%22jsonrpc%22:%222.0%22,%22method%22:%22SetTVVolume%22,%22params%22:[3,10]}",
 					"protocol": "http",
 					"host": [
 						"10",
@@ -1047,7 +1047,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://10.120.5.15/triplecare/JsonRpcHandler.php?call={%22jsonrpc%22:%222.0%22,%22method%22:%22GetPowerStatus%22,%22params%22:[3]}",
+					"raw": "http://{{serverIp}}/triplecare/JsonRpcHandler.php?call={%22jsonrpc%22:%222.0%22,%22method%22:%22GetPowerStatus%22,%22params%22:[3]}",
 					"protocol": "http",
 					"host": [
 						"10",
@@ -1074,7 +1074,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://10.120.5.15/triplecare/JsonRpcHandler.php?call={%22jsonrpc%22:%222.0%22,%22method%22:%22GetPowerStatus%22,%22params%22:[3]}",
+							"raw": "http://{{serverIp}}/triplecare/JsonRpcHandler.php?call={%22jsonrpc%22:%222.0%22,%22method%22:%22GetPowerStatus%22,%22params%22:[3]}",
 							"protocol": "http",
 							"host": [
 								"10",
@@ -1166,7 +1166,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://10.120.5.15/triplecare/JsonRpcHandler.php?call={%22jsonrpc%22:%222.0%22,%22method%22:%22SelectTVInput%22,%22params%22:[3,101]}",
+					"raw": "http://{{serverIp}}/triplecare/JsonRpcHandler.php?call={%22jsonrpc%22:%222.0%22,%22method%22:%22SelectTVInput%22,%22params%22:[3,101]}",
 					"protocol": "http",
 					"host": [
 						"10",
@@ -1194,7 +1194,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://10.120.5.15/triplecare/JsonRpcHandler.php?call={%22jsonrpc%22:%222.0%22,%22method%22:%22SelectTVInput%22,%22params%22:[3,153]}",
+					"raw": "http://{{serverIp}}/triplecare/JsonRpcHandler.php?call={%22jsonrpc%22:%222.0%22,%22method%22:%22SelectTVInput%22,%22params%22:[3,153]}",
 					"protocol": "http",
 					"host": [
 						"10",
@@ -1221,7 +1221,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://10.120.5.15/triplecare/JsonRpcHandler.php?call={%22jsonrpc%22:%222.0%22,%22method%22:%22SelectTVInput%22,%22params%22:[3,153]}",
+							"raw": "http://{{serverIp}}/triplecare/JsonRpcHandler.php?call={%22jsonrpc%22:%222.0%22,%22method%22:%22SelectTVInput%22,%22params%22:[3,153]}",
 							"protocol": "http",
 							"host": [
 								"10",
@@ -1313,7 +1313,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://10.120.5.15/triplecare/JsonRpcHandler.php?call={%22jsonrpc%22:%222.0%22,%22method%22:%22SelectTVInput%22,%22params%22:[3,154]}",
+					"raw": "http://{{serverIp}}/triplecare/JsonRpcHandler.php?call={%22jsonrpc%22:%222.0%22,%22method%22:%22SelectTVInput%22,%22params%22:[3,154]}",
 					"protocol": "http",
 					"host": [
 						"10",
@@ -1341,7 +1341,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://10.120.5.15/triplecare/JsonRpcHandler.php?call={%22jsonrpc%22:%222.0%22,%22method%22:%22HandleKeyPress%22,%22params%22:[3,\"Titles\"]}",
+					"raw": "http://{{serverIp}}/triplecare/JsonRpcHandler.php?call={%22jsonrpc%22:%222.0%22,%22method%22:%22HandleKeyPress%22,%22params%22:[3,\"Titles\"]}",
 					"protocol": "http",
 					"host": [
 						"10",
@@ -1368,7 +1368,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://10.120.5.15/triplecare/JsonRpcHandler.php?call={%22jsonrpc%22:%222.0%22,%22method%22:%22HandleKeyPress%22,%22params%22:[3,\"Titles\"]}",
+							"raw": "http://{{serverIp}}/triplecare/JsonRpcHandler.php?call={%22jsonrpc%22:%222.0%22,%22method%22:%22HandleKeyPress%22,%22params%22:[3,\"Titles\"]}",
 							"protocol": "http",
 							"host": [
 								"10",
@@ -1460,7 +1460,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://10.120.5.15/triplecare/JsonRpcHandler.php?call={%22jsonrpc%22:%222.0%22,%22method%22:%22HandleKeyPress%22,%22params%22:[3,\"Blue\"]}",
+					"raw": "http://{{serverIp}}/triplecare/JsonRpcHandler.php?call={%22jsonrpc%22:%222.0%22,%22method%22:%22HandleKeyPress%22,%22params%22:[3,\"Blue\"]}",
 					"protocol": "http",
 					"host": [
 						"10",
@@ -1488,7 +1488,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://10.120.5.15/triplecare/JsonRpcHandler.php?call={%22jsonrpc%22:%222.0%22,%22method%22:%22HandleKeyPress%22,%22params%22:[3,\"Home\"]}",
+					"raw": "http://{{serverIp}}/triplecare/JsonRpcHandler.php?call={%22jsonrpc%22:%222.0%22,%22method%22:%22HandleKeyPress%22,%22params%22:[3,\"Home\"]}",
 					"protocol": "http",
 					"host": [
 						"10",
@@ -1516,7 +1516,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://10.120.5.15/triplecare/JsonRpcHandler.php?call={%22jsonrpc%22:%222.0%22,%22method%22:%22HandleKeyPress%22,%22params%22:[3,\"Mute\"]}",
+					"raw": "http://{{serverIp}}/triplecare/JsonRpcHandler.php?call={%22jsonrpc%22:%222.0%22,%22method%22:%22HandleKeyPress%22,%22params%22:[3,\"Mute\"]}",
 					"protocol": "http",
 					"host": [
 						"10",
@@ -1544,7 +1544,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://10.120.5.15/triplecare/JsonRpcHandler.php?call={%22jsonrpc%22:%222.0%22,%22method%22:%22HandleKeyPress%22,%22params%22:[3,\"ChannelUp\"]}",
+					"raw": "http://{{serverIp}}/triplecare/JsonRpcHandler.php?call={%22jsonrpc%22:%222.0%22,%22method%22:%22HandleKeyPress%22,%22params%22:[3,\"ChannelUp\"]}",
 					"protocol": "http",
 					"host": [
 						"10",
@@ -1572,7 +1572,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://10.120.5.15/triplecare/JsonRpcHandler.php?call={%22jsonrpc%22:%222.0%22,%22method%22:%22HandleKeyPress%22,%22params%22:[3,\"ChannelDown\"]}",
+					"raw": "http://{{serverIp}}/triplecare/JsonRpcHandler.php?call={%22jsonrpc%22:%222.0%22,%22method%22:%22HandleKeyPress%22,%22params%22:[3,\"ChannelDown\"]}",
 					"protocol": "http",
 					"host": [
 						"10",
@@ -1600,7 +1600,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://10.120.5.15/triplecare/JsonRpcHandler.php?call={%22jsonrpc%22:%222.0%22,%22method%22:%22HandleKeyPress%22,%22params%22:[3,\"Guide\"]}",
+					"raw": "http://{{serverIp}}/triplecare/JsonRpcHandler.php?call={%22jsonrpc%22:%222.0%22,%22method%22:%22HandleKeyPress%22,%22params%22:[3,\"Guide\"]}",
 					"protocol": "http",
 					"host": [
 						"10",
@@ -1628,7 +1628,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://10.120.5.15/triplecare/JsonRpcHandler.php?call={%22jsonrpc%22:%222.0%22,%22method%22:%22HandleKeyPress%22,%22params%22:[3,\"Back\"]}",
+					"raw": "http://{{serverIp}}/triplecare/JsonRpcHandler.php?call={%22jsonrpc%22:%222.0%22,%22method%22:%22HandleKeyPress%22,%22params%22:[3,\"Back\"]}",
 					"protocol": "http",
 					"host": [
 						"10",
@@ -1656,7 +1656,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://10.120.5.15/triplecare/JsonRpcHandler.php?call={%22jsonrpc%22:%222.0%22,%22method%22:%22HandleKeyPress%22,%22params%22:[3,\"OK\"]}",
+					"raw": "http://{{serverIp}}/triplecare/JsonRpcHandler.php?call={%22jsonrpc%22:%222.0%22,%22method%22:%22HandleKeyPress%22,%22params%22:[3,\"OK\"]}",
 					"protocol": "http",
 					"host": [
 						"10",
