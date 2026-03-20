@@ -217,3 +217,189 @@ The selection below documents the digital, analog, and serial joins used by the 
 |                           | 8      | Response Error String       |
 |                           | 41- 65 | Preset (1-24) Icon URL Path |
 |                           | 71-95  | Preset (1-24) Name          |
+<!-- START Minimum Essentials Framework Versions -->
+### Minimum Essentials Framework Versions
+
+- 2.12.1
+<!-- END Minimum Essentials Framework Versions -->
+<!-- START Config Example -->
+### Config Example
+
+```json
+{
+    "key": "GeneratedKey",
+    "uid": 1,
+    "name": "GeneratedName",
+    "type": "tripleplay",
+    "group": "Group",
+    "properties": {
+        "control": "SampleValue",
+        "pollTimeMs": 0,
+        "warningTimeoutMs": 0,
+        "errorTimeoutMs": 0,
+        "stbId": 0,
+        "presetsMaxAllowed": 0,
+        "Presets": {
+            "SampleValue": {
+                "Id": "SampleValue",
+                "ChannelNumber": "SampleValue",
+                "Name": "SampleString",
+                "IsFavorite": true,
+                "IconPath": "SampleString",
+                "IsWatchable": true
+            }
+        }
+    }
+}
+```
+<!-- END Config Example -->
+<!-- START Supported Types -->
+### Supported Types
+
+- tripleplay
+- tripleplayiptv
+<!-- END Supported Types -->
+<!-- START Join Maps -->
+### Join Maps
+
+#### Digitals
+
+| Join | Type (RW) | Description |
+| --- | --- | --- |
+| 1 | R | Is online feedback |
+| 6 | R | Reboot client |
+| 7 | R | Get a list of all IPTV services configured |
+| 11 | R | Channel up |
+| 12 | R | Channel down |
+| 16 | R | Volume up |
+| 17 | R | Volume down |
+| 18 | R | Volume mute toggle |
+| 19 | R | Volume mute on set and feedback |
+| 20 | R | Volume mute off set and feedback |
+| 21 | R | RCU key press Power |
+| 22 | R | RCU key press Channel Up |
+| 23 | R | RCU key press Channel Down |
+| 24 | R | RCU key press Guide |
+| 25 | R | RCU key press TV |
+| 26 | R | RCU key press Home |
+| 27 | R | RCU key press navigation up |
+| 28 | R | RCU key press navigation down |
+| 29 | R | RCU key press navigation left |
+| 30 | R | RCU key press navigation right |
+| 31 | R | RCU key press navigation OK |
+| 32 | R | RCU key press red |
+| 33 | R | RCU key press green |
+| 34 | R | RCU key press yellow |
+| 35 | R | RCU key press blue |
+| 36 | R | RCU key press green |
+| 37 | R | RCU key press stop |
+| 38 | R | RCU key press pause |
+| 39 | R | RCU key press rewind |
+| 40 | R | RCU key press forward |
+| 41 | R | RCU key press back |
+| 42 | R | RCU key press info |
+| 43 | R | RCU key press PVR |
+| 44 | R | RCU key press record |
+| 45 | R | RCU key press titles |
+| 46 | R | RCU key press source |
+| 48 | R | RCU key press page up |
+| 49 | R | RCU key press page down |
+| 50 | R | RCU key press 0-10 |
+| 71 | R | Presets, 1-24, select and feedback (icon and label) |
+| 101 | R | TV control power on |
+| 102 | R | TV control power off |
+| 111 | R | TV control input hdmi 1 |
+| 112 | R | TV control input hdmi 2 |
+| 113 | R | TV control input hdmi 4 |
+| 114 | R | TV control input hdmi 4 |
+| 115 | R | TV control input hdmi |
+| 116 | R | TV control input DVI |
+| 117 | R | TV control input Display Port |
+| 118 | R | TV control input PC |
+| 119 | R | TV control input vga |
+| 120 | R | TV control input media |
+
+#### Analogs
+
+| Join | Type (RW) | Description |
+| --- | --- | --- |
+| 1 | R | Socket status feedback |
+| 2 | R | Monitor status feedback |
+| 6 | R | Settop box ID set and feedback |
+| 7 | R | Response code feedback |
+| 11 | R | Channel direct select |
+| 16 | R | Volume direct set |
+| 101 | R | TV Volume set and feedback |
+
+#### Serials
+
+| Join | Type (RW) | Description |
+| --- | --- | --- |
+| 1 | R | Device Name |
+| 7 | R | Response content feedback |
+| 8 | R | Response error feedback |
+| 41 | R | Preset Icon Paths |
+<!-- END Join Maps -->
+<!-- START Interfaces Implemented -->
+### Interfaces Implemented
+
+- IRestfulComms
+<!-- END Interfaces Implemented -->
+<!-- START Base Classes -->
+### Base Classes
+
+- EssentialsBridgeableDevice
+- JoinMapBaseAdvanced
+- EventArgs
+<!-- END Base Classes -->
+<!-- START Public Methods -->
+### Public Methods
+
+- public void GetPresets()
+- public void SendText(string method)
+- public void SendText(string method, bool boolParam)
+- public void SendText(string method, string strParam)
+- public void SendText(string method, int? intParam)
+- public void SendText(string method, string strParam, int? intParam)
+- public void ChangeStbId(int id)
+- public void Poll()
+- public void RebootClient()
+- public void GetAllServices()
+- public void ChannelUp()
+- public void ChannelDown()
+- public void ChannelSet(int channel)
+- public void VolumeUp()
+- public void VolumeDown()
+- public void VolumeSet(int level)
+- public void VolumeMuteToggle()
+- public void VolumeMuteOn()
+- public void VolumeMuteOff()
+- public void GetVolumeMuteState()
+- public void RcuKeyPress(RcuKeys key)
+- public void RcuKpNumbers(int number)
+- public void PresetSelect(uint index)
+- public void TvPowerOn()
+- public void TvPowerOff()
+- public void GetTvPowerStatus()
+- public void TvInputSelect(TvControlInputs input)
+- public void TvVolumeSet(int level)
+- public void SendRequest(string requestType, string path, string content)
+- public void SendRequest(string request, string contentString)
+- public void SendRequest(string requestType, string path, string content)
+- public void SendRequest(string request, string contentString)
+<!-- END Public Methods -->
+<!-- START Bool Feedbacks -->
+
+<!-- END Bool Feedbacks -->
+<!-- START Int Feedbacks -->
+### Int Feedbacks
+
+- StbIdFeedback
+- ResponseCodeFeedback
+<!-- END Int Feedbacks -->
+<!-- START String Feedbacks -->
+### String Feedbacks
+
+- ResponseContentStringFeedback
+- ResponseErrorFeedback
+<!-- END String Feedbacks -->
