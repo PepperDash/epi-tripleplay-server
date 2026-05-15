@@ -422,6 +422,7 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
                 Debug.LogDebug("_comms_ResponseRecieved: Code = {0} | ContentString = {1}", args.Code, args.ContentString);
 
                 ResponseCode = args.Code;
+                ResponseError = string.Empty;
 
                 if (string.IsNullOrEmpty(args.ContentString)) return;
 
@@ -431,7 +432,27 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
                 if (IsValidJson(args.ContentString))
                 {
                     var jObject = JObject.Parse(args.ContentString);
+
+                    // Handle JSON-RPC error payloads: {"error":{"code":x,"message":"..."}}
+                    var errorToken = jObject.SelectToken("error");
+                    if (errorToken != null && errorToken.Type == JTokenType.Object)
+                    {
+                        var errorResponse = JsonConvert.DeserializeObject<ErrorResponse>(args.ContentString);
+                        if (errorResponse != null && errorResponse.Error != null)
+                        {
+                            ResponseError = string.Format("{0}: {1}", errorResponse.Error.Code, errorResponse.Error.Message);
+                        }
+                        ResponseContentString = args.ContentString;
+                        return;
+                    }
+
                     var token = jObject.SelectToken("result");
+                    if (token == null)
+                    {
+                        ResponseContentString = args.ContentString;
+                        return;
+                    }
+
                     var tokenType = token.Type;
                     if (tokenType != JTokenType.Array)
                     {
@@ -451,12 +472,9 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
             }
             catch (Exception ex)
             {
-                Debug.LogDebug("_comms_ResponseRecieved Exception Message: {0}", ex.Message);
                 Debug.LogError("_comms_ResponseRecieved Exception Message: {0}", ex.Message);
-                Debug.LogVerbose("_comms_ResponseRecieved Inner Exception {0}", ex.InnerException);
-                Debug.LogError("_comms_ResponseRecieved Inner Exception {0}", ex.InnerException);
-                Debug.LogVerbose("_comms_ResponseRecieved Stack Trace: {0}", ex.StackTrace);
-                Debug.LogError("_comms_ResponseRecieved Stack Trace: {0}", ex.StackTrace);
+                Debug.LogDebug("_comms_ResponseRecieved Inner Exception {0}", ex.InnerException);
+                Debug.LogDebug("_comms_ResponseRecieved Stack Trace: {0}", ex.StackTrace);
             }
         }
 
