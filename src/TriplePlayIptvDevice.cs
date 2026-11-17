@@ -6,13 +6,14 @@ using Newtonsoft.Json.Linq;
 using PepperDash.Core.Logging;
 using PepperDash.Essentials.Core;
 using PepperDash.Essentials.Core.Bridges;
+using PepperDash.Essentials.Core.DeviceTypeInterfaces;
 
 namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
 {
     /// <summary>
     /// Plugin device
     /// </summary>
-    public class TriplePlayIptvDevice : EssentialsBridgeableDevice
+    public partial class TriplePlayIptvDevice : EssentialsBridgeableDevice, ISetTopBoxControls, ITvPresetsProvider, IRoutingSource
     {
         // request path for all commands
         private const string RequestPath = "triplecare/JsonRpcHandler.php";        
@@ -151,6 +152,8 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
         public TriplePlayIptvDevice(string key, string name, TriplePlayIptvConfig config, IRestfulComms client)
             : base(key, name)
         {
+            InitializeSetTopBox(config == null ? null : config.PresetsList);
+
             if (config == null || config.Control == null)
             {
                 this.LogInformation("Configuration or control object is null, unable to construct new {Name} instance.  Check configuration.", name);

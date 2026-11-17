@@ -99,6 +99,32 @@ defined via config if needed.
 }
 ```
 
+### Set-top box controls (rooms and Mobile Control)
+
+The device implements `ISetTopBoxControls`, `ITvPresetsProvider` and `IRoutingSource`, so a room can use it as its tuner and Mobile Control can show set-top box pages. Each button sends one TriplePlay `HandleKeyPress` on press.
+
+| Essentials control | TriplePlay key |
+| ------------------ | -------------- |
+| Digits 0-9 | `Number0`-`Number9` |
+| Channel up / down | `ChannelUp` / `ChannelDown` methods |
+| D-pad, Select, Menu, Exit | `Up`, `Down`, `Left`, `Right`, `Ok`, `Home`, `Back` |
+| Keypad enter | `Ok` |
+| Guide, Info | `Guide`, `Info` |
+| Red, Green, Yellow, Blue | same |
+| Play, Pause, Rewind, FFwd, Stop, Record | `Play`, `Pause`, `Rewind`, `Forward`, `Stop`, `Record` |
+| DVR list | `Pvr` |
+| Last channel, Replay, Dash, Chapter +/- | not available (do nothing) |
+
+TV favorites come from a presets file, as for an IR set-top box. Set `presetsList` to a file name in `/html/presets/lists/` on the processor; `HasPresets` is true only when it is set. Recalling a favorite dials its digits and then presses `Ok`.
+
+```json
+"properties": {
+	"presetsList": "tripleplay-favorites.json"
+}
+```
+
+The output port `anyVideoOut` (audio/video, HDMI) can be used in tie lines.
+
 ### Plugin Bridge Configuration Object
 
 Update the bridge configuration object as needed for the plugin being developed.
