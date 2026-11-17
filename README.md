@@ -68,6 +68,25 @@ Update the configuration object as needed for the plugin being developed.
 #### Optional configuration propeties
 The following properties are optional and do not need to be defined.  
 
+##### Online status
+
+The plugin polls the server with `GetAllServices` and reports it online on any HTTP response. If the server stops answering, the plugin reports a warning after `warningTimeoutMs` and an error after `errorTimeoutMs`. Polling also keeps the bridge preset joins current.
+
+| Property | Default | Meaning |
+| -------- | ------- | ------- |
+| `pollTimeMs` | 30000 | How often to poll |
+| `warningTimeoutMs` | 180000 | Time without a response before a warning |
+| `errorTimeoutMs` | 300000 | Time without a response before an error |
+
+A property that is missing or 0 uses its default. If the values cannot work together, all three defaults are used:
+- a timeout under 5000;
+- a warning time longer than the error time;
+- a poll time that is not shorter than the warning time.
+
+The poll is sent for the configured `stbId`, so a device without a valid `stbId` never polls and reports offline.
+
+The status is on bridge join 1 (`IsOnline`). Mobile Control picks it up automatically as the device's `commMonitor` status.
+
 The `presets` dictionary will be automatically populated by the `GetAllServices` query, but can be 
 defined via config if needed.
 

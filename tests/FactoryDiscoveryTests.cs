@@ -59,6 +59,7 @@ public class FactoryDiscoveryTests
     [InlineData("IRoutingSource")]
     [InlineData("IRoutingOutputs")]
     [InlineData("IBridgeAdvanced")]
+    [InlineData("ICommunicationMonitor")]
     public void Device_Implements_Interface(string interfaceName)
     {
         var device = AssemblyFixture.GetPluginType("TriplePlayIptvDevice");

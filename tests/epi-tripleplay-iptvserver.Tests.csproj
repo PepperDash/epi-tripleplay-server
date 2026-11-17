@@ -33,6 +33,7 @@
     <!-- Plugin source with no Crestron or Essentials dependencies, tested directly -->
     <Compile Include="..\src\Scaling.cs" Link="Linked\Scaling.cs" />
     <Compile Include="..\src\TriplePlayQuery.cs" Link="Linked\TriplePlayQuery.cs" />
+    <Compile Include="..\src\Monitoring\MonitorTimes.cs" Link="Linked\MonitorTimes.cs" />
     <Compile Include="..\src\GenericClient\RestEndpoint.cs" Link="Linked\RestEndpoint.cs" />
     <Compile Include="..\src\GenericClient\SerialRequestSender.cs" Link="Linked\SerialRequestSender.cs" />
     <Compile Include="..\src\GenericClient\GenericClientEventArgs.cs" Link="Linked\GenericClientEventArgs.cs" />

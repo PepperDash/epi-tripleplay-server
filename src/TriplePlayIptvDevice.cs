@@ -13,13 +13,20 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
     /// <summary>
     /// Plugin device
     /// </summary>
-    public partial class TriplePlayIptvDevice : EssentialsBridgeableDevice, ISetTopBoxControls, ITvPresetsProvider, IRoutingSource
+    public partial class TriplePlayIptvDevice : EssentialsBridgeableDevice, ISetTopBoxControls, ITvPresetsProvider, IRoutingSource, ICommunicationMonitor
     {
         // request path for all commands
-        private const string RequestPath = "triplecare/JsonRpcHandler.php";        
+        private const string RequestPath = "triplecare/JsonRpcHandler.php";
 
         // generic http/https client
         private readonly IRestfulComms _comms;
+
+        private readonly HttpPollMonitor _monitor;
+
+        /// <summary>
+        /// Online status of the TriplePlay server, from polling GetAllServices
+        /// </summary>
+        public StatusMonitorBase CommunicationMonitor { get { return _monitor; } }
 
         // preset dictionary
         private Dictionary<int, TriplePlayServicesPresetsConfig> _presets;
@@ -154,6 +161,13 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
         {
             InitializeSetTopBox(config == null ? null : config.PresetsList);
 
+            // Created before any early return: Mobile Control's comm monitor messenger reads it without a null check
+            _monitor = new HttpPollMonitor(this,
+                config == null
+                    ? MonitorTimes.Defaults
+                    : MonitorTimes.Resolve(config.PollTimeMs, config.WarningTimeoutMs, config.ErrorTimeoutMs),
+                Poll);
+
             if (config == null || config.Control == null)
             {
                 this.LogInformation("Configuration or control object is null, unable to construct new {Name} instance.  Check configuration.", name);
@@ -202,6 +216,19 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
         #region Overrides of EssentialsBridgeableDevice
 
         /// <summary>
+        /// Starts the communication monitor once there is a client to poll with
+        /// </summary>
+        protected override bool CustomActivate()
+        {
+            var result = base.CustomActivate();
+
+            if (_comms != null)
+                _monitor.Start();
+
+            return result;
+        }
+
+        /// <summary>
         /// Links the plugin device to the EISC bridge
         /// </summary>
         /// <param name="trilist"></param>
@@ -235,7 +262,7 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
             //ConnectFeedback.LinkInputSig(trilist.BooleanInput[joinMap.Connect.JoinNumber]);
 
             //SocketStatusFeedback.LinkInputSig(trilist.UShortInput[joinMap.SocketStatus.JoinNumber]);
-            //OnlineFeedback.LinkInputSig(trilist.BooleanInput[joinMap.IsOnline.JoinNumber]);
+            CommunicationMonitor.IsOnlineFeedback.LinkInputSig(trilist.BooleanInput[joinMap.IsOnline.JoinNumber]);
 
             ResponseCodeFeedback.LinkInputSig(trilist.UShortInput[joinMap.ResponseCode.JoinNumber]);
             ResponseContentStringFeedback.LinkInputSig(trilist.StringInput[joinMap.ResponseContent.JoinNumber]);
@@ -348,7 +375,7 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
         {
             // TODO [ ] Update as needed for the plugin being developed
             //ConnectFeedback.FireUpdate();
-            //OnlineFeedback.FireUpdate();
+            CommunicationMonitor.IsOnlineFeedback.FireUpdate();
             //SocketStatusFeedback.FireUpdate();
 
             StbIdFeedback.FireUpdate();
@@ -393,6 +420,8 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
         {
             try
             {
+                _monitor.ResponseReceived();
+
                 this.LogDebug("Response {Code}: {Content}", args.Code, args.ContentString);
 
                 ResponseCode = args.Code;
@@ -632,11 +661,9 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
         }
 
         /// <summary>
-        /// Polls the device
+        /// Polls the server for its channel list. The communication monitor calls this every pollTimeMs, which
+        /// also keeps the bridge presets current.
         /// </summary>
-        /// <remarks>
-        /// Poll method is used by the communication monitor.  Update the poll method as needed for the plugin being developed
-        /// </remarks>
         public void Poll()
         {
             SendText("GetAllServices");
