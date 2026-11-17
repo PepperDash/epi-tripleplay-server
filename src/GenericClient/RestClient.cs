@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Concurrent;
 using System.Net.Http;
-using System.Net.Http.Headers;
 using System.Text;
-using System.Threading;
 using PepperDash.Core;
 using PepperDash.Core.Logging;
 using PepperDash.Essentials.Core;
@@ -17,17 +14,13 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
     {
         private const string DefaultRequestType = "GET";
 
-        // Same capacity as the CrestronQueue this replaces. Add blocks while the queue is full.
+        // Same capacity as the CrestronQueue this replaces.
         private const int MaxQueuedRequests = 20;
 
         private static readonly TimeSpan RequestTimeout = TimeSpan.FromSeconds(10);
 
         private readonly HttpClient _client;
-        private readonly BlockingCollection<HttpRequestMessage> _requests =
-            new BlockingCollection<HttpRequestMessage>(MaxQueuedRequests);
-
-        // Held in a field so the worker thread is not collected.
-        private readonly Thread _worker;
+        private readonly SerialRequestSender _sender;
 
         /// <summary>
         /// Creates a client from the device's control properties
@@ -35,17 +28,6 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
         /// <param name="key">client key</param>
         /// <param name="controlConfig">control properties; method must be http or https</param>
         public RestClient(string key, ControlPropertiesConfig controlConfig)
-            : this(key, controlConfig, null)
-        {
-        }
-
-        /// <summary>
-        /// Creates a client that sends through the given message handler (used by tests)
-        /// </summary>
-        /// <param name="key">client key</param>
-        /// <param name="controlConfig">control properties; method must be http or https</param>
-        /// <param name="handler">message handler, or null to use the default handler</param>
-        public RestClient(string key, ControlPropertiesConfig controlConfig, HttpMessageHandler handler)
         {
             if (string.IsNullOrEmpty(key)) throw new ArgumentNullException(nameof(key));
             if (controlConfig == null || controlConfig.TcpSshProperties == null)
@@ -55,35 +37,28 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
 
             var tcp = controlConfig.TcpSshProperties;
             var isHttps = controlConfig.Method == eControlMethod.Https;
-            var scheme = isHttps ? "https" : "http";
+            BaseUri = RestEndpoint.BaseUri(isHttps, tcp.Address, tcp.Port);
 
-            BaseUri = tcp.Port >= 1 && tcp.Port <= 65535
-                ? new Uri(string.Format("{0}://{1}:{2}/", scheme, tcp.Address, tcp.Port))
-                : new Uri(string.Format("{0}://{1}/", scheme, tcp.Address));
-
-            if (handler == null)
-            {
-                var clientHandler = new HttpClientHandler();
-                // The Crestron HttpsClient this replaces ran with host and peer verification off.
-                if (isHttps)
-                    clientHandler.ServerCertificateCustomValidationCallback =
-                        HttpClientHandler.DangerousAcceptAnyServerCertificateValidator;
-                handler = clientHandler;
-            }
+            var handler = new HttpClientHandler();
+            // The Crestron HttpsClient this replaces ran with host and peer verification off.
+            if (isHttps)
+                handler.ServerCertificateCustomValidationCallback =
+                    HttpClientHandler.DangerousAcceptAnyServerCertificateValidator;
 
             _client = new HttpClient(handler) { BaseAddress = BaseUri, Timeout = RequestTimeout };
+            _client.DefaultRequestHeaders.Authorization = RestEndpoint.BasicAuthorization(tcp.Username, tcp.Password);
 
-            if (!string.IsNullOrEmpty(tcp.Username))
+            _sender = new SerialRequestSender(_client, MaxQueuedRequests, Key + "-requests");
+            _sender.ResponseReceived += (sender, args) =>
             {
-                var credentials = Encoding.Latin1.GetBytes(string.Format("{0}:{1}", tcp.Username, tcp.Password ?? ""));
-                _client.DefaultRequestHeaders.Authorization =
-                    new AuthenticationHeaderValue("Basic", Convert.ToBase64String(credentials));
-            }
+                var responseHandler = ResponseReceived;
+                if (responseHandler != null)
+                    responseHandler(this, args);
+            };
+            _sender.RequestFailed += (sender, args) =>
+                this.LogDebug(args.Exception, "Request {Url} failed: {Message}", args.RequestUri, args.Exception.Message);
 
             this.LogVerbose("Client created for {BaseUri}", BaseUri);
-
-            _worker = new Thread(ProcessRequests) { IsBackground = true, Name = Key + "-requests" };
-            _worker.Start();
         }
 
         /// <summary>
@@ -137,15 +112,8 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
 
             this.LogDebug("Request {Method} {Url} {Content}", method, new Uri(BaseUri, request.RequestUri), content);
 
-            try
-            {
-                _requests.Add(request);
-            }
-            catch (InvalidOperationException)
-            {
-                // The client has been disposed.
+            if (!_sender.Queue(request))
                 request.Dispose();
-            }
         }
 
         #endregion
@@ -155,38 +123,8 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
         /// </summary>
         public void Dispose()
         {
-            _requests.CompleteAdding();
+            _sender.Dispose();
             _client.Dispose();
-        }
-
-        // Runs on the worker thread. It blocks waiting for each response, which keeps requests in order;
-        // it is a dedicated background thread, so it holds no pool thread and can't keep the program open.
-        private void ProcessRequests()
-        {
-            foreach (var request in _requests.GetConsumingEnumerable())
-            {
-                try
-                {
-                    using (request)
-                    using (var response = _client.SendAsync(request).GetAwaiter().GetResult())
-                    {
-                        var body = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
-                        OnResponseReceived(new GenericClientResponseEventArgs((int)response.StatusCode, body));
-                    }
-                }
-                catch (Exception ex)
-                {
-                    // Nothing may escape: an unhandled exception on this thread ends the program.
-                    this.LogDebug(ex, "Request {Url} failed: {Message}", request.RequestUri, ex.Message);
-                }
-            }
-        }
-
-        private void OnResponseReceived(GenericClientResponseEventArgs args)
-        {
-            var handler = ResponseReceived;
-            if (handler != null)
-                handler(this, args);
         }
     }
 }

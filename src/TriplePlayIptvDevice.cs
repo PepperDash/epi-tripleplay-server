@@ -615,34 +615,11 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
         // builds the call= query with string, int and/or bool parameters
         private string BuildQuery(int stbId, string method, string strParam, int? intParam, bool? boolParam)
         {
-            if ((stbId <= 0) || string.IsNullOrEmpty(method))
-            {
+            var query = TriplePlayQuery.Build(stbId, method, strParam, intParam, boolParam);
+            if (query == null)
                 this.LogDebug("BuildQuery: invalid stbId {StbId}, unable to build query.", stbId);
-                return null;
-            }
-
-            var array = new JArray
-            {
-                stbId
-            };
-            if (!string.IsNullOrEmpty(strParam))
-                array.Add(strParam);
-            if (intParam != null)
-                array.Add(intParam);
-            if(boolParam != null)
-                array.Add(boolParam);
-
-            var obj = new JObject
-            {
-                {"jsonrpc", "2.0"}, 
-                {"method", method}
-            };
-            obj["params"] = array;
-
-            // HttpClient sends the URI as given, so encode the JSON for the query string.
-            var call = JsonConvert.SerializeObject(obj, Formatting.None);
-            return string.Format("call={0}", Uri.EscapeDataString(call));
-        }       
+            return query;
+        }
 
         /// <summary>
         /// Allows bridge to change the settop box id (stbId) to be controlled
