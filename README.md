@@ -115,7 +115,9 @@ The device implements `ISetTopBoxControls`, `ITvPresetsProvider` and `IRoutingSo
 | DVR list | `Pvr` |
 | Last channel, Replay, Dash, Chapter +/- | not available (do nothing) |
 
-TV favorites come from a presets file, as for an IR set-top box. Set `presetsList` to a file name in `/html/presets/lists/` on the processor; `HasPresets` is true only when it is set. Recalling a favorite dials its digits and then presses `Ok`.
+Mobile Control TV favorites come only from a presets file, as for an IR set-top box. Set `presetsList` to the name of a file in `/html/presets/lists/` on the processor. `HasPresets` is true only when `presetsList` is set. Recalling a favorite dials its digits and then presses `Ok`.
+
+Mobile Control does not use the server's channel list, by design. The list the server returns for `GetAllServices` fills only the bridge preset joins.
 
 ```json
 "properties": {
