@@ -9,7 +9,6 @@
 *.user
 *.userosscache
 *.sln.docstates
-*.projectinfo
 
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
@@ -203,6 +202,7 @@ PublishScripts/
 # NuGet v3's project.json files produces more ignorable files
 *.nuget.props
 *.nuget.targets
+.nuget/
 
 # Microsoft Azure Build Output
 csx/
@@ -357,6 +357,12 @@ MigrationBackup/
 # Ionide (cross platform F# VS Code tools) working folder
 .ionide/
 
-# VS Code settings folders
-.vscode/
+# Crestron Zip Files
+*.cplz
+*.clz
 *.projectinfo
+*.suo
+.vscode/settings.json
+.vscode
+.config/dotnet-tools.json
+*.DS_Store

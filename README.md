@@ -4,6 +4,10 @@
 
 Provided under MIT license
 
+## Minimum Essentials Framework Version
+
+- **3.0.0** (net8, 4-Series processors). This version of the plugin does not load on Essentials 1.x or 2.x.
+
 ## Device Specific Information
 
 All commands are sent to the TriplePlay server.  The server will pass the command to the IPTV client associated with the `stbId` as defined.
@@ -64,6 +68,25 @@ Update the configuration object as needed for the plugin being developed.
 #### Optional configuration propeties
 The following properties are optional and do not need to be defined.  
 
+##### Online status
+
+The plugin polls the server with `GetAllServices` and reports it online on any HTTP response. If the server stops answering, the plugin reports a warning after `warningTimeoutMs` and an error after `errorTimeoutMs`. Polling also keeps the bridge preset joins current.
+
+| Property | Default | Meaning |
+| -------- | ------- | ------- |
+| `pollTimeMs` | 30000 | How often to poll |
+| `warningTimeoutMs` | 180000 | Time without a response before a warning |
+| `errorTimeoutMs` | 300000 | Time without a response before an error |
+
+A property that is missing or 0 uses its default. If the values cannot work together, all three defaults are used:
+- a timeout under 5000;
+- a warning time longer than the error time;
+- a poll time that is not shorter than the warning time.
+
+The poll is sent for the configured `stbId`, so a device without a valid `stbId` never polls and reports offline.
+
+The status is on bridge join 1 (`IsOnline`). Mobile Control picks it up automatically as the device's `commMonitor` status.
+
 The `presets` dictionary will be automatically populated by the `GetAllServices` query, but can be 
 defined via config if needed.
 
@@ -94,6 +117,34 @@ defined via config if needed.
 	]
 }
 ```
+
+### Set-top box controls (rooms and Mobile Control)
+
+The device implements `ISetTopBoxControls`, `ITvPresetsProvider` and `IRoutingSource`, so a room can use it as its tuner and Mobile Control can show set-top box pages. Each button sends one TriplePlay `HandleKeyPress` on press.
+
+| Essentials control | TriplePlay key |
+| ------------------ | -------------- |
+| Digits 0-9 | `Number0`-`Number9` |
+| Channel up / down | `ChannelUp` / `ChannelDown` methods |
+| D-pad, Select, Menu, Exit | `Up`, `Down`, `Left`, `Right`, `Ok`, `Home`, `Back` |
+| Keypad enter | `Ok` |
+| Guide, Info | `Guide`, `Info` |
+| Red, Green, Yellow, Blue | same |
+| Play, Pause, Rewind, FFwd, Stop, Record | `Play`, `Pause`, `Rewind`, `Forward`, `Stop`, `Record` |
+| DVR list | `Pvr` |
+| Last channel, Replay, Dash, Chapter +/- | not available (do nothing) |
+
+Mobile Control TV favorites come only from a presets file, as for an IR set-top box. Set `presetsList` to the name of a file in `/html/presets/lists/` on the processor. `HasPresets` is true only when `presetsList` is set. Recalling a favorite dials its digits and then presses `Ok`.
+
+Mobile Control does not use the server's channel list, by design. The list the server returns for `GetAllServices` fills only the bridge preset joins.
+
+```json
+"properties": {
+	"presetsList": "tripleplay-favorites.json"
+}
+```
+
+The output port `anyVideoOut` (audio/video, HDMI) can be used in tie lines.
 
 ### Plugin Bridge Configuration Object
 

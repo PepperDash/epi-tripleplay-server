@@ -1,0 +1,48 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <IsPackable>false</IsPackable>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <GenerateDocumentationFile>false</GenerateDocumentationFile>
+    <RootNamespace>PepperDash.Essentials.Plugin.TriplePlay.IptvServer.Tests</RootNamespace>
+    <!-- The linked plugin sources have no nullable context; these warnings come from them, not the tests -->
+    <NoWarn>$(NoWarn);CS8603;CS8604;CS8618</NoWarn>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.12.0" />
+    <PackageReference Include="xunit" Version="2.9.3" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.8.2">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="FluentAssertions" Version="7.0.0" />
+    <PackageReference Include="System.Reflection.MetadataLoadContext" Version="9.0.4" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- Builds the plugin before the tests run; the DLL is inspected with MetadataLoadContext, not referenced -->
+    <ProjectReference Include="..\src\epi-tripleplay-iptvserver.4Series.csproj" ReferenceOutputAssembly="false" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- Plugin source with no Crestron or Essentials dependencies, tested directly -->
+    <Compile Include="..\src\Scaling.cs" Link="Linked\Scaling.cs" />
+    <Compile Include="..\src\TriplePlayQuery.cs" Link="Linked\TriplePlayQuery.cs" />
+    <Compile Include="..\src\Monitoring\MonitorTimes.cs" Link="Linked\MonitorTimes.cs" />
+    <Compile Include="..\src\GenericClient\RestEndpoint.cs" Link="Linked\RestEndpoint.cs" />
+    <Compile Include="..\src\GenericClient\SerialRequestSender.cs" Link="Linked\SerialRequestSender.cs" />
+    <Compile Include="..\src\GenericClient\GenericClientEventArgs.cs" Link="Linked\GenericClientEventArgs.cs" />
+    <Compile Include="..\src\ResponseObjects\*.cs" Link="Linked\ResponseObjects\%(Filename)%(Extension)" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- Sample TriplePlay server responses -->
+    <None Include="..\documents\*.json" Link="Samples\%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+
+</Project>

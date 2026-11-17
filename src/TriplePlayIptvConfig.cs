@@ -99,6 +99,13 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
         public Dictionary<uint, TriplePlayServicesPresetsConfig> Presets { get; set; }
 
 		/// <summary>
+		/// Optional TV presets (favorites) file for ISetTopBoxControls / Mobile Control, relative to
+		/// /html/presets/lists/ on the processor. Same as the IR set-top box presetsList property.
+		/// </summary>
+		[JsonProperty("presetsList", NullValueHandling = NullValueHandling.Ignore)]
+		public string PresetsList { get; set; }
+
+		/// <summary>
 		/// Constuctor
 		/// </summary>
 		public TriplePlayIptvConfig()

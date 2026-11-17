@@ -7,23 +7,19 @@ using PepperDash.Essentials.Core.Config;
 namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
 {
 	/// <summary>
-	/// Plugin factory for devices that require communications using IBasicCommunications or custom communication methods
+	/// Plugin factory for TriplePlay IPTV devices
 	/// </summary>
 	public class TriplePlayIptvFactory : EssentialsPluginDeviceFactory<TriplePlayIptvDevice>
 	{
-        private const int DebugLevel1 = 1;
-        private const int DebugLevel2 = 2;
-
 		/// <summary>
 		/// Plugin device factory constructor
 		/// </summary>
 		public TriplePlayIptvFactory()
 		{
-			// Set the minimum Essentials Framework Version
-			MinimumEssentialsFrameworkVersion = "1.9.1";
+			// Numeric major.minor.patch only: a prerelease suffix makes Essentials skip loading the plugin.
+			MinimumEssentialsFrameworkVersion = "3.0.0";
 
-			// In the constructor we initialize the list with the typenames that will build an instance of this device
-			// only include unique typenames, when the constructur is used all the typenames will be evaluated in lower case.
+			// Type names are compared in lower case.
 			TypeNames = new List<string>() { "tripleplayiptv", "tripleplay" };
 		}
 
@@ -34,41 +30,30 @@ namespace PepperDash.Essentials.Plugin.TriplePlay.IptvServer
 		{
 			try
 			{
-				Debug.Console(TriplePlayDebug.Verbose, new string('*', 80));
-				Debug.Console(TriplePlayDebug.Verbose, new string('*', 80));
-				Debug.Console(TriplePlayDebug.Info, "[{0}] Factory Attempting to create new device from type: {1}", dc.Key, dc.Type);				
-				
-				// get the plugin device properties configuration object & check for null 
 				var propertiesConfig = dc.Properties.ToObject<TriplePlayIptvConfig>();
 
-			    if (propertiesConfig == null)
-			    {
-			        Debug.Console(TriplePlayDebug.Info, "[{0}] Unable to get configuration. Please check configuration.", dc.Key);
-			        return null;
-			    }
+				if (propertiesConfig == null || propertiesConfig.Control == null)
+				{
+					Debug.LogInformation("[{Key}] Unable to get configuration. Please check configuration.", dc.Key);
+					return null;
+				}
 
-			    IRestfulComms client;
+				var method = propertiesConfig.Control.Method;
+				if (method != eControlMethod.Http && method != eControlMethod.Https)
+				{
+					Debug.LogInformation("[{Key}] Control method {Method} NOT supported. Please check configuration", dc.Key, method);
+					return null;
+				}
 
-			    switch (propertiesConfig.Control.Method)
-			    {
-			        case eControlMethod.Http:
-			            client = new GenericClientHttp(String.Format("{0}-http", dc.Key), propertiesConfig.Control);
-			            break;
-			        case eControlMethod.Https:
-			            client = new GenericClientHttps(String.Format("{0}-https", dc.Key), propertiesConfig.Control);
-			            break;
-			        default:
-			            Debug.Console(TriplePlayDebug.Info, "[{0}] Control method {1} NOT supported. Please check configuration", dc.Key,
-			                propertiesConfig.Control.Method);
-			            return null;
-			    }
+				var client = new RestClient(
+					string.Format("{0}-{1}", dc.Key, method.ToString().ToLowerInvariant()),
+					propertiesConfig.Control);
 
-			    return new TriplePlayIptvDevice(dc.Key, dc.Name, propertiesConfig, client);
-			    
+				return new TriplePlayIptvDevice(dc.Key, dc.Name, propertiesConfig, client);
 			}
 			catch (Exception ex)
 			{
-				Debug.Console(TriplePlayDebug.Info, "[{0}] Factory BuildDevice Exception: {1}", dc.Key, ex);
+				Debug.LogInformation(ex, "[{Key}] Factory BuildDevice Exception: {Message}", dc.Key, ex.Message);
 				return null;
 			}
 		}
