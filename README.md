@@ -4,6 +4,10 @@
 
 Provided under MIT license
 
+## Minimum Essentials Framework Version
+
+- **3.0.0** (net8, 4-Series processors). This version of the plugin does not load on Essentials 1.x or 2.x.
+
 ## Device Specific Information
 
 All commands are sent to the TriplePlay server.  The server will pass the command to the IPTV client associated with the `stbId` as defined.
