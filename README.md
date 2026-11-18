@@ -217,3 +217,10 @@ The selection below documents the digital, analog, and serial joins used by the 
 |                           | 8      | Response Error String       |
 |                           | 41- 65 | Preset (1-24) Icon URL Path |
 |                           | 71-95  | Preset (1-24) Name          |
+
+## Future Plans
+
+- **Essentials v2 (net472):** Update `TriplePlayIptvDevice` to implement the standard Essentials v2 interfaces (e.g. `ISetTopBoxControls`, `ITvPresetsProvider`, `IRoutingSource`/`IRoutingOutputs`, `IDeviceInfoProvider`) so it can be used as a first-class set-top box source. Note that implementing `ITvPresetsProvider` is a **breaking change**: it relies on a different preset file path and structure than the current `presets` config, so existing configurations will need migrating. It is the better fit for future Essentials support, so plan it as part of a major version bump. The `epi-vytio-iptv` plugin's `VytioIptvTunerDevice` is a reference implementation.
+- **Essentials v3 (net8):** Migrate the plugin to target Essentials v3 on .NET 8.
+
+Support for 3-Series (net35) has been removed.
